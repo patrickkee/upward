@@ -7,9 +7,17 @@ repositories {
     mavenCentral()
 }
 
+buildscript {
+    repositories {
+        mavenCentral()
+    }
+    dependencies {
+        classpath 'org.hidetake:gradle-ssh-plugin:0.1.7'
+    }
+}
+
 dependencies {
 	compile "javax.ws.rs:jsr311-api:1.1.1"
-
 
 	compile 'com.sun.jersey:jersey-server:1.16'
 	compile 'com.sun.jersey:jersey-core:1.16'
@@ -43,4 +51,33 @@ processTestResources.dependsOn copyTestResources
 
 task wrapper(type: Wrapper) {
     gradleVersion = '2.3'
+}
+
+apply plugin: 'ssh'
+
+remotes {
+    web01 {
+        host = 'ec2-54-85-161-10.compute-1.amazonaws.com'
+        user = 'ec2-user'
+        identity = file('E:/My Documents/GitHub/aws/admin-key-pair.pem')
+    }
+}
+
+ssh {   
+    config(StrictHostKeyChecking: 'no') // needed for deploying to EC2
+}
+
+task deployWar(type: SshTask, dependsOn: 'war') {
+    def tomcatHome = '/usr/apache-tomcat-8.0.26/webapps'
+    def warName = "ROOT"
+    session(remotes.web01) {
+        println "Uploading new war from ${war.archivePath.absolutePath} to ${tomcatHome}/${warName}.war"
+        put(war.archivePath.absolutePath,"/usr/upload-tmp/${warName}.war")
+        
+        println "removing old war"
+        executeSudo("rm ${tomcatHome}/${warName}.war")
+        
+        println "activating new war"
+        executeSudo("mv /usr/upload-tmp/${warName}.war ${tomcatHome}/${warName}.war")
+    }
 }
