@@ -1,0 +1,35 @@
+<html>
+<head>
+
+<script src="https://code.jquery.com/jquery-2.1.4.min.js"></script>
+
+</head>
+
+<body>
+
+<script type="text/javascript">
+
+$(document).ready(function(){
+   //$("#msgid").html("This is Hello World by JQuery");
+   $.ajax({
+	    url : "http://ec2-54-85-161-10.compute-1.amazonaws.com/api/accounts?accountName=foobar&firstName=patrick&lastName=kee&email=patrickpdk@gmail.com",
+	    type: "POST",
+	    dataType: "json",
+	    success: function(results)
+	    {
+	    	$("#msgid").html(JSON.stringify(results));
+	    },
+	    error: function (jqXHR, textStatus, errorThrown)
+	    {
+	    	$("#msgid").html(errorThrown);
+	    }
+	});
+	
+});
+</script>
+
+<div id="msgid">
+</div>
+
+</body>
+</html>
