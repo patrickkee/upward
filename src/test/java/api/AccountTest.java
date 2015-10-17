@@ -45,4 +45,17 @@ public class AccountTest {
 		acct.addModel(savingsForecastModel);
 		assertEquals(1, acct.getModels().size());
 	}
+
+	@Test
+	public void TestRemoveModelFromAccount() throws ParseException {
+		Model savingsForecastModel = SavingsForecastModel.newModel().name("Lilah's College Savings")
+																	.initialValue(new BigDecimal(2000))
+																	.targetValue(new BigDecimal(100000))
+																	.startDate(new SimpleDateFormat("dd/MM/yyyy").parse("10/01/2015"))
+																	.endDate(new SimpleDateFormat("dd/MM/yyyy").parse("08/01/2030"));
+		Account acct = Account.newAccount().accountName("Savings").firstName("Patrick").lastName("Kee").email("patrick.kee0@gmail.com");
+		acct.addModel(savingsForecastModel);
+		acct.removeModel(savingsForecastModel.getModelId());
+		assertEquals(0, acct.getModels().size());
+	}
 }

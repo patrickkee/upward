@@ -4,6 +4,7 @@ import java.math.BigDecimal;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 
+import javax.ws.rs.DELETE;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
@@ -12,6 +13,7 @@ import javax.ws.rs.QueryParam;
 
 import com.patrickkee.model.Account;
 import com.patrickkee.model.Model;
+import com.patrickkee.model.ResponseMessage;
 import com.patrickkee.model.impl.SavingsForecastModel;
 import com.patrickkee.persistence.AccountsDb;
 
@@ -46,6 +48,23 @@ public class Models {
 		acct.addModel(savingsForecastModel);
 		AccountsDb.persistAccount(acct);
 		return AccountsDb.getAccountById(acct.getAccountId());
+	}
+	
+	@DELETE
+	@Path("/{modelId}")
+	@Produces("application/json")
+	public ResponseMessage removeModel(@PathParam("accountId") int accountId, 
+									   @PathParam("modelId") int modelId) 
+	{
+		Account acct = AccountsDb.getAccountById(accountId);
+		acct.removeModel(modelId);
+		
+		if (null == acct.getModel(modelId)) {
+			return new ResponseMessage("Model successfully removed");
+		} else {
+			return new ResponseMessage("Model could not be removed");
+		}
+		
 	}
 	
 }

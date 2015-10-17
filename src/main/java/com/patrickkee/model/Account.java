@@ -46,6 +46,13 @@ public class Account {
 	public void addModel(Model model) {
 		_models.putIfAbsent(model.getModelId(), model);
 	}
+	public void removeModel(int modelId) {
+		_models.remove(modelId);
+	}
+	public Model getModel(int modelId) {
+		return _models.get(modelId);
+	}
+	
 	/**
 	 * Provides easy access 	to calculating the value of the user's models at one point in time
 	 * @param date as of when the user wants the account value
