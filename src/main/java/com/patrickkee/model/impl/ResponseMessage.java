@@ -1,4 +1,4 @@
-package com.patrickkee.model;
+package com.patrickkee.model.impl;
 
 import javax.xml.bind.annotation.XmlRootElement;
 

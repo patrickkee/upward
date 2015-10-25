@@ -1,4 +1,4 @@
-package api;
+package model;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
@@ -10,8 +10,8 @@ import java.util.Date;
 
 import org.junit.Test;
 
-import com.patrickkee.model.Account;
 import com.patrickkee.model.Model;
+import com.patrickkee.model.impl.Account;
 import com.patrickkee.model.impl.SavingsForecastModel;
 
 public class AccountTest {
@@ -19,8 +19,6 @@ public class AccountTest {
 	@Test
 	public void TestAccountCreation() {
 		Account acct = Account.newAccount().accountName("Savings").firstName("Patrick").lastName("Kee").email("patrick.kee0@gmail.com");
-		int accountId = -59763533; 
-		assertEquals(accountId, acct.getAccountId());
 		assertEquals("Savings", acct.getAccountName());
 		assertEquals("Patrick", acct.getFirstName());
 		assertEquals("Kee", acct.getLastName());

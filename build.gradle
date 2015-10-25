@@ -17,23 +17,25 @@ buildscript {
 }
 
 dependencies {
-	compile "javax.ws.rs:jsr311-api:1.1.1"
+	compile 'javax.ws.rs:javax.ws.rs-api:2.0.1'
 
-	compile 'com.sun.jersey:jersey-server:1.16'
-	compile 'com.sun.jersey:jersey-core:1.16'
-	compile 'com.sun.jersey:jersey-client:1.16'
-	compile 'com.sun.jersey:jersey-servlet:1.16'
-	compile 'com.sun.jersey:jersey-json:1.16'
+	compile 'org.glassfish.jersey.containers:jersey-container-servlet:2.22.1'
+	compile 'org.glassfish.jersey.core:jersey-server:2.22.1'
+	compile 'org.glassfish.jersey.core:jersey-common:2.22.1'
+	compile 'org.glassfish.jersey.core:jersey-client:2.22.1'
 	
-	compile 'com.yammer.metrics:metrics-core:2.2.0'
-	compile 'com.yammer.metrics:metrics-servlet:2.2.0'
-	compile 'com.yammer.metrics:metrics-jersey:2.2.0'
+	compile 'org.glassfish.jersey.media:jersey-media-json-processing:2.22.1'
+	compile 'org.glassfish.jersey.media:jersey-media-json-jackson:2.22.1'
+	compile 'org.glassfish.jersey.media:jersey-media-multipart:2.22.1'
+	compile 'org.glassfish.jersey.media:jersey-media-sse:2.22.1'
+	
 	compile 'com.yammer.metrics:metrics-graphite:2.2.0'
 	
 	compile 'log4j:log4j:1.2.16'
-	compile 'org.mapdb:mapdb:0.9.7'
 	
-	testCompile "junit:junit-dep:4.10"
+	testCompile 'junit:junit-dep:4.10'
+	testCompile 'org.slf4j:slf4j-simple:1.6.1'
+	testCompile 'org.glassfish.jersey.test-framework.providers:jersey-test-framework-provider-grizzly2:2.22.1'
 }
 
 sourceSets {
@@ -58,7 +60,7 @@ apply plugin: 'ssh'
 
 remotes {
     web01 {
-        host = 'ec2-54-85-161-10.compute-1.amazonaws.com'
+        host = 'ec2-52-5-125-8.compute-1.amazonaws.com'
         user = 'ec2-user'
         identity = file('E:/My Documents/GitHub/aws/admin-key-pair.pem')
     }

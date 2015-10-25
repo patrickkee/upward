@@ -1,4 +1,4 @@
-package com.patrickkee.api;
+package com.patrickkee.resources;
 
 import java.math.BigDecimal;
 import java.text.ParseException;
@@ -11,18 +11,18 @@ import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
 
-import com.patrickkee.model.Account;
 import com.patrickkee.model.Model;
-import com.patrickkee.model.ResponseMessage;
+import com.patrickkee.model.impl.Account;
+import com.patrickkee.model.impl.ResponseMessage;
 import com.patrickkee.model.impl.SavingsForecastModel;
 import com.patrickkee.persistence.AccountsDb;
 
-@Path("accounts/{accountId}/models")
-public class Models {
+@Path("accounts/{email}/models")
+public class ModelResource {
 
 	@POST
 	@Produces("application/json")
-	public Account createModel(@PathParam("accountId") int accountId, 
+	public Account createModel(@PathParam("email") String email, 
 							   @QueryParam("modelName") String modelName,
 							   @QueryParam("description") String description,
 							   @QueryParam("initialValue") BigDecimal initialValue,
@@ -30,7 +30,7 @@ public class Models {
 							   @QueryParam("startDate") String startDate,
 							   @QueryParam("endDate") String endDate) 
 	{
-		Account acct = AccountsDb.getAccountById(accountId);
+		Account acct = AccountsDb.getAccountByEmail(email);
 		Model savingsForecastModel = null;
 		try {
 			savingsForecastModel = SavingsForecastModel.newModel()
@@ -47,16 +47,16 @@ public class Models {
 
 		acct.addModel(savingsForecastModel);
 		AccountsDb.persistAccount(acct);
-		return AccountsDb.getAccountById(acct.getAccountId());
+		return AccountsDb.getAccountByEmail(email);
 	}
 	
 	@DELETE
 	@Path("/{modelId}")
 	@Produces("application/json")
-	public ResponseMessage removeModel(@PathParam("accountId") int accountId, 
+	public ResponseMessage removeModel(@PathParam("email") String email, 
 									   @PathParam("modelId") int modelId) 
 	{
-		Account acct = AccountsDb.getAccountById(accountId);
+		Account acct = AccountsDb.getAccountByEmail(email);
 		acct.removeModel(modelId);
 		
 		if (null == acct.getModel(modelId)) {

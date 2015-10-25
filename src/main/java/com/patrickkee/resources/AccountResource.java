@@ -1,4 +1,4 @@
-package com.patrickkee.api;
+package com.patrickkee.resources;
 
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
@@ -7,29 +7,28 @@ import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
 
-import com.patrickkee.model.Account;
+import com.patrickkee.model.impl.Account;
 import com.patrickkee.persistence.AccountsDb;
 
 @Path("accounts")
-public class Accounts {
+public class AccountResource {
 
 	@GET
-	@Path("/{accountId}")
+	@Path("/{email}")
 	@Produces("application/json")
 	/**
 	 * Allows users to get a particular account
 	 * @param accountId
 	 * @return
 	 */
-	public Account getAccountById(@PathParam("accountId") int accountId) {
-		Account acct = AccountsDb.getAccountById(accountId);
+	public Account getAccountById(@PathParam("email") String email) {
+		Account acct = AccountsDb.getAccountByEmail(email);
 		if (null != acct && acct.getAccountId() != -1) {
 			return acct;
 		} else {
 			return acct;
-			//return Response.status(Response.Status.NOT_FOUND).entity("Account not found for accountId:"+Integer.toString(accountId));
+			//TODO: return Response.status(Response.Status.NOT_FOUND).entity("Account not found for accountId:"+Integer.toString(accountId));
 		}
-		
 	}
 
 	@POST
@@ -40,6 +39,6 @@ public class Accounts {
 	{
 		Account acct = Account.newAccount().accountName(accountName).firstName(firstName).lastName(lastName).email(email);
 		AccountsDb.persistAccount(acct);
-				return AccountsDb.getAccountById(acct.getAccountId());
+				return AccountsDb.getAccountByEmail(email);
 	}
 }

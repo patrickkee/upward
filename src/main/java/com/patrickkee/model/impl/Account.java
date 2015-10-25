@@ -1,4 +1,4 @@
-package com.patrickkee.model;
+package com.patrickkee.model.impl;
 
 import java.math.BigDecimal;
 import java.util.Date;
@@ -6,7 +6,7 @@ import java.util.HashMap;
 
 import javax.xml.bind.annotation.XmlRootElement;
 
-import com.patrickkee.model.impl.SavingsForecastModel;
+import com.patrickkee.model.Model;
 
 /**
  * Stores a collection of models and metadata about the owner of those models. 
@@ -89,9 +89,6 @@ public class Account {
 		final int prime = 31;
 		int result = 1;
 		result = prime * result + ((_accountName == null) ? 0 : _accountName.hashCode());
-		result = prime * result + ((_email == null) ? 0 : _email.hashCode());
-		result = prime * result + ((_firstName == null) ? 0 : _firstName.hashCode());
-		result = prime * result + ((_lastName == null) ? 0 : _lastName.hashCode());
 		return result;
 	}
 
