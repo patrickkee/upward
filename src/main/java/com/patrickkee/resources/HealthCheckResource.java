@@ -14,7 +14,7 @@ public class HealthCheckResource {
 	@GET
 	@Produces("text/html")
 	public String getHeath() {
-		DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
+		DateFormat dateFormat = new SimpleDateFormat("MM/dd/yyyy hh:mm:ss");
 		Date date = new Date();
 		return "Financial Models Application is healthy as of " + dateFormat.format(date) + "!";
 	}
