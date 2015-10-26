@@ -3,11 +3,8 @@ package com.patrickkee.model.impl;
 import java.math.BigDecimal;
 import java.util.Date;
 
-import javax.xml.bind.annotation.XmlRootElement;
-
 import com.patrickkee.model.Model;
 
-@XmlRootElement
 public class SavingsForecastModel implements Model {
 
 	private int _modelId = 0;

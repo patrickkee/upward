@@ -4,8 +4,6 @@ import java.math.BigDecimal;
 import java.util.Date;
 import java.util.HashMap;
 
-import javax.xml.bind.annotation.XmlRootElement;
-
 import com.patrickkee.model.Model;
 
 /**
@@ -13,7 +11,6 @@ import com.patrickkee.model.Model;
  * Provies easy access to aggregated, cross model functions like getting the total account value.
  * @author Kee
  * */
-@XmlRootElement
 public class Account {
 
 	private String _accountName;
@@ -54,7 +51,7 @@ public class Account {
 	}
 	
 	/**
-	 * Provides easy access 	to calculating the value of the user's models at one point in time
+	 * Provides easy access to calculating the value of the user's models at one point in time
 	 * @param date as of when the user wants the account value
 	 * @return account value as {@code BigDecimal}
 	 */

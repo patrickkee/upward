@@ -2,17 +2,13 @@ package com.patrickkee.persistence;
 
 import java.util.HashMap;
 
-import javax.xml.bind.annotation.XmlRootElement;
-
 import com.patrickkee.model.impl.Account;
 
-@XmlRootElement
 public class AccountsDb {
 	private static HashMap<String, Account> _accounts = new HashMap<String, Account>();
 
 	/**
 	 * Persists the account to in memory storage
-	 * 
 	 * @param account
 	 */
 	public synchronized static void persistAccount(Account account) {
