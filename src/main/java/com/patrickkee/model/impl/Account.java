@@ -4,13 +4,18 @@ import java.math.BigDecimal;
 import java.util.Date;
 import java.util.HashMap;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.patrickkee.model.Model;
 
 /**
- * Stores a collection of models and metadata about the owner of those models. 
- * Provies easy access to aggregated, cross model functions like getting the total account value.
+ * Stores a collection of models and metadata about the owner of those models.
+ * Provies easy access to aggregated, cross model functions like getting the
+ * total account value.
+ * 
  * @author Kee
- * */
+ */
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class Account {
 
 	private String _accountName;
@@ -18,69 +23,90 @@ public class Account {
 	private String _lastName;
 	private String _email;
 	private HashMap<Integer, Model> _models = new HashMap<Integer, Model>();
-		
-	private Account() {}
-		
-	//Getters
+
+	private Account() {
+	}
+
+	// Getters
+	@JsonProperty("acctId")
 	public int getAccountId() {
 		return hashCode();
 	}
+
+	@JsonProperty("acctName")
 	public String getAccountName() {
 		return _accountName;
 	}
+
+	@JsonProperty("firstName")
 	public String getFirstName() {
 		return _firstName;
 	}
+
+	@JsonProperty("lastName")
 	public String getLastName() {
 		return _lastName;
 	}
+
+	@JsonProperty("email")
 	public String getEmail() {
 		return _email;
 	}
+
 	public HashMap<Integer, Model> getModels() {
 		return _models;
 	}
+
 	public void addModel(Model model) {
 		_models.putIfAbsent(model.getModelId(), model);
 	}
+
 	public void removeModel(int modelId) {
 		_models.remove(modelId);
 	}
+
 	public Model getModel(int modelId) {
 		return _models.get(modelId);
 	}
-	
+
 	/**
-	 * Provides easy access to calculating the value of the user's models at one point in time
-	 * @param date as of when the user wants the account value
+	 * Provides easy access to calculating the value of the user's models at one
+	 * point in time
+	 * 
+	 * @param date
+	 *            as of when the user wants the account value
 	 * @return account value as {@code BigDecimal}
 	 */
 	public BigDecimal getValue(Date date) {
 		return new BigDecimal("100.21");
 	}
-	
-	//Builder pattern for account construction
+
+	// Builder pattern for account construction
 	public static Account newAccount() {
 		return new Account();
 	}
+
 	public Account accountName(String name) {
 		this._accountName = name;
 		return this;
 	}
+
 	public Account firstName(String firstName) {
 		this._firstName = firstName;
 		return this;
 	}
+
 	public Account lastName(String lastName) {
 		this._lastName = lastName;
 		return this;
 	}
+
 	public Account email(String email) {
 		this._email = email;
 		return this;
 	}
 
-	//Hashcode & Equals
+	// Hashcode & Equals
 	@Override
 	public int hashCode() {
 		final int prime = 31;

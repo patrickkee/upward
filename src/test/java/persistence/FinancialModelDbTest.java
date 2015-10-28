@@ -11,7 +11,7 @@ public class FinancialModelDbTest {
 
 	@Test
 	public void testGetByIdWhenMissing() {
-		Account acct = AccountsDb.getAccountByEmail("foooobar");
+		Account acct = AccountsDb.getAccountByEmail("foooobar").get();
 		assertEquals("", acct.getAccountName());
 	}
 	
@@ -20,7 +20,7 @@ public class FinancialModelDbTest {
 		Account acct = Account.newAccount().accountName("foo").firstName("bar").lastName("man").email("choo");
 		AccountsDb.persistAccount(acct);
 		acct = null;
-		acct = AccountsDb.getAccountByEmail("choo");
+		acct = AccountsDb.getAccountByEmail("choo").get();
 		assertEquals("foo", acct.getAccountName());
 	}
 }

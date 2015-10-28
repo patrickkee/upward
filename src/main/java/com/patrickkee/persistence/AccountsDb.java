@@ -2,6 +2,7 @@ package com.patrickkee.persistence;
 
 import java.util.HashMap;
 
+import com.google.common.base.Optional;
 import com.patrickkee.model.impl.Account;
 
 public class AccountsDb {
@@ -15,13 +16,13 @@ public class AccountsDb {
 		_accounts.putIfAbsent(account.getEmail(), account);
 	}
 
-	public static Account getAccountByEmail(String email) {
+	public static Optional<Account> getAccountByEmail(String email) {
 		Account acct = _accounts.get(email);
 		
 		if (null==acct) {
-			return Account.newAccount().accountName("").lastName("").firstName("").email("");
+			return Optional.absent();
 		} else {
-			return acct;
+			return Optional.of(acct);
 		}
 	}
 }

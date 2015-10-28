@@ -10,7 +10,9 @@ import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
+import javax.ws.rs.WebApplicationException;
 
+import com.google.common.base.Optional;
 import com.patrickkee.model.Model;
 import com.patrickkee.model.impl.Account;
 import com.patrickkee.model.impl.ResponseMessage;
@@ -30,7 +32,7 @@ public class ModelResource {
 							   @QueryParam("startDate") String startDate,
 							   @QueryParam("endDate") String endDate) 
 	{
-		Account acct = AccountsDb.getAccountByEmail(email);
+		Optional<Account> acct = AccountsDb.getAccountByEmail(email);
 		Model savingsForecastModel = null;
 		try {
 			savingsForecastModel = SavingsForecastModel.newModel()
@@ -41,13 +43,20 @@ public class ModelResource {
 															 .startDate(new SimpleDateFormat("dd/MM/yyyy").parse(startDate))
 															 .endDate(new SimpleDateFormat("dd/MM/yyyy").parse(endDate));
 		} catch (ParseException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			//Throw HTTP422, unprocessable entity error
+			throw new WebApplicationException(422);
 		}
 
-		acct.addModel(savingsForecastModel);
-		AccountsDb.persistAccount(acct);
-		return AccountsDb.getAccountByEmail(email);
+		if (acct.isPresent()) {
+			acct.get().addModel(savingsForecastModel);
+			AccountsDb.persistAccount(acct.get());
+			return AccountsDb.getAccountByEmail(email).get();
+		} else {
+			//Throw HTTP404, not found error
+			throw new WebApplicationException(404);
+		}
+		
+		
 	}
 	
 	@DELETE
@@ -56,10 +65,17 @@ public class ModelResource {
 	public ResponseMessage removeModel(@PathParam("email") String email, 
 									   @PathParam("modelId") int modelId) 
 	{
-		Account acct = AccountsDb.getAccountByEmail(email);
-		acct.removeModel(modelId);
+		Optional<Account> acct = AccountsDb.getAccountByEmail(email);
 		
-		if (null == acct.getModel(modelId)) {
+		if (acct.isPresent()) {
+			acct.get().removeModel(modelId);	
+		} else {
+			//Throw HTTP404, not found error
+			throw new WebApplicationException(404); 
+		}
+		
+		
+		if (null == acct.get().getModel(modelId)) {
 			return new ResponseMessage("Model successfully removed");
 		} else {
 			return new ResponseMessage("Model could not be removed");
