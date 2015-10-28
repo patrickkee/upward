@@ -1,9 +1,11 @@
 package persistence;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
 import org.junit.Test;
 
+import com.google.common.base.Optional;
 import com.patrickkee.model.impl.Account;
 import com.patrickkee.persistence.AccountsDb;
 
@@ -11,10 +13,10 @@ public class FinancialModelDbTest {
 
 	@Test
 	public void testGetByIdWhenMissing() {
-		Account acct = AccountsDb.getAccountByEmail("foooobar").get();
-		assertEquals("", acct.getAccountName());
+		Optional<Account> acct = AccountsDb.getAccountByEmail("foooobar");
+		assertTrue(!acct.isPresent());
 	}
-	
+
 	@Test
 	public void testGetByIdWhenPresent() {
 		Account acct = Account.newAccount().accountName("foo").firstName("bar").lastName("man").email("choo");
