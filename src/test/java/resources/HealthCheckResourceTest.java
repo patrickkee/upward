@@ -8,13 +8,17 @@ import javax.ws.rs.core.Response;
 import org.junit.Assert;
 import org.junit.Test;
 
+import com.patrickkee.model.impl.ApplicationHealthStatus;
+
 public class HealthCheckResourceTest extends BaseJerseyTest {
 
 	@Test
 	public void missingAccountTest() {
-		Response response = target("health").request(MediaType.TEXT_HTML_TYPE).get();
+		Response response = target("health").request(MediaType.APPLICATION_JSON).get();
 		
 		assertEquals(200, response.getStatus());
-		Assert.assertTrue(response.readEntity(String.class).contains("Financial Models Application is healthy"));
+		
+		String status = response.readEntity(String.class);
+		Assert.assertTrue(status.contains("Application is healthy!"));
 	}
 }
