@@ -1,9 +1,20 @@
 package com.patrickkee.model.impl;
 
 import java.math.BigDecimal;
-import java.util.Date;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+import java.util.ListIterator;
+import java.util.TreeMap;
 
-import com.patrickkee.model.Model;
+import org.joda.time.LocalDate;
+
+import com.patrickkee.model.type.EventInstance;
+import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.patrickkee.model.type.Event;
+import com.patrickkee.model.type.Model;
+import com.patrickkee.jaxrs.util.LocalDateSerializer;
 
 public class SavingsForecastModel implements Model {
 
@@ -12,13 +23,15 @@ public class SavingsForecastModel implements Model {
 	private String _description;
 	private BigDecimal _initialValue;
 	private BigDecimal _targetValue;
-	private Date _startDate;
-	private Date _endDate;
+	private LocalDate _startDate;
+	private LocalDate _endDate;
+	private List<Event> events = new ArrayList<Event>();
 
 	private SavingsForecastModel() {
 	}
 
 	// Getters
+	@JsonFormat
 	public String getName() {
 		return _name;
 	}
@@ -35,19 +48,72 @@ public class SavingsForecastModel implements Model {
 		return _targetValue;
 	}
 
-	public Date getStartDate() {
+	@JsonSerialize(using = LocalDateSerializer.class)
+	public LocalDate getStartDate() {
 		return _startDate;
 	}
 
-	public Date getEndDate() {
+	@JsonSerialize(using = LocalDateSerializer.class)
+	public LocalDate getEndDate() {
 		return _endDate;
 	}
 
+	public void addEvent(Event event) {
+		events.add(event);
+	}
+	
 	@Override
-	public BigDecimal getValue(Date date) {
-		return new BigDecimal("100.42");
+	public BigDecimal getValue(LocalDate valueAsOfDate) {
+		//Apply all the event instances to the account value
+		BigDecimal currentValue = _initialValue;
+		ListIterator<EventInstance> eventInstIterator = getSortedEventInstances().listIterator();
+		
+		EventInstance e = null;
+		while (eventInstIterator.hasNext() && ((e = eventInstIterator.next()).getDate().isBefore(valueAsOfDate))) {
+			currentValue = e.apply(currentValue);
+		}
+		
+		return currentValue;
 	}
 
+	@Override
+	public BigDecimal valueVsTarget() {
+		return getValue(_endDate).subtract(_targetValue);
+	}
+	
+	@Override
+	public TreeMap<LocalDate, BigDecimal> getValues() {
+		TreeMap<LocalDate, BigDecimal> modelValues = new TreeMap<>();
+		
+		//Apply all the event instances to the account value
+		BigDecimal currentValue = _initialValue;
+		ListIterator<EventInstance> eventInstIterator = getSortedEventInstances().listIterator();
+		
+		EventInstance e = null;
+		while (eventInstIterator.hasNext()) {
+			e = eventInstIterator.next();
+			currentValue = e.apply(currentValue);
+			modelValues.put(e.getDate(), currentValue.setScale(2, BigDecimal.ROUND_HALF_UP));
+		}
+		
+		return modelValues;
+	}
+	
+	private List<EventInstance> getSortedEventInstances() {
+		List<EventInstance> eventInstances = new ArrayList<>();
+		
+		//Get all the event instances from the event types in the model
+		for (ListIterator<Event> iter = events.listIterator(); iter.hasNext(); ) {
+		    Event e = iter.next();
+		    eventInstances.addAll(e.getInstances());		    
+		}
+		
+		//Sort the event instances chronologically
+		Collections.sort(eventInstances);
+		
+		return eventInstances;
+	}
+	
 	@Override
 	public int getModelId() {
 		if (_modelId == 0) {
@@ -84,12 +150,12 @@ public class SavingsForecastModel implements Model {
 		return this;
 	}
 
-	public SavingsForecastModel startDate(Date startDate) {
+	public SavingsForecastModel startDate(LocalDate startDate) {
 		this._startDate = startDate;
 		return this;
 	}
 
-	public SavingsForecastModel endDate(Date endDate) {
+	public SavingsForecastModel endDate(LocalDate endDate) {
 		this._endDate = endDate;
 		return this;
 	}
@@ -148,5 +214,7 @@ public class SavingsForecastModel implements Model {
 			return false;
 		return true;
 	}
+
+
 
 }

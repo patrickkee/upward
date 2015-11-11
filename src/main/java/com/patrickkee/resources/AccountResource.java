@@ -1,7 +1,5 @@
 package com.patrickkee.resources;
 
-import java.net.URI;
-
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
@@ -10,7 +8,6 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
 import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.Context;
-import javax.ws.rs.core.Request;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriBuilder;
 import javax.ws.rs.core.UriInfo;
@@ -44,15 +41,14 @@ public class AccountResource {
 	@Produces("application/json")
 	public Response createAccount(@QueryParam("accountName") String accountName,
 			@QueryParam("firstName") String firstName, @QueryParam("lastName") String lastName,
-			@QueryParam("email") String email, 
-			@Context UriInfo uriInfo) 
-	{
-		Account acct = Account.newAccount().accountName(accountName).firstName(firstName).lastName(lastName).email(email);
+			@QueryParam("email") String email, @Context UriInfo uriInfo) {
+		Account acct = Account.newAccount().accountName(accountName).firstName(firstName).lastName(lastName)
+				.email(email);
 		AccountsDb.persistAccount(acct);
-		
+
 		UriBuilder locationBuilder = uriInfo.getAbsolutePathBuilder();
 		locationBuilder.path(email);
-		
-	    return Response.created(locationBuilder.build()).entity(AccountsDb.getAccountByEmail(email).get()).build();
+
+		return Response.created(locationBuilder.build()).entity(AccountsDb.getAccountByEmail(email).get()).build();
 	}
 }

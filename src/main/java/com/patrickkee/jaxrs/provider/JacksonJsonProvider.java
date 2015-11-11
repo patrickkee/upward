@@ -1,5 +1,6 @@
 package com.patrickkee.jaxrs.provider;
 
+import javax.ws.rs.Produces;
 import javax.ws.rs.ext.ContextResolver;
 import javax.ws.rs.ext.Provider;
  
@@ -8,6 +9,7 @@ import com.fasterxml.jackson.databind.MapperFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
  
 @Provider
+@Produces("application/json")
 public class JacksonJsonProvider implements ContextResolver<ObjectMapper> {
     
     private static final ObjectMapper MAPPER = new ObjectMapper();
