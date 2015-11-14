@@ -11,7 +11,6 @@ import javax.ws.rs.client.Entity;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
-import org.junit.Ignore;
 import org.junit.Test;
 
 public class ModelResourceTest extends BaseJerseyTest {
@@ -61,7 +60,6 @@ public class ModelResourceTest extends BaseJerseyTest {
 		assertTrue(jsonEntity.contains("01/25/2020"));
 	}
 
-	@Ignore
 	@Test
 	public void createModelTestInvalidDateFormat() {
 		final String START_DATE = "foobar";
@@ -84,8 +82,10 @@ public class ModelResourceTest extends BaseJerseyTest {
 		String jsonEntity = response.readEntity(String.class);
 
 		assertEquals(422, response.getStatus());
-		assertTrue(jsonEntity.contains("PARSE_ERROR"));
-		assertTrue(jsonEntity.contains("Unable to parse date format"));
+		assertEquals("Unprocessable Entity", response.getStatusInfo().getReasonPhrase());
+		assertEquals(Response.Status.Family.CLIENT_ERROR, response.getStatusInfo().getFamily());
+		assertTrue(jsonEntity.contains("Could not parse date"));
+		assertTrue(jsonEntity.contains("Date should be provided in mm/dd/yyyy format"));
 	}
 
 	@Test

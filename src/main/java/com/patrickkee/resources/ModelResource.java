@@ -21,6 +21,7 @@ import org.joda.time.format.DateTimeFormat;
 import org.joda.time.format.DateTimeFormatter;
 
 import com.google.common.base.Optional;
+import com.patrickkee.jaxrs.util.UnprocessableEntityStatusType;
 import com.patrickkee.model.impl.Account;
 import com.patrickkee.model.impl.ResponseMessage;
 import com.patrickkee.model.impl.SavingsForecastModel;
@@ -51,18 +52,33 @@ public class ModelResource {
 			@QueryParam("description") String description, @QueryParam("initialValue") BigDecimal initialValue,
 			@QueryParam("targetValue") BigDecimal targetValue, @QueryParam("startDate") String startDate,
 			@QueryParam("endDate") String endDate, @Context UriInfo uriInfo) {
+
 		Optional<Account> acct = AccountsDb.getAccountByEmail(email);
 		Model savingsForecastModel = null;
 
-		DateTime dt = DATE_FORMATTER.parseDateTime(startDate);
-		LocalDate localStartDate = new LocalDate(dt.getYear(), dt.getMonthOfYear(), dt.getDayOfMonth());
+		// Parse the dates and throw unprocessable entity response if date
+		// formats are invalid
+		LocalDate localStartDate = null;
+		LocalDate localEndDate = null;
+		try {
+			DateTime dt = DATE_FORMATTER.parseDateTime(startDate);
+			localStartDate = new LocalDate(dt.getYear(), dt.getMonthOfYear(), dt.getDayOfMonth());
 
-		dt = DATE_FORMATTER.parseDateTime(endDate);
-		LocalDate localEndDate = new LocalDate(dt.getYear(), dt.getMonthOfYear(), dt.getDayOfMonth());
+			dt = DATE_FORMATTER.parseDateTime(endDate);
+			localEndDate = new LocalDate(dt.getYear(), dt.getMonthOfYear(), dt.getDayOfMonth());
 
+		} catch (IllegalArgumentException e) {
+			return Response.status(UnprocessableEntityStatusType.getNew()).entity(
+					ResponseMessage.getNew("Could not parse date", "Date should be provided in mm/dd/yyyy format"))
+					.build();
+		}
+
+		// Create the new model
 		savingsForecastModel = SavingsForecastModel.newModel().name(modelName).description(description)
 				.initialValue(initialValue).targetValue(targetValue).startDate(localStartDate).endDate(localEndDate);
 
+		// Validate that the account could be found and add the model to the
+		// account, otherwise throw not found error
 		if (acct.isPresent()) {
 			acct.get().addModel(savingsForecastModel);
 			AccountsDb.persistAccount(acct.get());

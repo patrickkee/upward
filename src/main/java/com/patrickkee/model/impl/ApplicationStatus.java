@@ -2,16 +2,16 @@ package com.patrickkee.model.impl;
 
 import org.joda.time.DateTime;
 
-public class ApplicationHealthStatus {
+public class ApplicationStatus {
 
 	private String _status;
 	private String _description;
 	private DateTime _dateTime;
 
-	private ApplicationHealthStatus() {	}
+	private ApplicationStatus() {	}
 
-	public static ApplicationHealthStatus getNew(String status, String desc) {
-		ApplicationHealthStatus stat = new ApplicationHealthStatus();
+	public static ApplicationStatus getNew(String status, String desc) {
+		ApplicationStatus stat = new ApplicationStatus();
 		stat.setDateTime(DateTime.now());
 		stat.setStatus(status);
 		stat.setDescription(desc);
