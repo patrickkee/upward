@@ -1,4 +1,4 @@
-package com.patrickkee.model.type;
+package com.patrickkee.model.event.type;
 
 import java.math.BigDecimal;
 
@@ -21,6 +21,9 @@ public interface EventInstance extends Comparable<EventInstance> {
 	public BigDecimal apply(BigDecimal value);
 
 	public LocalDate getDate();
-
+	
 	public int compareTo(EventInstance arg0);
+	
+	public EventInstance getNew(LocalDate date, BigDecimal value);
+	
 }

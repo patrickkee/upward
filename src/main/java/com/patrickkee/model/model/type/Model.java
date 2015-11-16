@@ -1,9 +1,11 @@
-package com.patrickkee.model.type;
+package com.patrickkee.model.model.type;
 
 import java.math.BigDecimal;
 import java.util.TreeMap;
 
 import org.joda.time.LocalDate;
+
+import com.patrickkee.model.event.type.Period;
 
 public interface Model {
 	public int getModelId();
@@ -23,6 +25,11 @@ public interface Model {
 	 * @return BigDecimal account ending value minus target
 	 */
 	public BigDecimal valueVsTarget();
-	
-	public TreeMap<LocalDate, BigDecimal> getValues();
+
+	/**
+	 * Returns a collection of account values, sorted in natural order, at the frequency specified
+	 * @param the frequency of account values; eg. daily, monthly, etc
+	 * @return map of LocalDates and account values
+	 */
+	public TreeMap<LocalDate, BigDecimal> getValues(Period frequency);
 }

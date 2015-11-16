@@ -1,20 +1,23 @@
-package com.patrickkee.model.impl;
+package com.patrickkee.model.model;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.ListIterator;
+import java.util.Map.Entry;
 import java.util.TreeMap;
+import java.util.stream.Collector;
+import java.util.stream.Collectors;
 
 import org.joda.time.LocalDate;
 
-import com.patrickkee.model.type.EventInstance;
-import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
-import com.patrickkee.model.type.Event;
-import com.patrickkee.model.type.Model;
 import com.patrickkee.jaxrs.util.LocalDateSerializer;
+import com.patrickkee.model.event.type.Event;
+import com.patrickkee.model.event.type.EventInstance;
+import com.patrickkee.model.event.type.Period;
+import com.patrickkee.model.model.type.Model;
 
 public class SavingsForecastModel implements Model {
 
@@ -31,7 +34,6 @@ public class SavingsForecastModel implements Model {
 	}
 
 	// Getters
-	@JsonFormat
 	public String getName() {
 		return _name;
 	}
@@ -61,18 +63,18 @@ public class SavingsForecastModel implements Model {
 	public void addEvent(Event event) {
 		events.add(event);
 	}
-	
+
 	@Override
 	public BigDecimal getValue(LocalDate valueAsOfDate) {
-		//Apply all the event instances to the account value
+		// Apply all the event instances to the account value
 		BigDecimal currentValue = _initialValue;
-		ListIterator<EventInstance> eventInstIterator = getSortedEventInstances().listIterator();
-		
-		EventInstance e = null;
-		while (eventInstIterator.hasNext() && ((e = eventInstIterator.next()).getDate().isBefore(valueAsOfDate))) {
+		//ListIterator<EventInstance> eventInstIterator = getSortedEventInstances(valueAsOfDate).listIterator();
+		List<EventInstance> instances = getSortedEventInstances(valueAsOfDate);
+
+		for (EventInstance e : instances) {
 			currentValue = e.apply(currentValue);
 		}
-		
+
 		return currentValue;
 	}
 
@@ -80,40 +82,48 @@ public class SavingsForecastModel implements Model {
 	public BigDecimal valueVsTarget() {
 		return getValue(_endDate).subtract(_targetValue);
 	}
-	
+
 	@Override
-	public TreeMap<LocalDate, BigDecimal> getValues() {
+	public TreeMap<LocalDate, BigDecimal> getValues(Period frequency) {
 		TreeMap<LocalDate, BigDecimal> modelValues = new TreeMap<>();
-		
-		//Apply all the event instances to the account value
+
+		// Apply all the event instances to the account value
 		BigDecimal currentValue = _initialValue;
-		ListIterator<EventInstance> eventInstIterator = getSortedEventInstances().listIterator();
-		
+		ListIterator<EventInstance> eventInstIterator = getSortedEventInstances(_endDate).listIterator();
+
 		EventInstance e = null;
 		while (eventInstIterator.hasNext()) {
 			e = eventInstIterator.next();
 			currentValue = e.apply(currentValue);
 			modelValues.put(e.getDate(), currentValue.setScale(2, BigDecimal.ROUND_HALF_UP));
 		}
-		
+
+		modelValues = modelValues.entrySet()
+								 .stream()
+								 .filter(p -> frequency.getEnd(p.getKey()).compareTo(p.getKey()) == 0)
+								 .collect(Collectors.toMap(
+									       p -> p.getKey(), 
+									       p -> p.getValue(),
+									       (v1, v2) -> { throw new IllegalStateException(); },
+									       () -> new TreeMap<LocalDate, BigDecimal>()));
 		return modelValues;
 	}
-	
-	private List<EventInstance> getSortedEventInstances() {
+
+	private List<EventInstance> getSortedEventInstances(LocalDate valueAsOfDate) {
 		List<EventInstance> eventInstances = new ArrayList<>();
-		
-		//Get all the event instances from the event types in the model
-		for (ListIterator<Event> iter = events.listIterator(); iter.hasNext(); ) {
-		    Event e = iter.next();
-		    eventInstances.addAll(e.getInstances());		    
+
+		// Get all the event instances from the event types in the model
+		for (ListIterator<Event> iter = events.listIterator(); iter.hasNext();) {
+			Event e = iter.next();
+			eventInstances.addAll(e.getInstances(valueAsOfDate));
 		}
-		
-		//Sort the event instances chronologically
+
+		// Sort the event instances chronologically
 		Collections.sort(eventInstances);
-		
+
 		return eventInstances;
 	}
-	
+
 	@Override
 	public int getModelId() {
 		if (_modelId == 0) {
@@ -214,7 +224,5 @@ public class SavingsForecastModel implements Model {
 			return false;
 		return true;
 	}
-
-
 
 }

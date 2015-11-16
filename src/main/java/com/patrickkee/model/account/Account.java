@@ -1,4 +1,4 @@
-package com.patrickkee.model.impl;
+package com.patrickkee.model.account;
 
 import java.math.BigDecimal;
 import java.util.Date;
@@ -6,7 +6,7 @@ import java.util.HashMap;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.patrickkee.model.type.Model;
+import com.patrickkee.model.model.type.Model;
 
 /**
  * Stores a collection of models and metadata about the owner of those models.

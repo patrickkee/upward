@@ -13,7 +13,7 @@ import javax.ws.rs.core.UriBuilder;
 import javax.ws.rs.core.UriInfo;
 
 import com.google.common.base.Optional;
-import com.patrickkee.model.impl.Account;
+import com.patrickkee.model.account.Account;
 import com.patrickkee.persistence.AccountsDb;
 
 @Path("accounts")

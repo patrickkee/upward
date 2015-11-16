@@ -1,4 +1,4 @@
-package com.patrickkee.model.impl;
+package com.patrickkee.resources;
 
 public class ResponseMessage {
 

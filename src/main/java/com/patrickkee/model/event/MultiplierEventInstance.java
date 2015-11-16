@@ -1,32 +1,27 @@
-package com.patrickkee.model.impl;
+package com.patrickkee.model.event;
 
 import java.math.BigDecimal;
 
 import org.joda.time.LocalDate;
 
-import com.patrickkee.model.type.EventInstance;
+import com.patrickkee.model.event.type.EventInstance;
 
-public class YieldEventInstance implements EventInstance {
+public class MultiplierEventInstance implements EventInstance {
 
 	private LocalDate _date;
 	private BigDecimal _percent;
-	
-	private YieldEventInstance() {}
-	
-	@Override
-	public BigDecimal apply(BigDecimal value) {
-		return value.multiply(_percent);
-	}
 
-	public static YieldEventInstance getNew(LocalDate date, BigDecimal percent) {
-		YieldEventInstance evnt = new YieldEventInstance();
+	protected MultiplierEventInstance() { }
+
+	@Override
+	public MultiplierEventInstance getNew(LocalDate date, BigDecimal percent) {
+		MultiplierEventInstance evnt = new MultiplierEventInstance();
 		evnt.setDate(date);
 		evnt.setPercent(percent);
-		
+
 		return evnt;
 	}
 
-	//Getters and setters
 	private void setDate(LocalDate _date) {
 		this._date = _date;
 	}
@@ -34,7 +29,7 @@ public class YieldEventInstance implements EventInstance {
 	public LocalDate getDate() {
 		return _date;
 	}
-	
+
 	public BigDecimal getPercent() {
 		return _percent;
 	}
@@ -43,17 +38,20 @@ public class YieldEventInstance implements EventInstance {
 		this._percent = _percent;
 	}
 
-	
+	@Override
+	public BigDecimal apply(BigDecimal value) {
+		return value.multiply(_percent);
+	}
+
 	@Override
 	public int compareTo(EventInstance arg0) {
 		if (_date.isBefore(arg0.getDate())) {
 			return -1;
-		}
-		else if (_date.isAfter(arg0.getDate())) {
+		} else if (_date.isAfter(arg0.getDate())) {
 			return 1;
-		} 
-		else {
+		} else {
 			return 0;
 		}
-	}	
+	}
+
 }

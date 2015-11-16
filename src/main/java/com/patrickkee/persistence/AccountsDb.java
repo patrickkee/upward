@@ -3,7 +3,7 @@ package com.patrickkee.persistence;
 import java.util.HashMap;
 
 import com.google.common.base.Optional;
-import com.patrickkee.model.impl.Account;
+import com.patrickkee.model.account.Account;
 
 public class AccountsDb {
 	private static HashMap<String, Account> _accounts = new HashMap<String, Account>();

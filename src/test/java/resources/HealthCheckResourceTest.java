@@ -8,7 +8,7 @@ import javax.ws.rs.core.Response;
 import org.junit.Assert;
 import org.junit.Test;
 
-import com.patrickkee.model.impl.ApplicationStatus;
+import com.patrickkee.model.application.ApplicationStatus;
 
 public class HealthCheckResourceTest extends BaseJerseyTest {
 

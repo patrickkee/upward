@@ -22,10 +22,9 @@ import org.joda.time.format.DateTimeFormatter;
 
 import com.google.common.base.Optional;
 import com.patrickkee.jaxrs.util.UnprocessableEntityStatusType;
-import com.patrickkee.model.impl.Account;
-import com.patrickkee.model.impl.ResponseMessage;
-import com.patrickkee.model.impl.SavingsForecastModel;
-import com.patrickkee.model.type.Model;
+import com.patrickkee.model.account.Account;
+import com.patrickkee.model.model.SavingsForecastModel;
+import com.patrickkee.model.model.type.Model;
 import com.patrickkee.persistence.AccountsDb;
 
 @Path("accounts/{email}/models")

@@ -14,9 +14,9 @@ import org.joda.time.format.DateTimeFormat;
 import org.joda.time.format.DateTimeFormatter;
 import org.junit.Test;
 
-import com.patrickkee.model.impl.Account;
-import com.patrickkee.model.impl.SavingsForecastModel;
-import com.patrickkee.model.type.Model;
+import com.patrickkee.model.account.Account;
+import com.patrickkee.model.model.SavingsForecastModel;
+import com.patrickkee.model.model.type.Model;
 
 public class AccountTest {
 
