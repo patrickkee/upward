@@ -8,7 +8,7 @@ import javax.ws.rs.core.Response;
 import com.patrickkee.model.application.ApplicationStatus;
 
 @Path("health")
-public class HealthCheckResource {
+public class HealthResource {
 
 	@GET
 	@Produces("application/json")

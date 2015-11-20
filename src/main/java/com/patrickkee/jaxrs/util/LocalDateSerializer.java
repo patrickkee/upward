@@ -20,4 +20,5 @@ public class LocalDateSerializer extends JsonSerializer<LocalDate> {
 			throws IOException, JsonProcessingException {
 		gen.writeString(formatter.print(value));
 	}
+
 }

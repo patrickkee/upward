@@ -7,22 +7,22 @@ import org.junit.Test;
 
 import com.google.common.base.Optional;
 import com.patrickkee.model.account.Account;
-import com.patrickkee.persistence.AccountsDb;
+import com.patrickkee.persistence.FinancialModelsDb;
 
 public class FinancialModelDbTest {
 
 	@Test
 	public void testGetByIdWhenMissing() {
-		Optional<Account> acct = AccountsDb.getAccountByEmail("foooobar");
+		Optional<Account> acct = FinancialModelsDb.getAccount("foooobar");
 		assertTrue(!acct.isPresent());
 	}
 
 	@Test
 	public void testGetByIdWhenPresent() {
 		Account acct = Account.newAccount().accountName("foo").firstName("bar").lastName("man").email("choo");
-		AccountsDb.persistAccount(acct);
+		FinancialModelsDb.persistAccount(acct);
 		acct = null;
-		acct = AccountsDb.getAccountByEmail("choo").get();
+		acct = FinancialModelsDb.getAccount("choo").get();
 		assertEquals("foo", acct.getAccountName());
 	}
 }

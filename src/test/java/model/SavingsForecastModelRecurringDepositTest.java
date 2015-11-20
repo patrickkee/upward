@@ -27,9 +27,9 @@ public class SavingsForecastModelRecurringDepositTest {
 		dt = formatter.parseDateTime("12/31/2019");
 		LocalDate endDate = new LocalDate(dt.getYear(), dt.getMonthOfYear(), dt.getDayOfMonth());
 
-		SavingsForecastModel model = SavingsForecastModel.newModel().name("test").startDate(startDate).endDate(endDate)
+		SavingsForecastModel model = SavingsForecastModel.getNew().name("test").startDate(startDate).endDate(endDate)
 				.initialValue(BigDecimal.valueOf(2000.0)).targetValue(BigDecimal.valueOf(10000.0));
-		model.addEvent(DepositEventRecurring.getNew(BigDecimal.valueOf(100.50), Period.MONTHLY, startDate, endDate));
+		model.addEvent(DepositEventRecurring.getNew("VALUE_TEST_EVENT", BigDecimal.valueOf(100.50), Period.MONTHLY, startDate, endDate));
 
 		// Test intermediary model value
 		dt = formatter.parseDateTime("01/01/2011");

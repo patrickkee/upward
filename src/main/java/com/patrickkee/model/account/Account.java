@@ -4,8 +4,10 @@ import java.math.BigDecimal;
 import java.util.Date;
 import java.util.HashMap;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.google.common.base.Optional;
 import com.patrickkee.model.model.type.Model;
 
 /**
@@ -37,22 +39,39 @@ public class Account {
 	public String getAccountName() {
 		return _accountName;
 	}
-
+	@JsonProperty("acctName")
+	public void setAccountName(String name) {
+		this._accountName = name;
+	}
+	
 	@JsonProperty("firstName")
 	public String getFirstName() {
 		return _firstName;
 	}
-
+	@JsonProperty("firstName")
+	public void setFirstName(String firstName) {
+		this._firstName = firstName;
+	}
+	
 	@JsonProperty("lastName")
 	public String getLastName() {
 		return _lastName;
+	}
+	@JsonProperty("lastName")
+	public void setLastName(String lastName) {
+		this._lastName = lastName;
 	}
 
 	@JsonProperty("email")
 	public String getEmail() {
 		return _email;
 	}
-
+	@JsonProperty("email")
+	public void setEmail(String email) {
+		this._email = email;
+	}
+	
+	@JsonIgnore
 	public HashMap<Integer, Model> getModels() {
 		return _models;
 	}
@@ -65,8 +84,8 @@ public class Account {
 		_models.remove(modelId);
 	}
 
-	public Model getModel(int modelId) {
-		return _models.get(modelId);
+	public Optional<Model> getModel(int modelId) {
+		return Optional.of(_models.get(modelId));
 	}
 
 	/**
@@ -112,7 +131,7 @@ public class Account {
 		final int prime = 31;
 		int result = 1;
 		result = prime * result + ((_accountName == null) ? 0 : _accountName.hashCode());
-		return result;
+		return result * -1;
 	}
 
 	@Override

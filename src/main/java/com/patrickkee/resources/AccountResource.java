@@ -14,7 +14,7 @@ import javax.ws.rs.core.UriInfo;
 
 import com.google.common.base.Optional;
 import com.patrickkee.model.account.Account;
-import com.patrickkee.persistence.AccountsDb;
+import com.patrickkee.persistence.FinancialModelsDb;
 
 @Path("accounts")
 public class AccountResource {
@@ -29,7 +29,7 @@ public class AccountResource {
 	 * @return
 	 */
 	public Account getAccountByEmail(@PathParam("email") String email) {
-		Optional<Account> acct = AccountsDb.getAccountByEmail(email);
+		Optional<Account> acct = FinancialModelsDb.getAccount(email);
 		if (acct.isPresent()) {
 			return acct.get();
 		} else {
@@ -44,11 +44,11 @@ public class AccountResource {
 			@QueryParam("email") String email, @Context UriInfo uriInfo) {
 		Account acct = Account.newAccount().accountName(accountName).firstName(firstName).lastName(lastName)
 				.email(email);
-		AccountsDb.persistAccount(acct);
+		FinancialModelsDb.persistAccount(acct);
 
 		UriBuilder locationBuilder = uriInfo.getAbsolutePathBuilder();
 		locationBuilder.path(email);
 
-		return Response.created(locationBuilder.build()).entity(AccountsDb.getAccountByEmail(email).get()).build();
+		return Response.created(locationBuilder.build()).entity(FinancialModelsDb.getAccount(email).get()).build();
 	}
 }

@@ -3,6 +3,7 @@ package model;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
+import java.io.IOException;
 import java.math.BigDecimal;
 import java.util.TreeMap;
 
@@ -12,6 +13,8 @@ import org.joda.time.format.DateTimeFormat;
 import org.joda.time.format.DateTimeFormatter;
 import org.junit.Test;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.SerializationFeature;
 import com.patrickkee.model.event.DepositEventRecurring;
 import com.patrickkee.model.event.YieldEventRecurring;
 import com.patrickkee.model.event.type.Period;
@@ -21,6 +24,7 @@ public class SavingsForecastModelTest {
 
 	@Test
 	public void valueVsTargetTest() {
+		final String EVENT_NAME = "valueVsTargetTest";
 		// Set up the model
 		DateTimeFormatter formatter = DateTimeFormat.forPattern("MM/dd/yyyy");
 
@@ -30,10 +34,10 @@ public class SavingsForecastModelTest {
 		dt = formatter.parseDateTime("12/31/2019");
 		LocalDate endDate = new LocalDate(dt.getYear(), dt.getMonthOfYear(), dt.getDayOfMonth());
 
-		SavingsForecastModel model = SavingsForecastModel.newModel().name("test").startDate(startDate).endDate(endDate)
+		SavingsForecastModel model = SavingsForecastModel.getNew().name("test").startDate(startDate).endDate(endDate)
 				.initialValue(BigDecimal.valueOf(2000.0)).targetValue(BigDecimal.valueOf(10000.0));
 		
-		model.addEvent(YieldEventRecurring.getNew(BigDecimal.valueOf(1.00416), Period.MONTHLY, startDate, endDate));
+		model.addEvent(YieldEventRecurring.getNew(EVENT_NAME, BigDecimal.valueOf(1.00416), Period.MONTHLY, startDate, endDate));
 
 		assertEquals(BigDecimal.valueOf(-6708.60).setScale(2, BigDecimal.ROUND_HALF_UP),
 				model.valueVsTarget().setScale(2, BigDecimal.ROUND_HALF_UP));
@@ -74,13 +78,46 @@ public class SavingsForecastModelTest {
 		dt = formatter.parseDateTime("11/30/2010");
 		LocalDate endDate = new LocalDate(dt.getYear(), dt.getMonthOfYear(), dt.getDayOfMonth());
 
-		SavingsForecastModel model = SavingsForecastModel.newModel().name("test").startDate(startDate).endDate(endDate)
+		SavingsForecastModel model = SavingsForecastModel.getNew().name("test").startDate(startDate).endDate(endDate)
 				.initialValue(BigDecimal.valueOf(2000.0)).targetValue(BigDecimal.valueOf(10000.0));
-		model.addEvent(YieldEventRecurring.getNew(BigDecimal.valueOf(1.00416), Period.MONTHLY, startDate.plusDays(1), endDate.plusDays(1)));
-		model.addEvent(DepositEventRecurring.getNew(BigDecimal.valueOf(100), Period.MONTHLY, startDate, endDate));
+		model.addEvent(YieldEventRecurring.getNew("YEILD_EVENT", BigDecimal.valueOf(1.00416), Period.MONTHLY, startDate.plusDays(1), endDate.plusDays(1)));
+		model.addEvent(DepositEventRecurring.getNew("DEPOSIT_EVENT", BigDecimal.valueOf(100), Period.MONTHLY, startDate, endDate));
 		
 		TreeMap<LocalDate, BigDecimal> modelValues = model.getValues(Period.MONTHLY);
 		assertTrue(modelValues.equals(manuallyComputedModel));
+	}
+
+	@Test
+	public void testSavingsForecastModelSerialization() {
+		final String EVENT_NAME = "serializationTest";
+		// Set up the model
+		DateTimeFormatter formatter = DateTimeFormat.forPattern("MM/dd/yyyy");
+
+		DateTime dt = formatter.parseDateTime("01/01/2010");
+		LocalDate startDate = new LocalDate(dt.getYear(), dt.getMonthOfYear(), dt.getDayOfMonth());
+
+		dt = formatter.parseDateTime("12/31/2019");
+		LocalDate endDate = new LocalDate(dt.getYear(), dt.getMonthOfYear(), dt.getDayOfMonth());
+
+		SavingsForecastModel model = SavingsForecastModel.getNew().name("test").startDate(startDate).endDate(endDate).description("foobar")
+				.initialValue(BigDecimal.valueOf(2000.0)).targetValue(BigDecimal.valueOf(10000.0));
+		
+		ObjectMapper mapper = new ObjectMapper();
+		mapper.configure(SerializationFeature.FAIL_ON_EMPTY_BEANS, false);
+
+		try {
+			String genJson = mapper.writeValueAsString(model);
+			SavingsForecastModel deserializedModel = mapper.readValue(genJson, SavingsForecastModel.class);
+			assertEquals("test", deserializedModel.getName());
+			assertEquals(startDate, deserializedModel.getStartDate());
+			assertEquals(endDate, deserializedModel.getEndDate());
+			assertEquals("foobar", deserializedModel.getDescription());
+			assertEquals(BigDecimal.valueOf(2000.0), deserializedModel.getInitialValue());
+			assertEquals(BigDecimal.valueOf(10000.0), deserializedModel.getTargetValue());
+		} catch (IOException e) {
+			e.printStackTrace();
+			assertEquals(0,1);
+		} 
 	}
 	
 }

@@ -5,6 +5,7 @@ import java.util.TreeMap;
 
 import org.joda.time.LocalDate;
 
+import com.patrickkee.model.event.type.Event;
 import com.patrickkee.model.event.type.Period;
 
 public interface Model {
@@ -27,9 +28,21 @@ public interface Model {
 	public BigDecimal valueVsTarget();
 
 	/**
-	 * Returns a collection of account values, sorted in natural order, at the frequency specified
-	 * @param the frequency of account values; eg. daily, monthly, etc
+	 * Returns a collection of account values, sorted in natural order, at the
+	 * frequency specified
+	 * 
+	 * @param the
+	 *            frequency of account values; eg. daily, monthly, etc
 	 * @return map of LocalDates and account values
 	 */
 	public TreeMap<LocalDate, BigDecimal> getValues(Period frequency);
+
+	/**
+	 * Adds a new event to the model's collection of events
+	 * 
+	 * @param model
+	 */
+	public void addEvent(Event event);
+
+	public Event getEvent(String eventName);
 }

@@ -12,6 +12,7 @@ import com.patrickkee.model.event.type.AddendRecurring;
 
 public class DepositEventRecurring extends AddendRecurring implements Event {
 
+	private String _name;
 	private BigDecimal _amount;
 	private Period _period;
 	private LocalDate _startDate;
@@ -20,9 +21,10 @@ public class DepositEventRecurring extends AddendRecurring implements Event {
 
 	private DepositEventRecurring() { }
 
-	public static DepositEventRecurring getNew(BigDecimal amount, Period period, LocalDate startDate,
+	public static DepositEventRecurring getNew(String name, BigDecimal amount, Period period, LocalDate startDate,
 			LocalDate endDate) {
 		DepositEventRecurring tmpEvnt = new DepositEventRecurring();
+		tmpEvnt.setName(name);
 		tmpEvnt.setAmount(amount);
 		tmpEvnt.setPeriod(period);
 		tmpEvnt.setStartDate(startDate);
@@ -37,7 +39,16 @@ public class DepositEventRecurring extends AddendRecurring implements Event {
 		return super.getInstances(_amount, _period, _startDate, valueAsOfDate, _depositEventInstance);
 	}
 
-	// Setters...
+	//Getters & Setters...
+	@Override
+	public String getName() {
+		return this._name;
+	}
+	
+	private void setName(String name) {
+		this._name = name;		
+	}
+	
 	public void setAmount(BigDecimal amount) {
 		this._amount = amount;
 	}

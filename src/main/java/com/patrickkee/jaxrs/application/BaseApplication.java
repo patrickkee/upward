@@ -9,4 +9,5 @@ public class BaseApplication extends ResourceConfig {
     public BaseApplication() {
         packages("com.patrickkee.resources");
     }
+    
 }

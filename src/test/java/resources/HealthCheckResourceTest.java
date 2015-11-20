@@ -8,12 +8,10 @@ import javax.ws.rs.core.Response;
 import org.junit.Assert;
 import org.junit.Test;
 
-import com.patrickkee.model.application.ApplicationStatus;
-
 public class HealthCheckResourceTest extends BaseJerseyTest {
 
 	@Test
-	public void missingAccountTest() {
+	public void healthCheckTest() {
 		Response response = target("health").request(MediaType.APPLICATION_JSON).get();
 		
 		assertEquals(200, response.getStatus());

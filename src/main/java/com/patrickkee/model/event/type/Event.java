@@ -13,4 +13,9 @@ public interface Event {
 	 */
 	public ArrayList<EventInstance> getInstances(LocalDate valueAsOfDate);
 
+	/**
+	 * Returns the name of the particular event
+	 * @return
+	 */
+	public String getName();
 }

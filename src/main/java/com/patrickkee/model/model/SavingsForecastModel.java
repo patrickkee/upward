@@ -1,24 +1,29 @@
 package com.patrickkee.model.model;
 
+import java.beans.Transient;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
-import java.util.ListIterator;
-import java.util.Map.Entry;
 import java.util.TreeMap;
-import java.util.stream.Collector;
 import java.util.stream.Collectors;
 
 import org.joda.time.LocalDate;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.patrickkee.jaxrs.util.LocalDateSerializer;
+import com.patrickkee.jaxrs.util.LocalDateDeserializer;
 import com.patrickkee.model.event.type.Event;
 import com.patrickkee.model.event.type.EventInstance;
 import com.patrickkee.model.event.type.Period;
 import com.patrickkee.model.model.type.Model;
 
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class SavingsForecastModel implements Model {
 
 	private int _modelId = 0;
@@ -28,49 +33,102 @@ public class SavingsForecastModel implements Model {
 	private BigDecimal _targetValue;
 	private LocalDate _startDate;
 	private LocalDate _endDate;
-	private List<Event> events = new ArrayList<Event>();
+	private HashMap<String, Event> _events = new HashMap<String, Event>();
 
-	private SavingsForecastModel() {
+	private SavingsForecastModel() { }
+
+	public static SavingsForecastModel getNew() {
+		return new SavingsForecastModel();
 	}
-
-	// Getters
+	
+	// Getters & Setters
+	@Override
+	@JsonProperty("modelId")
+	public int getModelId() {
+		if (_modelId == 0) {
+			_modelId = hashCode();
+			return _modelId;
+		} else {
+			return _modelId;
+		}
+	}
+	//TODO: Revert this once deserialization of dates is fixed - this is a hack to work around getting the wrong identity when dates are null
+	@JsonProperty("modelId")
+	public void setModelId(int modelId) {
+		this._modelId=modelId;
+	}
+	
+	@JsonProperty("name")
 	public String getName() {
 		return _name;
 	}
-
+	@JsonProperty("name")
+	public void setName(String name) {
+		this._name = name;
+	}
+	
+	@JsonProperty("description")
 	public String getDescription() {
 		return _description;
 	}
-
+	@JsonProperty("description")
+	public void setDescription(String description) {
+		this._description = description;
+	}
+	
+	@JsonProperty("initialValue")
 	public BigDecimal getInitialValue() {
 		return _initialValue;
 	}
-
+	@JsonProperty("initialValue")
+	public void setInitialValue(BigDecimal initialValue) {
+		this._initialValue = initialValue;
+	}
+	
+	@JsonProperty("targetValue")
 	public BigDecimal getTargetValue() {
 		return _targetValue;
 	}
-
+	@JsonProperty("targetValue")
+	public void setTargetValue(BigDecimal targetValue) {
+		this._targetValue = targetValue;
+	}
+	
 	@JsonSerialize(using = LocalDateSerializer.class)
+	@JsonProperty("startDate")
 	public LocalDate getStartDate() {
 		return _startDate;
 	}
-
+	@JsonDeserialize(using = LocalDateDeserializer.class)
+	@JsonProperty("startDate")
+	public void setStartDate(LocalDate startDate) {
+		this._startDate = startDate;
+	}
+	
 	@JsonSerialize(using = LocalDateSerializer.class)
+	@JsonProperty("endDate")
 	public LocalDate getEndDate() {
 		return _endDate;
+	} 
+	@JsonDeserialize(using = LocalDateDeserializer.class)
+	@JsonProperty("endDate")
+	public void setEndDate(LocalDate endDate) {
+		this._endDate = endDate;
 	}
-
+	
+	@Override
 	public void addEvent(Event event) {
-		events.add(event);
+		_events.putIfAbsent(event.getName(), event);
 	}
 
+	@JsonIgnore
 	@Override
 	public BigDecimal getValue(LocalDate valueAsOfDate) {
 		// Apply all the event instances to the account value
 		BigDecimal currentValue = _initialValue;
-		//ListIterator<EventInstance> eventInstIterator = getSortedEventInstances(valueAsOfDate).listIterator();
 		List<EventInstance> instances = getSortedEventInstances(valueAsOfDate);
 
+		//TODO: Convert to Java8 Stream iteration style
 		for (EventInstance e : instances) {
 			currentValue = e.apply(currentValue);
 		}
@@ -78,29 +136,30 @@ public class SavingsForecastModel implements Model {
 		return currentValue;
 	}
 
+	@JsonIgnore
 	@Override
 	public BigDecimal valueVsTarget() {
 		return getValue(_endDate).subtract(_targetValue);
 	}
 
+	@JsonIgnore
 	@Override
-	public TreeMap<LocalDate, BigDecimal> getValues(Period frequency) {
+	public TreeMap<LocalDate, BigDecimal> getValues(Period period) {
 		TreeMap<LocalDate, BigDecimal> modelValues = new TreeMap<>();
 
 		// Apply all the event instances to the account value
 		BigDecimal currentValue = _initialValue;
-		ListIterator<EventInstance> eventInstIterator = getSortedEventInstances(_endDate).listIterator();
-
-		EventInstance e = null;
-		while (eventInstIterator.hasNext()) {
-			e = eventInstIterator.next();
+		List<EventInstance> instances = getSortedEventInstances(_endDate);
+		
+		for (EventInstance e : instances) {
 			currentValue = e.apply(currentValue);
 			modelValues.put(e.getDate(), currentValue.setScale(2, BigDecimal.ROUND_HALF_UP));
 		}
 
+		//Filter the events to get only the last value for each period.
 		modelValues = modelValues.entrySet()
 								 .stream()
-								 .filter(p -> frequency.getEnd(p.getKey()).compareTo(p.getKey()) == 0)
+								 .filter(p -> period.getEnd(p.getKey()).compareTo(p.getKey()) == 0)
 								 .collect(Collectors.toMap(
 									       p -> p.getKey(), 
 									       p -> p.getValue(),
@@ -109,13 +168,13 @@ public class SavingsForecastModel implements Model {
 		return modelValues;
 	}
 
+	@JsonIgnore
 	private List<EventInstance> getSortedEventInstances(LocalDate valueAsOfDate) {
 		List<EventInstance> eventInstances = new ArrayList<>();
 
 		// Get all the event instances from the event types in the model
-		for (ListIterator<Event> iter = events.listIterator(); iter.hasNext();) {
-			Event e = iter.next();
-			eventInstances.addAll(e.getInstances(valueAsOfDate));
+		for (Event event : _events.values()) {
+			eventInstances.addAll(event.getInstances(valueAsOfDate));
 		}
 
 		// Sort the event instances chronologically
@@ -124,22 +183,7 @@ public class SavingsForecastModel implements Model {
 		return eventInstances;
 	}
 
-	@Override
-	public int getModelId() {
-		if (_modelId == 0) {
-			_modelId = hashCode();
-			return _modelId;
-		} else {
-			return _modelId;
-		}
-
-	}
-
 	// Methods for builder pattern
-	public static SavingsForecastModel newModel() {
-		return new SavingsForecastModel();
-	}
-
 	public SavingsForecastModel name(String name) {
 		this._name = name;
 		return this;
@@ -180,7 +224,7 @@ public class SavingsForecastModel implements Model {
 		result = prime * result + ((_name == null) ? 0 : _name.hashCode());
 		result = prime * result + ((_startDate == null) ? 0 : _startDate.hashCode());
 		result = prime * result + ((_targetValue == null) ? 0 : _targetValue.hashCode());
-		return result;
+		return result * -1;
 	}
 
 	@Override
@@ -223,6 +267,12 @@ public class SavingsForecastModel implements Model {
 		} else if (!_targetValue.equals(other._targetValue))
 			return false;
 		return true;
+	}
+
+	@Override
+	@JsonIgnore
+	public Event getEvent(String eventName) {
+		return _events.get(eventName);
 	}
 
 }

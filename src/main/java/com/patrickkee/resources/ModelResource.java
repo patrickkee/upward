@@ -25,7 +25,7 @@ import com.patrickkee.jaxrs.util.UnprocessableEntityStatusType;
 import com.patrickkee.model.account.Account;
 import com.patrickkee.model.model.SavingsForecastModel;
 import com.patrickkee.model.model.type.Model;
-import com.patrickkee.persistence.AccountsDb;
+import com.patrickkee.persistence.FinancialModelsDb;
 
 @Path("accounts/{email}/models")
 public class ModelResource {
@@ -52,7 +52,7 @@ public class ModelResource {
 			@QueryParam("targetValue") BigDecimal targetValue, @QueryParam("startDate") String startDate,
 			@QueryParam("endDate") String endDate, @Context UriInfo uriInfo) {
 
-		Optional<Account> acct = AccountsDb.getAccountByEmail(email);
+		Optional<Account> acct = FinancialModelsDb.getAccount(email);
 		Model savingsForecastModel = null;
 
 		// Parse the dates and throw unprocessable entity response if date
@@ -73,19 +73,19 @@ public class ModelResource {
 		}
 
 		// Create the new model
-		savingsForecastModel = SavingsForecastModel.newModel().name(modelName).description(description)
+		savingsForecastModel = SavingsForecastModel.getNew().name(modelName).description(description)
 				.initialValue(initialValue).targetValue(targetValue).startDate(localStartDate).endDate(localEndDate);
 
 		// Validate that the account could be found and add the model to the
 		// account, otherwise throw not found error
 		if (acct.isPresent()) {
 			acct.get().addModel(savingsForecastModel);
-			AccountsDb.persistAccount(acct.get());
+			FinancialModelsDb.persistAccount(acct.get());
 
 			UriBuilder locationBuilder = uriInfo.getAbsolutePathBuilder();
 			locationBuilder.path(Integer.toString(savingsForecastModel.getModelId()));
-
-			return Response.created(locationBuilder.build()).entity(AccountsDb.getAccountByEmail(email).get()).build();
+			
+			return Response.created(locationBuilder.build()).entity(savingsForecastModel).build();
 		} else {
 			return Response.status(Status.NOT_FOUND).entity(
 					ResponseMessage.getNew("ACCOUNT_NOT_FOUND", "Unable to create model because account was not found"))
@@ -105,7 +105,7 @@ public class ModelResource {
 	@Path("/{modelId}")
 	@Produces("application/json")
 	public Response removeModel(@PathParam("email") String email, @PathParam("modelId") int modelId) {
-		Optional<Account> acct = AccountsDb.getAccountByEmail(email);
+		Optional<Account> acct = FinancialModelsDb.getAccount(email);
 
 		if (acct.isPresent() && null == acct.get().getModel(modelId)) {
 			return Response.status(Status.NOT_FOUND).entity(ResponseMessage.getNew("MODEL_NOT_FOUND",
