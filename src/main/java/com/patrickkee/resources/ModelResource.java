@@ -107,7 +107,7 @@ public class ModelResource {
 	public Response removeModel(@PathParam("email") String email, @PathParam("modelId") int modelId) {
 		Optional<Account> acct = FinancialModelsDb.getAccount(email);
 
-		if (acct.isPresent() && null == acct.get().getModel(modelId)) {
+		if (acct.isPresent() && !acct.get().getModel(modelId).isPresent()) {
 			return Response.status(Status.NOT_FOUND).entity(ResponseMessage.getNew("MODEL_NOT_FOUND",
 					"Could not delete model because it could not be found in this account")).build();
 		} else if (acct.isPresent() && null != acct.get().getModel(modelId)) {

@@ -4,9 +4,6 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
 import java.math.BigDecimal;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.Date;
 
 import javax.ws.rs.client.Entity;
 import javax.ws.rs.core.MediaType;
@@ -15,6 +12,7 @@ import javax.ws.rs.core.Response;
 import org.junit.Test;
 
 import com.patrickkee.model.model.SavingsForecastModel;
+import com.patrickkee.resources.ResponseMessage;
 
 public class ModelResourceTest extends BaseJerseyTest {
 
@@ -95,8 +93,6 @@ public class ModelResourceTest extends BaseJerseyTest {
 
 	@Test
 	public void deleteModelModelNotFoundTest() {
-		final String START_DATE = "01/25/2010";
-		final String END_DATE = "01/25/2020";
 		Response response = target("accounts").queryParam("accountName", "createModelTest")
 				.queryParam("firstName", "createModelTestFirstName").queryParam("lastName", "createModelTestLastName")
 				.queryParam("email", "deleteModelModelNotFoundTest@gmail.com").request(MediaType.APPLICATION_JSON_TYPE)
@@ -105,12 +101,11 @@ public class ModelResourceTest extends BaseJerseyTest {
 		response = target("accounts/deleteModelModelNotFoundTest@gmail.com/models/0")
 				.request(MediaType.APPLICATION_JSON_TYPE).delete(Response.class);
 
-		// TODO: validate response object intelligently by de-serializing into
-		// object
-		String jsonEntity = response.readEntity(String.class);
+		ResponseMessage responseObj = response.readEntity(ResponseMessage.class);
 
 		assertEquals(404, response.getStatus());
-		assertTrue(jsonEntity.contains("MODEL_NOT_FOUND"));
-		assertTrue(jsonEntity.contains("Could not delete model because it could not be found in this account"));
+		assertEquals("MODEL_NOT_FOUND", responseObj.getMessage());
+		assertEquals("Could not delete model because it could not be found in this account",
+				responseObj.getDescription());
 	}
 }

@@ -85,7 +85,13 @@ public class Account {
 	}
 
 	public Optional<Model> getModel(int modelId) {
-		return Optional.of(_models.get(modelId));
+		Model m = _models.get(modelId);
+		if (null != m) {
+			return Optional.of(_models.get(modelId));	
+		} else {
+			return Optional.absent();
+		}
+		
 	}
 
 	/**
