@@ -3,6 +3,7 @@ package resources;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
+import java.math.BigDecimal;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -12,6 +13,8 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
 import org.junit.Test;
+
+import com.patrickkee.model.model.SavingsForecastModel;
 
 public class ModelResourceTest extends BaseJerseyTest {
 
@@ -31,33 +34,14 @@ public class ModelResourceTest extends BaseJerseyTest {
 				.request(MediaType.APPLICATION_JSON_TYPE)
 				.post(Entity.entity("foo", MediaType.APPLICATION_JSON_TYPE), Response.class);
 
-		Date startDate = null;
-		Date endDate = null;
-		SimpleDateFormat formatter = new SimpleDateFormat("MM/dd/yyyy");
-		try {
-			startDate = formatter.parse(START_DATE);
-			endDate = formatter.parse(END_DATE);
-		} catch (ParseException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-
-		String jsonEntity = response.readEntity(String.class);
+		SavingsForecastModel model = response.readEntity(SavingsForecastModel.class);
 
 		assertEquals(201, response.getStatus());
-		assertTrue(null != response.getLocation());
-		assertTrue(startDate != null);
-		assertTrue(endDate != null);
-		assertTrue(jsonEntity.contains("createModelTest"));
-		assertTrue(jsonEntity.contains("createModelTestFirstName"));
-		assertTrue(jsonEntity.contains("createModelTestLastName"));
-		assertTrue(jsonEntity.contains("createModelTest@gmail.com"));
-		assertTrue(jsonEntity.contains("createModelTestModelName"));
-		assertTrue(jsonEntity.contains("createModelTestModelDesc"));
-		assertTrue(jsonEntity.contains("2000"));
-		assertTrue(jsonEntity.contains("20000"));
-		assertTrue(jsonEntity.contains("01/25/2010"));
-		assertTrue(jsonEntity.contains("01/25/2020"));
+		assertTrue(response.getLocation().toString().contains("/accounts/createModelTest@gmail.com/models/338106447"));
+		assertEquals("createModelTestModelName", model.getName());
+		assertEquals("createModelTestModelDesc", model.getDescription());
+		assertEquals(BigDecimal.valueOf(2000), model.getInitialValue());
+		assertEquals(BigDecimal.valueOf(20000), model.getTargetValue());
 	}
 
 	@Test
