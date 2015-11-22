@@ -1,5 +1,6 @@
 package com.patrickkee.model.model;
 
+import java.io.IOException;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -13,6 +14,8 @@ import org.joda.time.LocalDate;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.patrickkee.jaxrs.util.LocalDateDeserializer;
@@ -32,7 +35,7 @@ public class SavingsForecastModel implements Model {
 	private BigDecimal _targetValue;
 	private LocalDate _startDate;
 	private LocalDate _endDate;
-	private HashMap<String, Event> _events = new HashMap<>();
+	private HashMap<Integer, Event> _events = new HashMap<>();
 
 	private SavingsForecastModel() { }
 
@@ -112,7 +115,7 @@ public class SavingsForecastModel implements Model {
 	
 	@Override
 	public void addEvent(Event event) {
-		_events.putIfAbsent(event.getName(), event);
+		_events.putIfAbsent(event.getEventId(), event);
 	}
 
 	@JsonIgnore
@@ -269,4 +272,20 @@ public class SavingsForecastModel implements Model {
 		return _events.get(eventName);
 	}
 
+	@Override 
+	public String toString() {
+		ObjectMapper mapper = new ObjectMapper();
+		mapper.configure(SerializationFeature.FAIL_ON_EMPTY_BEANS, false);
+		String json = "";
+		
+		try {
+			json = mapper.writeValueAsString(this);
+		} catch (IOException e) {
+			//TODO: Something intelligent rather than ridiculously printing the stack trace
+			e.printStackTrace();
+		} 
+		
+		return json;
+	}
+	
 }

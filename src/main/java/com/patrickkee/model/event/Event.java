@@ -1,5 +1,8 @@
 package com.patrickkee.model.event;
 
+import static org.junit.Assert.assertEquals;
+
+import java.io.IOException;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 
@@ -7,6 +10,8 @@ import org.joda.time.LocalDate;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.patrickkee.jaxrs.util.LocalDateDeserializer;
@@ -17,6 +22,7 @@ import com.patrickkee.model.event.type.Period;
 
 public class Event {
 
+	private int eventId;
 	private String name;
 	private Period period;
 	private EventType eventType;
@@ -24,6 +30,16 @@ public class Event {
 	private LocalDate endDate;
 	private BigDecimal value;
 
+	@JsonProperty("eventId")
+	public int getEventId() {
+		if (eventId == 0) {
+			eventId = hashCode();
+			return eventId;
+		} else {
+			return eventId;
+		}
+	}
+	
 	@JsonProperty("name")
 	public String getName() {
 		return name;
@@ -91,5 +107,34 @@ public class Event {
 	@JsonIgnore
 	public ArrayList<EventInstance> getInstances(Event event, LocalDate valueAsOfDate) {
 		return this.getEventType().getInstances(event, valueAsOfDate);
+	}
+	
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + ((name == null) ? 0 : name.hashCode());
+		result = prime * result + ((period == null) ? 0 : period.hashCode());
+		result = prime * result + ((eventType == null) ? 0 : eventType.hashCode());
+		result = prime * result + ((startDate == null) ? 0 : startDate.hashCode());
+		result = prime * result + ((endDate == null) ? 0 : endDate.hashCode());
+		result = prime * result + ((value == null) ? 0 : value.hashCode());
+		return result;
+	}
+	
+	@Override 
+	public String toString() {
+		ObjectMapper mapper = new ObjectMapper();
+		mapper.configure(SerializationFeature.FAIL_ON_EMPTY_BEANS, false);
+		String json = "";
+		
+		try {
+			json = mapper.writeValueAsString(this);
+		} catch (IOException e) {
+			//TODO: Something intelligent rather than ridiculously printing the stack trace
+			e.printStackTrace();
+		} 
+		
+		return json;
 	}
 }

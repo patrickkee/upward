@@ -1,5 +1,6 @@
 package com.patrickkee.model.account;
 
+import java.io.IOException;
 import java.math.BigDecimal;
 import java.util.Date;
 import java.util.HashMap;
@@ -7,6 +8,8 @@ import java.util.HashMap;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.SerializationFeature;
 import com.google.common.base.Optional;
 import com.patrickkee.model.model.type.Model;
 
@@ -170,5 +173,21 @@ public class Account {
 		} else if (!_lastName.equals(other._lastName))
 			return false;
 		return true;
+	}
+	
+	@Override 
+	public String toString() {
+		ObjectMapper mapper = new ObjectMapper();
+		mapper.configure(SerializationFeature.FAIL_ON_EMPTY_BEANS, false);
+		String json = "";
+		
+		try {
+			json = mapper.writeValueAsString(this);
+		} catch (IOException e) {
+			//TODO: Something intelligent rather than ridiculously printing the stack trace
+			e.printStackTrace();
+		} 
+		
+		return json;
 	}
 }

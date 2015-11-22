@@ -32,7 +32,7 @@ public class EventResource {
 			model.get().addEvent(event);
 
 			UriBuilder locationBuilder = uriInfo.getAbsolutePathBuilder();
-			locationBuilder.path(event.getName());
+			locationBuilder.path(Integer.toString(event.getEventId()));
 
 			// Persist the account with the new event
 			FinancialModelsDb.persistAccount(acct.get());

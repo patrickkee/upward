@@ -16,6 +16,7 @@ import com.fasterxml.jackson.databind.SerializationFeature;
 import com.patrickkee.model.event.Event;
 import com.patrickkee.model.event.type.EventType;
 import com.patrickkee.model.event.type.Period;
+import com.patrickkee.model.model.SavingsForecastModel;
 
 public class EventTest {
 
@@ -55,5 +56,42 @@ public class EventTest {
 			e.printStackTrace();
 			assertEquals(0, 1);
 		}
+	}
+
+	@Test
+	public void eventSerializationTest() {
+		DateTimeFormatter formatter = DateTimeFormat.forPattern("MM/dd/yyyy");
+
+		DateTime dt = formatter.parseDateTime("01/01/2010");
+		LocalDate startDate = new LocalDate(dt.getYear(), dt.getMonthOfYear(), dt.getDayOfMonth());
+
+		dt = formatter.parseDateTime("12/31/2019");
+		LocalDate endDate = new LocalDate(dt.getYear(), dt.getMonthOfYear(), dt.getDayOfMonth());
+
+		Event event = new Event();
+		event.setPeriod(Period.MONTHLY);
+		event.setName("anEvent");
+		event.setEventType(EventType.RECURRING_DEPOSIT);
+		event.setStartDate(startDate);
+		event.setEndDate(endDate);
+		event.setValue(BigDecimal.valueOf(101.24));
+
+		ObjectMapper mapper = new ObjectMapper();
+		mapper.configure(SerializationFeature.FAIL_ON_EMPTY_BEANS, false);
+
+		try {
+			String genJson = mapper.writeValueAsString(event);
+			Event obj = mapper.readValue(genJson, Event.class);
+			assertEquals(1411430770, obj.getEventId());
+			assertEquals("anEvent", obj.getName());
+			assertEquals(startDate, obj.getStartDate());
+			assertEquals(endDate, obj.getEndDate());
+			assertEquals(Period.MONTHLY, obj.getPeriod());
+			assertEquals(EventType.RECURRING_DEPOSIT, obj.getEventType());
+			assertEquals(BigDecimal.valueOf(101.24), obj.getValue());
+		} catch (IOException e) {
+			e.printStackTrace();
+			assertEquals(0,1);
+		} 
 	}
 }
