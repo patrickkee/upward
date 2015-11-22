@@ -10,7 +10,8 @@ import org.joda.time.format.DateTimeFormat;
 import org.joda.time.format.DateTimeFormatter;
 import org.junit.Test;
 
-import com.patrickkee.model.event.YieldEventRecurring;
+import com.patrickkee.model.event.Event;
+import com.patrickkee.model.event.type.EventType;
 import com.patrickkee.model.event.type.Period;
 import com.patrickkee.model.model.SavingsForecastModel;
 
@@ -29,10 +30,21 @@ public class SavingsForecastModelRecurringYieldTest {
 
 		SavingsForecastModel model = SavingsForecastModel.getNew().name("test").startDate(startDate).endDate(endDate)
 				.initialValue(BigDecimal.valueOf(2000.0)).targetValue(BigDecimal.valueOf(10000.0));
-		model.addEvent(YieldEventRecurring.getNew("VALUE_TEST_EVENT", BigDecimal.valueOf(1.00416), Period.MONTHLY, startDate, endDate));
+		
+		//Create the event and add it to the model
+		Event event = new Event();
+		event.setName("VALUE_TEST_EVENT");
+		event.setPeriod(Period.MONTHLY);
+		event.setEventType(EventType.RECURRING_YIELD);
+		event.setValue(BigDecimal.valueOf(1.00416));
+		event.setStartDate(startDate);
+		event.setEndDate(endDate);
+		model.addEvent(event);
 
+		model.getValues(Period.MONTHLY);
+		
 		// Test intermediary model value
-		dt = formatter.parseDateTime("01/01/2011");
+		dt = formatter.parseDateTime("12/31/2010");
 		LocalDate currentDate = new LocalDate(dt.getYear(), dt.getMonthOfYear(), dt.getDayOfMonth());
 		BigDecimal value = model.getValue(currentDate);
 		assertEquals(BigDecimal.valueOf(2102.16).setScale(2, BigDecimal.ROUND_HALF_UP),

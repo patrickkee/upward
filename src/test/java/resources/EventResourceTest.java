@@ -3,17 +3,28 @@ package resources;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
+import java.math.BigDecimal;
+
 import javax.ws.rs.client.Entity;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
+import org.joda.time.DateTime;
+import org.joda.time.LocalDate;
+import org.joda.time.format.DateTimeFormat;
+import org.joda.time.format.DateTimeFormatter;
 import org.junit.Test;
 
-import com.patrickkee.model.event.YieldEventRecurring;
+import com.patrickkee.model.event.Event;
+import com.patrickkee.model.event.type.EventType;
+import com.patrickkee.model.event.type.Period;
 import com.patrickkee.model.model.SavingsForecastModel;
+import com.patrickkee.resources.ResponseMessage;
 
 public class EventResourceTest extends BaseJerseyTest {
 
+	private static final DateTimeFormatter DATE_FORMATTER = DateTimeFormat.forPattern("MM/dd/yyyy");
+	
 	@Test
 	public void createEventTest() {
 		final String EMAIL = "createEventTest@gmail.com";
@@ -33,21 +44,33 @@ public class EventResourceTest extends BaseJerseyTest {
 		SavingsForecastModel aModel = response.readEntity(SavingsForecastModel.class);
 		final String MODEL_ID = Integer.toString(aModel.getModelId());
 
+		
+		//Build the event to be created
+		DateTime dt = DATE_FORMATTER.parseDateTime(START_DATE);
+		LocalDate startDate = new LocalDate(dt.getYear(), dt.getMonthOfYear(), dt.getDayOfMonth());
+
+		dt = DATE_FORMATTER.parseDateTime(END_DATE);
+		LocalDate endDate = new LocalDate(dt.getYear(), dt.getMonthOfYear(), dt.getDayOfMonth());
+
+		
+		Event event = new Event();
+		event.setPeriod(Period.MONTHLY);
+		event.setName("anEvent");
+		event.setEventType(EventType.RECURRING_DEPOSIT);
+		event.setStartDate(startDate);
+		event.setEndDate(endDate);
+		event.setValue(BigDecimal.valueOf(101.24));
+	
+		//Post the new event
 		response = target("accounts/" + EMAIL + "/models/" + MODEL_ID + "/events")
-					.queryParam("eventName", "anEventName")
-					.queryParam("amount", "1.0041")
-					.queryParam("period", "MONTHLY")
-					.queryParam("startDate", START_DATE)
-					.queryParam("endDate", END_DATE)
-					.queryParam("eventType", "RECURRING_YIELD")
 					.request(MediaType.APPLICATION_JSON_TYPE)
-					.post(Entity.entity("foo", MediaType.APPLICATION_JSON_TYPE), Response.class);
+					.post(Entity.entity(event, MediaType.APPLICATION_JSON_TYPE), Response.class);
 
-		YieldEventRecurring anEvent = response.readEntity(YieldEventRecurring.class);
+		ResponseMessage respMsg = response.readEntity(ResponseMessage.class);
 		assertEquals(201, response.getStatus());
-		assertTrue(response.getLocation().toString().contains("/accounts/createEventTest@gmail.com/models/338106447/events/anEventName"));
-		assertEquals("anEventName", anEvent.getName());
-
+		assertTrue(response.getLocation().toString().contains("/accounts/createEventTest@gmail.com/models/338106447/events/anEvent"));
+		assertEquals("EVENT_CREATION_SUCCESSFUL", respMsg.getMessage());
+		assertEquals("The event was successfully created and persisted to the model", respMsg.getDescription());
 	}
 
 }

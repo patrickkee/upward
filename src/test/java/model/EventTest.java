@@ -13,10 +13,11 @@ import org.junit.Test;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
-import com.patrickkee.model.event.YieldEventRecurring;
+import com.patrickkee.model.event.Event;
+import com.patrickkee.model.event.type.EventType;
 import com.patrickkee.model.event.type.Period;
 
-public class YieldEventRecurringTest {
+public class EventTest {
 
 	@Test
 	public void yieldEventRecurringSerializationTest() {
@@ -29,19 +30,27 @@ public class YieldEventRecurringTest {
 		dt = formatter.parseDateTime("12/31/2019");
 		LocalDate endDate = new LocalDate(dt.getYear(), dt.getMonthOfYear(), dt.getDayOfMonth());
 
-		YieldEventRecurring obj = YieldEventRecurring.getNew("name", BigDecimal.valueOf(1.0041), Period.MONTHLY, startDate, endDate);
-
+		//Create the yield event and add it to the model
+		Event event = new Event();
+		event.setName("name");
+		event.setPeriod(Period.MONTHLY);
+		event.setEventType(EventType.RECURRING_YIELD);
+		event.setValue(BigDecimal.valueOf(1.00416));
+		event.setStartDate(startDate);
+		event.setEndDate(endDate);
+		
 		ObjectMapper mapper = new ObjectMapper();
 		mapper.configure(SerializationFeature.FAIL_ON_EMPTY_BEANS, false);
 
 		try {
-			String genJson = mapper.writeValueAsString(obj);
-			YieldEventRecurring deserializedObj = mapper.readValue(genJson, YieldEventRecurring.class);
+			String genJson = mapper.writeValueAsString(event);
+			Event deserializedObj = mapper.readValue(genJson, Event.class);
 			assertEquals("name", deserializedObj.getName());
 			assertEquals(startDate, deserializedObj.getStartDate());
 			assertEquals(endDate, deserializedObj.getEndDate());
-			assertEquals(BigDecimal.valueOf(1.0041), deserializedObj.getPercent());
+			assertEquals(BigDecimal.valueOf(1.00416), deserializedObj.getValue());
 			assertEquals(Period.MONTHLY, deserializedObj.getPeriod());
+			assertEquals(EventType.RECURRING_YIELD, deserializedObj.getEventType());
 		} catch (IOException e) {
 			e.printStackTrace();
 			assertEquals(0, 1);

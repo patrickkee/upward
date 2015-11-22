@@ -1,26 +1,32 @@
 package com.patrickkee.model.event.type;
 
-import java.math.BigDecimal;
+import java.util.ArrayList;
 
 import org.joda.time.LocalDate;
 
-import com.patrickkee.model.event.DepositEventRecurring;
-import com.patrickkee.model.event.YieldEventRecurring;
+import com.patrickkee.model.event.Event;
+import com.patrickkee.model.event.EventGenerator;
+import com.patrickkee.model.event.EventInstance;
 
 public enum EventType {
 	RECURRING_YIELD {
 		@Override
-		public Event getNew(String name, BigDecimal amount, Period period, LocalDate startDate, LocalDate endDate) {
-			return YieldEventRecurring.getNew(name, amount, period, startDate, endDate);
+		public ArrayList<EventInstance> getInstances(Event event, LocalDate dateLimit) {
+			return EventGenerator.getInstances(event, Operation.MULTIPLY, dateLimit);
 		}
 	},
-	RECURRING_DEPOSIT
-	{
+	RECURRING_DEPOSIT {
 		@Override
-		public Event getNew(String name, BigDecimal amount, Period period, LocalDate startDate, LocalDate endDate) {
-			return DepositEventRecurring.getNew(name, amount, period, startDate, endDate);
+		public ArrayList<EventInstance> getInstances(Event event, LocalDate dateLimit) {
+			return EventGenerator.getInstances(event, Operation.ADD, dateLimit);
+		}
+	},
+	ONE_TIME_DEPOSIT {
+		@Override
+		public ArrayList<EventInstance> getInstances(Event event, LocalDate dateLimit) {
+			return EventGenerator.getInstances(event, Operation.ADD, dateLimit);
 		}
 	};
 
-	abstract public Event getNew(String name, BigDecimal amount, Period period, LocalDate startDate, LocalDate endDate);
+	abstract public ArrayList<EventInstance> getInstances(Event event, LocalDate dateLimit);
 }

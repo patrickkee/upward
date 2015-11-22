@@ -5,7 +5,7 @@ import java.util.TreeMap;
 
 import org.joda.time.LocalDate;
 
-import com.patrickkee.model.event.type.Event;
+import com.patrickkee.model.event.Event;
 import com.patrickkee.model.event.type.Period;
 
 public interface Model {

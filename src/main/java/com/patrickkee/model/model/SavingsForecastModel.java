@@ -1,6 +1,5 @@
 package com.patrickkee.model.model;
 
-import java.beans.Transient;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -16,10 +15,10 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
-import com.patrickkee.jaxrs.util.LocalDateSerializer;
 import com.patrickkee.jaxrs.util.LocalDateDeserializer;
-import com.patrickkee.model.event.type.Event;
-import com.patrickkee.model.event.type.EventInstance;
+import com.patrickkee.jaxrs.util.LocalDateSerializer;
+import com.patrickkee.model.event.Event;
+import com.patrickkee.model.event.EventInstance;
 import com.patrickkee.model.event.type.Period;
 import com.patrickkee.model.model.type.Model;
 
@@ -33,7 +32,7 @@ public class SavingsForecastModel implements Model {
 	private BigDecimal _targetValue;
 	private LocalDate _startDate;
 	private LocalDate _endDate;
-	private HashMap<String, Event> _events = new HashMap<String, Event>();
+	private HashMap<String, Event> _events = new HashMap<>();
 
 	private SavingsForecastModel() { }
 
@@ -51,11 +50,6 @@ public class SavingsForecastModel implements Model {
 		} else {
 			return _modelId;
 		}
-	}
-	//TODO: Revert this once deserialization of dates is fixed - this is a hack to work around getting the wrong identity when dates are null
-	@JsonProperty("modelId")
-	public void setModelId(int modelId) {
-		this._modelId=modelId;
 	}
 	
 	@JsonProperty("name")
@@ -174,7 +168,7 @@ public class SavingsForecastModel implements Model {
 
 		// Get all the event instances from the event types in the model
 		for (Event event : _events.values()) {
-			eventInstances.addAll(event.getInstances(valueAsOfDate));
+			eventInstances.addAll(event.getInstances(event, valueAsOfDate));
 		}
 
 		// Sort the event instances chronologically

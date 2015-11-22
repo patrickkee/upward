@@ -15,8 +15,8 @@ import org.junit.Test;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
-import com.patrickkee.model.event.DepositEventRecurring;
-import com.patrickkee.model.event.YieldEventRecurring;
+import com.patrickkee.model.event.Event;
+import com.patrickkee.model.event.type.EventType;
 import com.patrickkee.model.event.type.Period;
 import com.patrickkee.model.model.SavingsForecastModel;
 
@@ -37,7 +37,15 @@ public class SavingsForecastModelTest {
 		SavingsForecastModel model = SavingsForecastModel.getNew().name("test").startDate(startDate).endDate(endDate)
 				.initialValue(BigDecimal.valueOf(2000.0)).targetValue(BigDecimal.valueOf(10000.0));
 		
-		model.addEvent(YieldEventRecurring.getNew(EVENT_NAME, BigDecimal.valueOf(1.00416), Period.MONTHLY, startDate, endDate));
+		//Create the event and add it to the model
+		Event event = new Event();
+		event.setName(EVENT_NAME);
+		event.setPeriod(Period.MONTHLY);
+		event.setEventType(EventType.RECURRING_YIELD);
+		event.setValue(BigDecimal.valueOf(1.00416));
+		event.setStartDate(startDate);
+		event.setEndDate(endDate);
+		model.addEvent(event);
 
 		assertEquals(BigDecimal.valueOf(-6708.60).setScale(2, BigDecimal.ROUND_HALF_UP),
 				model.valueVsTarget().setScale(2, BigDecimal.ROUND_HALF_UP));
@@ -80,8 +88,26 @@ public class SavingsForecastModelTest {
 
 		SavingsForecastModel model = SavingsForecastModel.getNew().name("test").startDate(startDate).endDate(endDate)
 				.initialValue(BigDecimal.valueOf(2000.0)).targetValue(BigDecimal.valueOf(10000.0));
-		model.addEvent(YieldEventRecurring.getNew("YEILD_EVENT", BigDecimal.valueOf(1.00416), Period.MONTHLY, startDate.plusDays(1), endDate.plusDays(1)));
-		model.addEvent(DepositEventRecurring.getNew("DEPOSIT_EVENT", BigDecimal.valueOf(100), Period.MONTHLY, startDate, endDate));
+		
+		//Create the yield event and add it to the model
+		Event event = new Event();
+		event.setName("Monthly Yield");
+		event.setPeriod(Period.MONTHLY);
+		event.setEventType(EventType.RECURRING_YIELD);
+		event.setValue(BigDecimal.valueOf(1.00416));
+		event.setStartDate(startDate);
+		event.setEndDate(endDate);
+		model.addEvent(event);
+		
+		//Create the yield event and add it to the model
+		event = new Event();
+		event.setName("Monthly Deposit");
+		event.setPeriod(Period.MONTHLY);
+		event.setEventType(EventType.RECURRING_DEPOSIT);
+		event.setValue(BigDecimal.valueOf(100));
+		event.setStartDate(startDate);
+		event.setEndDate(endDate);
+		model.addEvent(event);
 		
 		TreeMap<LocalDate, BigDecimal> modelValues = model.getValues(Period.MONTHLY);
 		assertTrue(modelValues.equals(manuallyComputedModel));
@@ -89,8 +115,7 @@ public class SavingsForecastModelTest {
 
 	@Test
 	public void testSavingsForecastModelSerialization() {
-		final String EVENT_NAME = "serializationTest";
-		// Set up the model
+				// Set up the model
 		DateTimeFormatter formatter = DateTimeFormat.forPattern("MM/dd/yyyy");
 
 		DateTime dt = formatter.parseDateTime("01/01/2010");

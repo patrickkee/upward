@@ -10,7 +10,8 @@ import org.joda.time.format.DateTimeFormat;
 import org.joda.time.format.DateTimeFormatter;
 import org.junit.Test;
 
-import com.patrickkee.model.event.DepositEventRecurring;
+import com.patrickkee.model.event.Event;
+import com.patrickkee.model.event.type.EventType;
 import com.patrickkee.model.event.type.Period;
 import com.patrickkee.model.model.SavingsForecastModel;
 
@@ -27,12 +28,23 @@ public class SavingsForecastModelRecurringDepositTest {
 		dt = formatter.parseDateTime("12/31/2019");
 		LocalDate endDate = new LocalDate(dt.getYear(), dt.getMonthOfYear(), dt.getDayOfMonth());
 
+		//Create the Model
 		SavingsForecastModel model = SavingsForecastModel.getNew().name("test").startDate(startDate).endDate(endDate)
 				.initialValue(BigDecimal.valueOf(2000.0)).targetValue(BigDecimal.valueOf(10000.0));
-		model.addEvent(DepositEventRecurring.getNew("VALUE_TEST_EVENT", BigDecimal.valueOf(100.50), Period.MONTHLY, startDate, endDate));
+		
+		//Create the event
+		Event event = new Event();
+		event.setPeriod(Period.MONTHLY);
+		event.setName("VALUE_TEST_EVENT");
+		event.setEventType(EventType.RECURRING_DEPOSIT);
+		event.setStartDate(startDate);
+		event.setEndDate(endDate);
+		event.setValue(BigDecimal.valueOf(100.50));
+		
+		model.addEvent(event);
 
 		// Test intermediary model value
-		dt = formatter.parseDateTime("01/01/2011");
+		dt = formatter.parseDateTime("12/31/2010");
 		LocalDate currentDate = new LocalDate(dt.getYear(), dt.getMonthOfYear(), dt.getDayOfMonth());
 		BigDecimal value = model.getValue(currentDate);
 		assertEquals(BigDecimal.valueOf(3206), value.setScale(0));
