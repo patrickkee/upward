@@ -41,7 +41,7 @@ public class SavingsForecastModelRecurringYieldTest {
 		event.setEndDate(endDate);
 		model.addEvent(event);
 
-		model.getValues(Period.MONTHLY);
+		model.getValues();
 		
 		// Test intermediary model value
 		dt = formatter.parseDateTime("12/31/2010");

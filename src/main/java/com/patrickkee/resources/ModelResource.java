@@ -3,6 +3,7 @@ package com.patrickkee.resources;
 import java.math.BigDecimal;
 
 import javax.ws.rs.DELETE;
+import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
@@ -23,8 +24,10 @@ import org.joda.time.format.DateTimeFormatter;
 import com.google.common.base.Optional;
 import com.patrickkee.jaxrs.util.UnprocessableEntityStatusType;
 import com.patrickkee.model.account.Account;
+import com.patrickkee.model.event.type.Period;
 import com.patrickkee.model.model.SavingsForecastModel;
 import com.patrickkee.model.model.type.Model;
+import com.patrickkee.model.response.ResponseValueNumeric;
 import com.patrickkee.persistence.FinancialModelsDb;
 
 @Path("accounts/{email}/models")
@@ -118,4 +121,48 @@ public class ModelResource {
 		}
 	}
 
+	@GET
+	@Path("/{modelId}/value")
+	@Produces("application/json")
+	public Response getValueByDate(@PathParam("email") String email, @PathParam("modelId") int modelId, @QueryParam("date") String date) {
+		Optional<Account> acct = FinancialModelsDb.getAccount(email);
+		
+		//TODO: Refactor this into central date handling
+		// Parse the dates and throw unprocessable entity response if date
+		// formats are invalid
+		LocalDate valueAsOfDate = null;
+		try {
+			DateTime dt = DATE_FORMATTER.parseDateTime(date);
+			valueAsOfDate = new LocalDate(dt.getYear(), dt.getMonthOfYear(), dt.getDayOfMonth());
+		} catch (IllegalArgumentException e) {
+			return Response.status(UnprocessableEntityStatusType.getNew()).entity(
+					ResponseMessage.getNew("Could not parse date", "Date should be provided in mm/dd/yyyy format"))
+					.build();
+		}
+		
+		if (acct.isPresent() && acct.get().getModel(modelId).isPresent()) {
+			Model model = acct.get().getModel(modelId).get();
+			return Response.ok().entity(ResponseValueNumeric.getNew(model.getValue(valueAsOfDate))).build();
+			
+		} else {
+			return Response.status(Status.NOT_FOUND).entity(ResponseMessage.getNew("MODEL_AND_ACCT_NOT_FOUND",
+					"Could not find the specified account and model")).build();
+		}
+	}
+	
+	@GET
+	@Path("/{modelId}/values")
+	@Produces("application/json")
+	public Response getValues(@PathParam("email") String email, @PathParam("modelId") int modelId) {
+		Optional<Account> acct = FinancialModelsDb.getAccount(email);
+		
+		if (acct.isPresent() && acct.get().getModel(modelId).isPresent()) {
+			Model model = acct.get().getModel(modelId).get();
+			return Response.ok().entity(model.getValues()).build();
+			
+		} else {
+			return Response.status(Status.NOT_FOUND).entity(ResponseMessage.getNew("MODEL_AND_ACCT_NOT_FOUND",
+					"Could not find the specified account and model")).build();
+		}
+	}
 }

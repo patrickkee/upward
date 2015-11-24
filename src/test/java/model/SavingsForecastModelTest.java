@@ -54,28 +54,30 @@ public class SavingsForecastModelTest {
 	@Test
 	public void getValuesTest() {
 		TreeMap<LocalDate, BigDecimal> manuallyComputedModel = new TreeMap<>();
+		manuallyComputedModel.put(new LocalDate(2010, 1, 1),
+				BigDecimal.valueOf(2100.00).setScale(2, BigDecimal.ROUND_HALF_UP));
 		manuallyComputedModel.put(new LocalDate(2010, 1, 31),
 				BigDecimal.valueOf(2108.74).setScale(2, BigDecimal.ROUND_HALF_UP));
+		
+		manuallyComputedModel.put(new LocalDate(2010, 2, 1),
+				BigDecimal.valueOf(2208.74).setScale(2, BigDecimal.ROUND_HALF_UP));
 		manuallyComputedModel.put(new LocalDate(2010, 2, 28),
 				BigDecimal.valueOf(2217.92).setScale(2, BigDecimal.ROUND_HALF_UP));
+		
+		manuallyComputedModel.put(new LocalDate(2010, 3, 1),
+				BigDecimal.valueOf(2317.92).setScale(2, BigDecimal.ROUND_HALF_UP));
 		manuallyComputedModel.put(new LocalDate(2010, 3, 31),
 				BigDecimal.valueOf(2327.57).setScale(2, BigDecimal.ROUND_HALF_UP));
+		
+		manuallyComputedModel.put(new LocalDate(2010, 4, 1),
+				BigDecimal.valueOf(2427.57).setScale(2, BigDecimal.ROUND_HALF_UP));
 		manuallyComputedModel.put(new LocalDate(2010, 4, 30),
 				BigDecimal.valueOf(2437.67).setScale(2, BigDecimal.ROUND_HALF_UP));
+		
+		manuallyComputedModel.put(new LocalDate(2010, 5, 1),
+				BigDecimal.valueOf(2537.67).setScale(2, BigDecimal.ROUND_HALF_UP));
 		manuallyComputedModel.put(new LocalDate(2010, 5, 31),
 				BigDecimal.valueOf(2548.22).setScale(2, BigDecimal.ROUND_HALF_UP));
-		manuallyComputedModel.put(new LocalDate(2010, 6, 30),
-				BigDecimal.valueOf(2659.24).setScale(2, BigDecimal.ROUND_HALF_UP));
-		manuallyComputedModel.put(new LocalDate(2010, 7, 31),
-				BigDecimal.valueOf(2770.72).setScale(2, BigDecimal.ROUND_HALF_UP));
-		manuallyComputedModel.put(new LocalDate(2010, 8, 31),
-				BigDecimal.valueOf(2882.66).setScale(2, BigDecimal.ROUND_HALF_UP));
-		manuallyComputedModel.put(new LocalDate(2010, 9, 30),
-				BigDecimal.valueOf(2995.07).setScale(2, BigDecimal.ROUND_HALF_UP));
-		manuallyComputedModel.put(new LocalDate(2010, 10, 31),
-				BigDecimal.valueOf(3107.94).setScale(2, BigDecimal.ROUND_HALF_UP));
-		manuallyComputedModel.put(new LocalDate(2010, 11, 30),
-				BigDecimal.valueOf(3221.29).setScale(2, BigDecimal.ROUND_HALF_UP));
 
 		// Set up the model
 		DateTimeFormatter formatter = DateTimeFormat.forPattern("MM/dd/yyyy");
@@ -83,7 +85,7 @@ public class SavingsForecastModelTest {
 		DateTime dt = formatter.parseDateTime("01/01/2010");
 		LocalDate startDate = new LocalDate(dt.getYear(), dt.getMonthOfYear(), dt.getDayOfMonth());
 
-		dt = formatter.parseDateTime("11/30/2010");
+		dt = formatter.parseDateTime("5/31/2010");
 		LocalDate endDate = new LocalDate(dt.getYear(), dt.getMonthOfYear(), dt.getDayOfMonth());
 
 		SavingsForecastModel model = SavingsForecastModel.getNew().name("test").startDate(startDate).endDate(endDate)
@@ -109,7 +111,7 @@ public class SavingsForecastModelTest {
 		event.setEndDate(endDate);
 		model.addEvent(event);
 		
-		TreeMap<LocalDate, BigDecimal> modelValues = model.getValues(Period.MONTHLY);
+		TreeMap<LocalDate, BigDecimal> modelValues = model.getValues();
 		assertTrue(modelValues.equals(manuallyComputedModel));
 	}
 

@@ -40,7 +40,10 @@ public class AccountTest {
 	public void testGetAccountValue() {
 		Account acct = Account.newAccount().accountName("Savings").firstName("Patrick").lastName("Kee")
 				.email("patrick.kee0@gmail.com");
-		assertTrue(new BigDecimal("100.21").equals(acct.getValue(new Date())));
+		DateTime dt = DATE_FORMATTER.parseDateTime("10/01/2015");
+		LocalDate valueAsOfDate = new LocalDate(dt.getYear(), dt.getMonthOfYear(), dt.getDayOfMonth());
+		
+		assertTrue(new BigDecimal("0.0").equals(acct.getValue(valueAsOfDate)));
 	}
 
 	@Test

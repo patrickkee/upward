@@ -12,13 +12,22 @@ import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriBuilder;
 import javax.ws.rs.core.UriInfo;
 
+import org.joda.time.DateTime;
+import org.joda.time.LocalDate;
+import org.joda.time.format.DateTimeFormat;
+import org.joda.time.format.DateTimeFormatter;
+
 import com.google.common.base.Optional;
+import com.patrickkee.jaxrs.util.UnprocessableEntityStatusType;
 import com.patrickkee.model.account.Account;
+import com.patrickkee.model.response.ResponseValueNumeric;
 import com.patrickkee.persistence.FinancialModelsDb;
 
 @Path("accounts")
 public class AccountResource {
 
+	private static final DateTimeFormatter DATE_FORMATTER = DateTimeFormat.forPattern("MM/dd/yyyy");
+	
 	@GET
 	@Path("/{email}")
 	@Produces("application/json")
@@ -51,4 +60,37 @@ public class AccountResource {
 
 		return Response.created(locationBuilder.build()).entity(FinancialModelsDb.getAccount(email).get()).build();
 	}
+
+
+	/**
+	 * Allows users to get the value of an account for a given date
+	 * 
+	 * @param accountId
+	 * @return
+	 */
+	@GET
+	@Path("/{email}/value")
+	@Produces("application/json")
+	public Response getValueByDate(@PathParam("email") String email, @QueryParam("date") String date ) {
+		Optional<Account> acct = FinancialModelsDb.getAccount(email);
+		
+		// Parse the dates and throw unprocessable entity response if date
+		// formats are invalid
+		LocalDate valueAsOfDate = null;
+		try {
+			DateTime dt = DATE_FORMATTER.parseDateTime(date);
+			valueAsOfDate = new LocalDate(dt.getYear(), dt.getMonthOfYear(), dt.getDayOfMonth());
+		} catch (IllegalArgumentException e) {
+			return Response.status(UnprocessableEntityStatusType.getNew()).entity(
+					ResponseMessage.getNew("Could not parse date", "Date should be provided in mm/dd/yyyy format"))
+					.build();
+		}
+		
+		if (acct.isPresent()) {
+			return Response.ok().entity(ResponseValueNumeric.getNew(acct.get().getValue(valueAsOfDate))).build();
+		} else {
+			throw new WebApplicationException(404);
+		}
+	}
+	
 }

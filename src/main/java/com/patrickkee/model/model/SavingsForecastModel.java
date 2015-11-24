@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map.Entry;
 import java.util.TreeMap;
 import java.util.stream.Collectors;
 
@@ -141,7 +142,7 @@ public class SavingsForecastModel implements Model {
 
 	@JsonIgnore
 	@Override
-	public TreeMap<LocalDate, BigDecimal> getValues(Period period) {
+	public TreeMap<LocalDate, BigDecimal> getValues() {
 		TreeMap<LocalDate, BigDecimal> modelValues = new TreeMap<>();
 
 		// Apply all the event instances to the account value
@@ -152,16 +153,6 @@ public class SavingsForecastModel implements Model {
 			currentValue = e.apply(currentValue);
 			modelValues.put(e.getDate(), currentValue.setScale(2, BigDecimal.ROUND_HALF_UP));
 		}
-
-		//Filter the events to get only the last value for each period.
-		modelValues = modelValues.entrySet()
-								 .stream()
-								 .filter(p -> period.getEnd(p.getKey()).compareTo(p.getKey()) == 0)
-								 .collect(Collectors.toMap(
-									       p -> p.getKey(), 
-									       p -> p.getValue(),
-									       (v1, v2) -> { throw new IllegalStateException(); },
-									       () -> new TreeMap<LocalDate, BigDecimal>()));
 		return modelValues;
 	}
 

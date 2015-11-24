@@ -2,8 +2,9 @@ package com.patrickkee.model.account;
 
 import java.io.IOException;
 import java.math.BigDecimal;
-import java.util.Date;
 import java.util.HashMap;
+
+import org.joda.time.LocalDate;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
@@ -42,24 +43,27 @@ public class Account {
 	public String getAccountName() {
 		return _accountName;
 	}
+
 	@JsonProperty("acctName")
 	public void setAccountName(String name) {
 		this._accountName = name;
 	}
-	
+
 	@JsonProperty("firstName")
 	public String getFirstName() {
 		return _firstName;
 	}
+
 	@JsonProperty("firstName")
 	public void setFirstName(String firstName) {
 		this._firstName = firstName;
 	}
-	
+
 	@JsonProperty("lastName")
 	public String getLastName() {
 		return _lastName;
 	}
+
 	@JsonProperty("lastName")
 	public void setLastName(String lastName) {
 		this._lastName = lastName;
@@ -69,11 +73,12 @@ public class Account {
 	public String getEmail() {
 		return _email;
 	}
+
 	@JsonProperty("email")
 	public void setEmail(String email) {
 		this._email = email;
 	}
-	
+
 	@JsonIgnore
 	public HashMap<Integer, Model> getModels() {
 		return _models;
@@ -90,11 +95,11 @@ public class Account {
 	public Optional<Model> getModel(int modelId) {
 		Model m = _models.get(modelId);
 		if (null != m) {
-			return Optional.of(_models.get(modelId));	
+			return Optional.of(_models.get(modelId));
 		} else {
 			return Optional.absent();
 		}
-		
+
 	}
 
 	/**
@@ -105,8 +110,12 @@ public class Account {
 	 *            as of when the user wants the account value
 	 * @return account value as {@code BigDecimal}
 	 */
-	public BigDecimal getValue(Date date) {
-		return new BigDecimal("100.21");
+	public BigDecimal getValue(LocalDate date) {
+		BigDecimal totalValue = BigDecimal.valueOf(0.0);
+		for (Model model : _models.values()) {
+			totalValue = totalValue.add(model.getValue(date));
+		}
+		return totalValue.setScale(2, BigDecimal.ROUND_HALF_UP);
 	}
 
 	// Builder pattern for account construction
@@ -174,20 +183,21 @@ public class Account {
 			return false;
 		return true;
 	}
-	
-	@Override 
+
+	@Override
 	public String toString() {
 		ObjectMapper mapper = new ObjectMapper();
 		mapper.configure(SerializationFeature.FAIL_ON_EMPTY_BEANS, false);
 		String json = "";
-		
+
 		try {
 			json = mapper.writeValueAsString(this);
 		} catch (IOException e) {
-			//TODO: Something intelligent rather than ridiculously printing the stack trace
+			// TODO: Something intelligent rather than ridiculously printing the
+			// stack trace
 			e.printStackTrace();
-		} 
-		
+		}
+
 		return json;
 	}
 }

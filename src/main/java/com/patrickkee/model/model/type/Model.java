@@ -35,7 +35,7 @@ public interface Model {
 	 *            frequency of account values; eg. daily, monthly, etc
 	 * @return map of LocalDates and account values
 	 */
-	public TreeMap<LocalDate, BigDecimal> getValues(Period frequency);
+	public TreeMap<LocalDate, BigDecimal> getValues();
 
 	/**
 	 * Adds a new event to the model's collection of events
