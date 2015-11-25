@@ -3,6 +3,18 @@ package com.patrickkee.model.event.type;
 import org.joda.time.LocalDate;
 
 public enum Period {
+	POINT_IN_TIME 
+	{
+		@Override
+		public LocalDate getBeginning(LocalDate date) {
+			return date;
+		}
+
+		@Override
+		public LocalDate getEnd(LocalDate date) {
+			return date;
+		}
+	},
 	MONTHLY
 	{
 		@Override

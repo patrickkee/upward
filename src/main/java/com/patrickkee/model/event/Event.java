@@ -1,7 +1,5 @@
 package com.patrickkee.model.event;
 
-import static org.junit.Assert.assertEquals;
-
 import java.io.IOException;
 import java.math.BigDecimal;
 import java.util.ArrayList;
@@ -16,7 +14,6 @@ import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.patrickkee.jaxrs.util.LocalDateDeserializer;
 import com.patrickkee.jaxrs.util.LocalDateSerializer;
-import com.patrickkee.model.event.EventInstance;
 import com.patrickkee.model.event.type.EventType;
 import com.patrickkee.model.event.type.Period;
 

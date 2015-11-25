@@ -66,18 +66,20 @@ public class SavingsForecastModelTest {
 		
 		manuallyComputedModel.put(new LocalDate(2010, 3, 1),
 				BigDecimal.valueOf(2317.92).setScale(2, BigDecimal.ROUND_HALF_UP));
+		manuallyComputedModel.put(new LocalDate(2010, 3, 12),
+				BigDecimal.valueOf(3317.92).setScale(2, BigDecimal.ROUND_HALF_UP));
 		manuallyComputedModel.put(new LocalDate(2010, 3, 31),
-				BigDecimal.valueOf(2327.57).setScale(2, BigDecimal.ROUND_HALF_UP));
+				BigDecimal.valueOf(3331.73).setScale(2, BigDecimal.ROUND_HALF_UP));
 		
 		manuallyComputedModel.put(new LocalDate(2010, 4, 1),
-				BigDecimal.valueOf(2427.57).setScale(2, BigDecimal.ROUND_HALF_UP));
+				BigDecimal.valueOf(3431.73).setScale(2, BigDecimal.ROUND_HALF_UP));
 		manuallyComputedModel.put(new LocalDate(2010, 4, 30),
-				BigDecimal.valueOf(2437.67).setScale(2, BigDecimal.ROUND_HALF_UP));
+				BigDecimal.valueOf(3474.39).setScale(2, BigDecimal.ROUND_HALF_UP));
 		
 		manuallyComputedModel.put(new LocalDate(2010, 5, 1),
-				BigDecimal.valueOf(2537.67).setScale(2, BigDecimal.ROUND_HALF_UP));
+				BigDecimal.valueOf(3546.00).setScale(2, BigDecimal.ROUND_HALF_UP));
 		manuallyComputedModel.put(new LocalDate(2010, 5, 31),
-				BigDecimal.valueOf(2548.22).setScale(2, BigDecimal.ROUND_HALF_UP));
+				BigDecimal.valueOf(3560.75).setScale(2, BigDecimal.ROUND_HALF_UP));
 
 		// Set up the model
 		DateTimeFormatter formatter = DateTimeFormat.forPattern("MM/dd/yyyy");
@@ -109,6 +111,30 @@ public class SavingsForecastModelTest {
 		event.setValue(BigDecimal.valueOf(100));
 		event.setStartDate(startDate);
 		event.setEndDate(endDate);
+		model.addEvent(event);
+		
+		//Create the one time deposit event and add it to the model
+		dt = formatter.parseDateTime("03/12/2010");
+		LocalDate pointInTime = new LocalDate(dt.getYear(), dt.getMonthOfYear(), dt.getDayOfMonth());
+		event = new Event();
+		event.setName("One-Time Deposit");
+		event.setPeriod(Period.POINT_IN_TIME);
+		event.setEventType(EventType.ONE_TIME_DEPOSIT);
+		event.setValue(BigDecimal.valueOf(1000));
+		event.setStartDate(pointInTime);
+		event.setEndDate(pointInTime);
+		model.addEvent(event);
+		
+		//Create an "actual" event and add it to the model
+		dt = formatter.parseDateTime("04/05/2010");
+		pointInTime = new LocalDate(dt.getYear(), dt.getMonthOfYear(), dt.getDayOfMonth());
+		event = new Event();
+		event.setName("One-Time Deposit");
+		event.setPeriod(Period.POINT_IN_TIME);
+		event.setEventType(EventType.ACTUAL);
+		event.setValue(BigDecimal.valueOf(3460.00));
+		event.setStartDate(pointInTime);
+		event.setEndDate(pointInTime);
 		model.addEvent(event);
 		
 		TreeMap<LocalDate, BigDecimal> modelValues = model.getValues();

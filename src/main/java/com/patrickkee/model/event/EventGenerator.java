@@ -6,10 +6,23 @@ import org.joda.time.LocalDate;
 
 import com.patrickkee.model.event.EventInstance;
 import com.patrickkee.model.event.type.Operation;
+import com.patrickkee.model.event.type.Period;
 
 public class EventGenerator {
 
 	public static ArrayList<EventInstance> getInstances(Event event, Operation operation, LocalDate dateLimit) {
+		ArrayList<EventInstance> tmpInstances = new ArrayList<EventInstance>();
+		
+		if (event.getPeriod().equals((Period.POINT_IN_TIME))) {
+			tmpInstances.add(new EventInstance(event.getEndDate(), event.getValue(), operation));
+		} else {
+			tmpInstances = generateRecurringInstances(event, operation, dateLimit);
+		}
+		
+		return tmpInstances;
+	}
+	
+	private static ArrayList<EventInstance> generateRecurringInstances(Event event, Operation operation, LocalDate dateLimit) {
 		ArrayList<EventInstance> tmpInstances = new ArrayList<EventInstance>();
 		LocalDate currDate;
 

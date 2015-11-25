@@ -16,7 +16,6 @@ import com.fasterxml.jackson.databind.SerializationFeature;
 import com.patrickkee.model.event.Event;
 import com.patrickkee.model.event.type.EventType;
 import com.patrickkee.model.event.type.Period;
-import com.patrickkee.model.model.SavingsForecastModel;
 
 public class EventTest {
 

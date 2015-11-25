@@ -8,7 +8,7 @@ import com.patrickkee.model.event.type.Operation;
 
 public class EventInstance implements Comparable<EventInstance> {
 
-	private Operation operation;
+	private Operation _operation;
 	private LocalDate _date;
 	private BigDecimal _value;
 
@@ -19,11 +19,11 @@ public class EventInstance implements Comparable<EventInstance> {
 	}
 
 	public Operation getOperation() {
-		return operation;
+		return _operation;
 	}
 
 	public void setOperation(Operation operation) {
-		this.operation = operation;
+		this._operation = operation;
 	}
 	
 	private void setDate(LocalDate _date) {
@@ -43,14 +43,7 @@ public class EventInstance implements Comparable<EventInstance> {
 	}
 
 	public BigDecimal apply(BigDecimal value) {
-		if (operation.equals(Operation.ADD)) {
-			return value.add(_value);
-		} else 
-		if (operation.equals(Operation.MULTIPLY)) {
-			return value.multiply(_value);
-		} else {
-			throw new UnsupportedOperationException();
-		}
+		return _operation.ex(value, _value);
 	}
 
 	public int compareTo(EventInstance arg0) {
