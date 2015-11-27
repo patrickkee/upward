@@ -61,6 +61,8 @@ public class EventResourceTest extends BaseJerseyTest {
 		event.setEndDate(endDate);
 		event.setValue(BigDecimal.valueOf(101.24));
 	
+		int eventId = event.getEventId(); //Store for validation of location response
+		
 		//Post the new event
 		response = target("accounts/" + EMAIL + "/models/" + MODEL_ID + "/events")
 					.request(MediaType.APPLICATION_JSON_TYPE)
@@ -68,7 +70,7 @@ public class EventResourceTest extends BaseJerseyTest {
 
 		ResponseMessage respMsg = response.readEntity(ResponseMessage.class);
 		assertEquals(201, response.getStatus());
-		assertTrue(response.getLocation().toString().contains("/accounts/createEventTest@gmail.com/models/338106447/events/anEvent"));
+		assertTrue(response.getLocation().toString().contains("/accounts/createEventTest@gmail.com/models/338106447/events/" + Integer.toString(eventId)));
 		assertEquals("EVENT_CREATION_SUCCESSFUL", respMsg.getMessage());
 		assertEquals("The event was successfully created and persisted to the model", respMsg.getDescription());
 	}

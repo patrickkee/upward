@@ -10,21 +10,42 @@ import com.patrickkee.model.event.EventInstance;
 
 public enum EventType {
 	/*
-	 * A a recurring yield which is applied as a multiple. Ex: 5% annual percentage rate
+	 * A a recurring yield which is applied as a multiple, expressed as a
+	 * decimal. Ex: 0.005 for 5% annual percentage rate
 	 */
 	RECURRING_YIELD {
 		@Override
 		public ArrayList<EventInstance> getInstances(Event event, LocalDate dateLimit) {
-			return EventGenerator.getInstances(event, Operation.MULTIPLY, dateLimit);
+			return EventGenerator.getInstances(event, Operation.ADD_PERCENT, dateLimit);
 		}
 	},
 	/*
-	 * A repetitive deposit event, such as monthly savings contribution 
+	 * A a recurring inflation which is applied as a multiple, expressed as a
+	 * decimal. Ex: 0.0025 for 2.5% annual core inflation 
+	 */
+	RECURRING_INFLATION {
+		@Override
+		public ArrayList<EventInstance> getInstances(Event event, LocalDate dateLimit) {
+			return EventGenerator.getInstances(event, Operation.SUBTRACT_PERCENT, dateLimit);
+		}
+	},
+	/*
+	 * A repetitive deposit event, such as monthly savings contribution
 	 */
 	RECURRING_DEPOSIT {
 		@Override
 		public ArrayList<EventInstance> getInstances(Event event, LocalDate dateLimit) {
 			return EventGenerator.getInstances(event, Operation.ADD, dateLimit);
+		}
+	},
+	/*
+	 * A repetitive withdrawl event, such as a semi-annual withdrawl against a
+	 * college savings account
+	 */
+	RECURRING_WITHDRAWL {
+		@Override
+		public ArrayList<EventInstance> getInstances(Event event, LocalDate dateLimit) {
+			return EventGenerator.getInstances(event, Operation.SUBTRACT, dateLimit);
 		}
 	},
 	/*
@@ -34,6 +55,15 @@ public enum EventType {
 		@Override
 		public ArrayList<EventInstance> getInstances(Event event, LocalDate dateLimit) {
 			return EventGenerator.getInstances(event, Operation.ADD, dateLimit);
+		}
+	},
+	/*
+	 * A one-time (non-recurring) deposit event
+	 */
+	ONE_TIME_WITHDRAWL {
+		@Override
+		public ArrayList<EventInstance> getInstances(Event event, LocalDate dateLimit) {
+			return EventGenerator.getInstances(event, Operation.SUBTRACT, dateLimit);
 		}
 	},
 	/*

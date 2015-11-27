@@ -115,7 +115,7 @@ public class AccountResourceTest extends BaseJerseyTest {
 		event.setEventType(EventType.RECURRING_YIELD);
 		event.setStartDate(startDate);
 		event.setEndDate(endDate);
-		event.setValue(BigDecimal.valueOf(1.00416));
+		event.setValue(BigDecimal.valueOf(0.00416));
 		response = target("accounts/" + EMAIL + "/models/" + MODEL_ID + "/events")
 					.request(MediaType.APPLICATION_JSON_TYPE)
 					.post(Entity.entity(event, MediaType.APPLICATION_JSON_TYPE), Response.class);

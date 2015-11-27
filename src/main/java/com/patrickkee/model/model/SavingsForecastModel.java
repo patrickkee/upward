@@ -6,9 +6,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Map.Entry;
 import java.util.TreeMap;
-import java.util.stream.Collectors;
 
 import org.joda.time.LocalDate;
 
@@ -23,7 +21,6 @@ import com.patrickkee.jaxrs.util.LocalDateDeserializer;
 import com.patrickkee.jaxrs.util.LocalDateSerializer;
 import com.patrickkee.model.event.Event;
 import com.patrickkee.model.event.EventInstance;
-import com.patrickkee.model.event.type.Period;
 import com.patrickkee.model.model.type.Model;
 
 @JsonIgnoreProperties(ignoreUnknown = true)

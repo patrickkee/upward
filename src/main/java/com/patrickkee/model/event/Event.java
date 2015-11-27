@@ -116,7 +116,7 @@ public class Event {
 		result = prime * result + ((startDate == null) ? 0 : startDate.hashCode());
 		result = prime * result + ((endDate == null) ? 0 : endDate.hashCode());
 		result = prime * result + ((value == null) ? 0 : value.hashCode());
-		return result;
+		return result * -1;
 	}
 	
 	@Override 

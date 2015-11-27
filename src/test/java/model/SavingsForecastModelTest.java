@@ -54,43 +54,44 @@ public class SavingsForecastModelTest {
 	@Test
 	public void getValuesTest() {
 		TreeMap<LocalDate, BigDecimal> manuallyComputedModel = new TreeMap<>();
-		manuallyComputedModel.put(new LocalDate(2010, 1, 1),
-				BigDecimal.valueOf(2100.00).setScale(2, BigDecimal.ROUND_HALF_UP));
-		manuallyComputedModel.put(new LocalDate(2010, 1, 31),
-				BigDecimal.valueOf(2108.74).setScale(2, BigDecimal.ROUND_HALF_UP));
+		manuallyComputedModel.put(new LocalDate(2010, 1, 1),BigDecimal.valueOf(2100.00).setScale(2, BigDecimal.ROUND_HALF_UP));
+		manuallyComputedModel.put(new LocalDate(2010, 1, 31),BigDecimal.valueOf(2104.34).setScale(2, BigDecimal.ROUND_HALF_UP));
 		
-		manuallyComputedModel.put(new LocalDate(2010, 2, 1),
-				BigDecimal.valueOf(2208.74).setScale(2, BigDecimal.ROUND_HALF_UP));
-		manuallyComputedModel.put(new LocalDate(2010, 2, 28),
-				BigDecimal.valueOf(2217.92).setScale(2, BigDecimal.ROUND_HALF_UP));
+		manuallyComputedModel.put(new LocalDate(2010, 2, 1),BigDecimal.valueOf(2204.34).setScale(2, BigDecimal.ROUND_HALF_UP));
+		manuallyComputedModel.put(new LocalDate(2010, 2, 28),BigDecimal.valueOf(2208.90).setScale(2, BigDecimal.ROUND_HALF_UP));
 		
-		manuallyComputedModel.put(new LocalDate(2010, 3, 1),
-				BigDecimal.valueOf(2317.92).setScale(2, BigDecimal.ROUND_HALF_UP));
-		manuallyComputedModel.put(new LocalDate(2010, 3, 12),
-				BigDecimal.valueOf(3317.92).setScale(2, BigDecimal.ROUND_HALF_UP));
-		manuallyComputedModel.put(new LocalDate(2010, 3, 31),
-				BigDecimal.valueOf(3331.73).setScale(2, BigDecimal.ROUND_HALF_UP));
+		manuallyComputedModel.put(new LocalDate(2010, 3, 1),BigDecimal.valueOf(2308.90).setScale(2, BigDecimal.ROUND_HALF_UP));
+		manuallyComputedModel.put(new LocalDate(2010, 3, 12),BigDecimal.valueOf(3308.90).setScale(2, BigDecimal.ROUND_HALF_UP));
+		manuallyComputedModel.put(new LocalDate(2010, 3, 31),BigDecimal.valueOf(3315.75).setScale(2, BigDecimal.ROUND_HALF_UP));
 		
-		manuallyComputedModel.put(new LocalDate(2010, 4, 1),
-				BigDecimal.valueOf(3431.73).setScale(2, BigDecimal.ROUND_HALF_UP));
-		manuallyComputedModel.put(new LocalDate(2010, 4, 30),
-				BigDecimal.valueOf(3474.39).setScale(2, BigDecimal.ROUND_HALF_UP));
+		manuallyComputedModel.put(new LocalDate(2010, 4, 1),BigDecimal.valueOf(3415.75).setScale(2, BigDecimal.ROUND_HALF_UP));
+		manuallyComputedModel.put(new LocalDate(2010, 4, 5),BigDecimal.valueOf(3460.00).setScale(2, BigDecimal.ROUND_HALF_UP));
+		manuallyComputedModel.put(new LocalDate(2010, 4, 30),BigDecimal.valueOf(3467.16).setScale(2, BigDecimal.ROUND_HALF_UP));
 		
-		manuallyComputedModel.put(new LocalDate(2010, 5, 1),
-				BigDecimal.valueOf(3546.00).setScale(2, BigDecimal.ROUND_HALF_UP));
-		manuallyComputedModel.put(new LocalDate(2010, 5, 31),
-				BigDecimal.valueOf(3560.75).setScale(2, BigDecimal.ROUND_HALF_UP));
+		manuallyComputedModel.put(new LocalDate(2010, 5, 1),BigDecimal.valueOf(3567.16).setScale(2, BigDecimal.ROUND_HALF_UP));
+		manuallyComputedModel.put(new LocalDate(2010, 5, 31),BigDecimal.valueOf(3574.53).setScale(2, BigDecimal.ROUND_HALF_UP));
 
+		manuallyComputedModel.put(new LocalDate(2010, 6, 1),BigDecimal.valueOf(3174.53).setScale(2, BigDecimal.ROUND_HALF_UP));
+		manuallyComputedModel.put(new LocalDate(2010, 6, 30),BigDecimal.valueOf(3181.10).setScale(2, BigDecimal.ROUND_HALF_UP));
+		
+		manuallyComputedModel.put(new LocalDate(2010, 7, 1),BigDecimal.valueOf(2781.10).setScale(2, BigDecimal.ROUND_HALF_UP));
+		manuallyComputedModel.put(new LocalDate(2010, 7, 31),BigDecimal.valueOf(2786.85).setScale(2, BigDecimal.ROUND_HALF_UP));
+		
+		manuallyComputedModel.put(new LocalDate(2010, 8, 1),BigDecimal.valueOf(2386.85).setScale(2, BigDecimal.ROUND_HALF_UP));
+		manuallyComputedModel.put(new LocalDate(2010, 8, 31),BigDecimal.valueOf(2391.79).setScale(2, BigDecimal.ROUND_HALF_UP));
+		
+		manuallyComputedModel.put(new LocalDate(2010, 9, 1),BigDecimal.valueOf(1991.79).setScale(2, BigDecimal.ROUND_HALF_UP));
+		manuallyComputedModel.put(new LocalDate(2010, 9, 30),BigDecimal.valueOf(1995.91).setScale(2, BigDecimal.ROUND_HALF_UP));
 		// Set up the model
 		DateTimeFormatter formatter = DateTimeFormat.forPattern("MM/dd/yyyy");
 
 		DateTime dt = formatter.parseDateTime("01/01/2010");
-		LocalDate startDate = new LocalDate(dt.getYear(), dt.getMonthOfYear(), dt.getDayOfMonth());
+		LocalDate modelStartDate = new LocalDate(dt.getYear(), dt.getMonthOfYear(), dt.getDayOfMonth());
 
-		dt = formatter.parseDateTime("5/31/2010");
-		LocalDate endDate = new LocalDate(dt.getYear(), dt.getMonthOfYear(), dt.getDayOfMonth());
+		dt = formatter.parseDateTime("9/30/2010");
+		LocalDate modelEndDate = new LocalDate(dt.getYear(), dt.getMonthOfYear(), dt.getDayOfMonth());
 
-		SavingsForecastModel model = SavingsForecastModel.getNew().name("test").startDate(startDate).endDate(endDate)
+		SavingsForecastModel model = SavingsForecastModel.getNew().name("test").startDate(modelStartDate).endDate(modelEndDate)
 				.initialValue(BigDecimal.valueOf(2000.0)).targetValue(BigDecimal.valueOf(10000.0));
 		
 		//Create the yield event and add it to the model
@@ -98,9 +99,9 @@ public class SavingsForecastModelTest {
 		event.setName("Monthly Yield");
 		event.setPeriod(Period.MONTHLY);
 		event.setEventType(EventType.RECURRING_YIELD);
-		event.setValue(BigDecimal.valueOf(1.00416));
-		event.setStartDate(startDate);
-		event.setEndDate(endDate);
+		event.setValue(BigDecimal.valueOf(0.00416));
+		event.setStartDate(modelStartDate);
+		event.setEndDate(modelEndDate);
 		model.addEvent(event);
 		
 		//Create the yield event and add it to the model
@@ -109,8 +110,8 @@ public class SavingsForecastModelTest {
 		event.setPeriod(Period.MONTHLY);
 		event.setEventType(EventType.RECURRING_DEPOSIT);
 		event.setValue(BigDecimal.valueOf(100));
-		event.setStartDate(startDate);
-		event.setEndDate(endDate);
+		event.setStartDate(modelStartDate);
+		event.setEndDate(modelEndDate);
 		model.addEvent(event);
 		
 		//Create the one time deposit event and add it to the model
@@ -129,12 +130,38 @@ public class SavingsForecastModelTest {
 		dt = formatter.parseDateTime("04/05/2010");
 		pointInTime = new LocalDate(dt.getYear(), dt.getMonthOfYear(), dt.getDayOfMonth());
 		event = new Event();
-		event.setName("One-Time Deposit");
+		event.setName("Actual Account Value");
 		event.setPeriod(Period.POINT_IN_TIME);
 		event.setEventType(EventType.ACTUAL);
 		event.setValue(BigDecimal.valueOf(3460.00));
 		event.setStartDate(pointInTime);
 		event.setEndDate(pointInTime);
+		model.addEvent(event);
+		
+		//Add the recurring withdrawl event
+		dt = formatter.parseDateTime("06/01/2010");
+		LocalDate withdrawlStartDate = new LocalDate(dt.getYear(), dt.getMonthOfYear(), dt.getDayOfMonth());
+
+		dt = formatter.parseDateTime("09/30/2010");
+		LocalDate withdrawlEndDate = new LocalDate(dt.getYear(), dt.getMonthOfYear(), dt.getDayOfMonth());
+		
+		event = new Event();
+		event.setName("Recurring Withdrawl");
+		event.setPeriod(Period.MONTHLY);
+		event.setEventType(EventType.RECURRING_WITHDRAWL);
+		event.setValue(BigDecimal.valueOf(500)); 
+		event.setStartDate(withdrawlStartDate);
+		event.setEndDate(withdrawlEndDate);
+		model.addEvent(event);
+		
+		//Create a recurring inflation event and add it to the model
+		event = new Event();
+		event.setName("Recurring Inflation");
+		event.setPeriod(Period.MONTHLY);
+		event.setEventType(EventType.RECURRING_INFLATION);
+		event.setValue(BigDecimal.valueOf(0.002083)); //2.5% APR inflation, monthly
+		event.setStartDate(modelStartDate);
+		event.setEndDate(withdrawlEndDate);
 		model.addEvent(event);
 		
 		TreeMap<LocalDate, BigDecimal> modelValues = model.getValues();
