@@ -74,6 +74,7 @@ public class AccountResource {
 	public Response getValueByDate(@PathParam("email") String email, @QueryParam("date") String date ) {
 		Optional<Account> acct = FinancialModelsDb.getAccount(email);
 		
+		//TODO: Convert to standardized validation pattern
 		// Parse the dates and throw unprocessable entity response if date
 		// formats are invalid
 		LocalDate valueAsOfDate = null;

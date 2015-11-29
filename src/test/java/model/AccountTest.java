@@ -6,8 +6,6 @@ import static org.junit.Assert.assertTrue;
 import java.io.IOException;
 import java.math.BigDecimal;
 import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.Date;
 
 import org.joda.time.DateTime;
 import org.joda.time.LocalDate;
@@ -15,7 +13,6 @@ import org.joda.time.format.DateTimeFormat;
 import org.joda.time.format.DateTimeFormatter;
 import org.junit.Test;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
 import com.patrickkee.model.account.Account;
@@ -43,7 +40,7 @@ public class AccountTest {
 		DateTime dt = DATE_FORMATTER.parseDateTime("10/01/2015");
 		LocalDate valueAsOfDate = new LocalDate(dt.getYear(), dt.getMonthOfYear(), dt.getDayOfMonth());
 		
-		assertTrue(new BigDecimal("0.0").equals(acct.getValue(valueAsOfDate)));
+		assertTrue(new BigDecimal("0.00").equals(acct.getValue(valueAsOfDate)));
 	}
 
 	@Test

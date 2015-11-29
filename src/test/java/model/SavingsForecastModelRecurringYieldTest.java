@@ -36,7 +36,7 @@ public class SavingsForecastModelRecurringYieldTest {
 		event.setName("VALUE_TEST_EVENT");
 		event.setPeriod(Period.MONTHLY);
 		event.setEventType(EventType.RECURRING_YIELD);
-		event.setValue(BigDecimal.valueOf(1.00416));
+		event.setValue(BigDecimal.valueOf(0.00416));
 		event.setStartDate(startDate);
 		event.setEndDate(endDate);
 		model.addEvent(event);

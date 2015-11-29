@@ -35,7 +35,7 @@ public class EventTest {
 		event.setName("name");
 		event.setPeriod(Period.MONTHLY);
 		event.setEventType(EventType.RECURRING_YIELD);
-		event.setValue(BigDecimal.valueOf(1.00416));
+		event.setValue(BigDecimal.valueOf(0.00416));
 		event.setStartDate(startDate);
 		event.setEndDate(endDate);
 		
@@ -48,7 +48,7 @@ public class EventTest {
 			assertEquals("name", deserializedObj.getName());
 			assertEquals(startDate, deserializedObj.getStartDate());
 			assertEquals(endDate, deserializedObj.getEndDate());
-			assertEquals(BigDecimal.valueOf(1.00416), deserializedObj.getValue());
+			assertEquals(BigDecimal.valueOf(0.00416), deserializedObj.getValue());
 			assertEquals(Period.MONTHLY, deserializedObj.getPeriod());
 			assertEquals(EventType.RECURRING_YIELD, deserializedObj.getEventType());
 		} catch (IOException e) {
@@ -75,13 +75,15 @@ public class EventTest {
 		event.setEndDate(endDate);
 		event.setValue(BigDecimal.valueOf(101.24));
 
+		int eventId = event.getEventId();
+		
 		ObjectMapper mapper = new ObjectMapper();
 		mapper.configure(SerializationFeature.FAIL_ON_EMPTY_BEANS, false);
 
 		try {
 			String genJson = mapper.writeValueAsString(event);
 			Event obj = mapper.readValue(genJson, Event.class);
-			assertEquals(1411430770, obj.getEventId());
+			assertEquals(eventId, obj.getEventId());
 			assertEquals("anEvent", obj.getName());
 			assertEquals(startDate, obj.getStartDate());
 			assertEquals(endDate, obj.getEndDate());

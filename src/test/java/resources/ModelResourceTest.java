@@ -121,10 +121,10 @@ public class ModelResourceTest extends BaseJerseyTest {
 
 	@Test
 	public void getModelValueTest() {
-		final String EMAIL = "createEventTest@gmail.com";
+		final String EMAIL = "getModelValueTest@gmail.com";
 		final String START_DATE = "01/25/2010";
 		final String END_DATE = "01/25/2020";
-		Response response = target("accounts").queryParam("accountName", "createModelTest")
+		Response response = target("accounts").queryParam("accountName", "getModelValueTest")
 				.queryParam("firstName", "createModelTestFirstName").queryParam("lastName", "createModelTestLastName")
 				.queryParam("email", EMAIL).request(MediaType.APPLICATION_JSON_TYPE)
 				.post(Entity.entity("foo", MediaType.APPLICATION_JSON_TYPE), Response.class);
