@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html>
+<head>
+
+<script src="https://code.jquery.com/jquery-2.1.4.min.js"></script>
+<link rel="stylesheet" type="text/css" href="styles.css">
+
+</head>
+
+<body>
+
+<script type="text/javascript">
+
+$(document).ready(function(){
+   $.ajax({
+	    url : "http://www.patrickkee.com/api/accounts/patrickpdk@gmail.com",
+	    type: "GET",
+	    dataType: "json",
+	    success: function(results)
+	    {
+	    	$("#msgid").html(JSON.stringify(results));
+	    },
+	    error: function (jqXHR, textStatus, errorThrown)
+	    {
+	    	$("#msgid").html(errorThrown);
+	    }
+	});
+	
+});
+</script>
+
+<div id="msgid">
+</div>
+
+<textarea class="app-login" rows="1" cols="1"></textarea>
+<button type="button">Login</button>
+</body>
+</html>

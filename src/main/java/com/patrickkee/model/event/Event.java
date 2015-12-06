@@ -6,6 +6,7 @@ import java.util.ArrayList;
 
 import org.joda.time.LocalDate;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -27,6 +28,25 @@ public class Event {
 	private LocalDate endDate;
 	private BigDecimal value;
 
+	@SuppressWarnings("unused") //Intentionally hiding the construction for immutability
+	private Event() {} 
+	
+	@JsonCreator
+	protected Event(@JsonProperty("name") String name,
+				 @JsonProperty("period") Period period,
+				 @JsonProperty("type") EventType eventType,
+				 @JsonDeserialize(using = LocalDateDeserializer.class) @JsonProperty("startDate") LocalDate startDate,
+				 @JsonDeserialize(using = LocalDateDeserializer.class) @JsonProperty("endDate") LocalDate endDate,
+				 @JsonProperty("value") BigDecimal value) {
+		
+		this.name = name;
+		this.period = period;
+		this.eventType = eventType;
+		this.startDate = startDate;
+		this.endDate = endDate;
+		this.value = value; 		
+	}
+	
 	@JsonProperty("eventId")
 	public int getEventId() {
 		if (eventId == 0) {
@@ -42,19 +62,9 @@ public class Event {
 		return name;
 	}
 
-	@JsonProperty("name")
-	public void setName(String name) {
-		this.name = name;
-	}
-
 	@JsonProperty("period")
 	public Period getPeriod() {
 		return period;
-	}
-
-	@JsonProperty("period")
-	public void setPeriod(Period period) {
-		this.period = period;
 	}
 
 	@JsonProperty("type")
@@ -62,43 +72,21 @@ public class Event {
 		return eventType;
 	}
 
-	@JsonProperty("type")
-	public void setEventType(EventType eventType) {
-		this.eventType = eventType;
-	}
-
 	@JsonSerialize(using = LocalDateSerializer.class)
 	@JsonProperty("startDate")
 	public LocalDate getStartDate() {
 		return startDate;
 	}
-
-	@JsonDeserialize(using = LocalDateDeserializer.class)
-	@JsonProperty("startDate")
-	public void setStartDate(LocalDate startDate) {
-		this.startDate = startDate;
-	}
-
+	
 	@JsonSerialize(using = LocalDateSerializer.class)
 	@JsonProperty("endDate")
 	public LocalDate getEndDate() {
 		return endDate;
 	}
 
-	@JsonDeserialize(using = LocalDateDeserializer.class)
-	@JsonProperty("endDate")
-	public void setEndDate(LocalDate endDate) {
-		this.endDate = endDate;
-	}
-
 	@JsonProperty("value")
 	public BigDecimal getValue() {
 		return value;
-	}
-
-	@JsonProperty("value")
-	public void setValue(BigDecimal value) {
-		this.value = value;
 	}
 
 	@JsonIgnore

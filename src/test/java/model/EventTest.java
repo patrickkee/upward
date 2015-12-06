@@ -13,6 +13,8 @@ import org.junit.Test;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
+import com.patrickkee.api.event.RecurringDeposit;
+import com.patrickkee.api.event.RecurringYield;
 import com.patrickkee.model.event.Event;
 import com.patrickkee.model.event.type.EventType;
 import com.patrickkee.model.event.type.Period;
@@ -30,15 +32,9 @@ public class EventTest {
 		dt = formatter.parseDateTime("12/31/2019");
 		LocalDate endDate = new LocalDate(dt.getYear(), dt.getMonthOfYear(), dt.getDayOfMonth());
 
-		//Create the yield event and add it to the model
-		Event event = new Event();
-		event.setName("name");
-		event.setPeriod(Period.MONTHLY);
-		event.setEventType(EventType.RECURRING_YIELD);
-		event.setValue(BigDecimal.valueOf(0.00416));
-		event.setStartDate(startDate);
-		event.setEndDate(endDate);
-		
+		// Create the yield event and add it to the model
+		RecurringYield event = RecurringYield.getNew("name", Period.MONTHLY, startDate, endDate,BigDecimal.valueOf(0.00416));
+
 		ObjectMapper mapper = new ObjectMapper();
 		mapper.configure(SerializationFeature.FAIL_ON_EMPTY_BEANS, false);
 
@@ -67,16 +63,11 @@ public class EventTest {
 		dt = formatter.parseDateTime("12/31/2019");
 		LocalDate endDate = new LocalDate(dt.getYear(), dt.getMonthOfYear(), dt.getDayOfMonth());
 
-		Event event = new Event();
-		event.setPeriod(Period.MONTHLY);
-		event.setName("anEvent");
-		event.setEventType(EventType.RECURRING_DEPOSIT);
-		event.setStartDate(startDate);
-		event.setEndDate(endDate);
-		event.setValue(BigDecimal.valueOf(101.24));
+		RecurringDeposit event = RecurringDeposit.getNew("anEvent", Period.MONTHLY, startDate, endDate,
+				BigDecimal.valueOf(101.24));
 
 		int eventId = event.getEventId();
-		
+
 		ObjectMapper mapper = new ObjectMapper();
 		mapper.configure(SerializationFeature.FAIL_ON_EMPTY_BEANS, false);
 
@@ -92,7 +83,7 @@ public class EventTest {
 			assertEquals(BigDecimal.valueOf(101.24), obj.getValue());
 		} catch (IOException e) {
 			e.printStackTrace();
-			assertEquals(0,1);
-		} 
+			assertEquals(0, 1);
+		}
 	}
 }

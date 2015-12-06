@@ -15,6 +15,7 @@ import org.joda.time.format.DateTimeFormat;
 import org.joda.time.format.DateTimeFormatter;
 import org.junit.Test;
 
+import com.patrickkee.api.event.RecurringDeposit;
 import com.patrickkee.model.event.Event;
 import com.patrickkee.model.event.type.EventType;
 import com.patrickkee.model.event.type.Period;
@@ -52,15 +53,8 @@ public class EventResourceTest extends BaseJerseyTest {
 		dt = DATE_FORMATTER.parseDateTime(END_DATE);
 		LocalDate endDate = new LocalDate(dt.getYear(), dt.getMonthOfYear(), dt.getDayOfMonth());
 
+		RecurringDeposit event = RecurringDeposit.getNew("Payroll Contribution", Period.MONTHLY, startDate, endDate, BigDecimal.valueOf(101.24));
 		
-		Event event = new Event();
-		event.setPeriod(Period.MONTHLY);
-		event.setName("anEvent");
-		event.setEventType(EventType.RECURRING_DEPOSIT);
-		event.setStartDate(startDate);
-		event.setEndDate(endDate);
-		event.setValue(BigDecimal.valueOf(101.24));
-	
 		int eventId = event.getEventId(); //Store for validation of location response
 		
 		//Post the new event

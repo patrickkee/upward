@@ -34,8 +34,8 @@ public class AccountResource {
 	/**
 	 * Allows users to get a particular account by email
 	 * 
-	 * @param accountId
-	 * @return
+	 * @param accountId - the id of the account to be returned
+	 * @return the account
 	 */
 	public Account getAccountByEmail(@PathParam("email") String email) {
 		Optional<Account> acct = FinancialModelsDb.getAccount(email);

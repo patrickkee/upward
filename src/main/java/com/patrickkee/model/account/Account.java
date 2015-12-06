@@ -2,7 +2,7 @@ package com.patrickkee.model.account;
 
 import java.io.IOException;
 import java.math.BigDecimal;
-import java.util.HashMap;
+import java.util.concurrent.ConcurrentHashMap;
 
 import org.joda.time.LocalDate;
 
@@ -28,7 +28,7 @@ public class Account {
 	private String _firstName;
 	private String _lastName;
 	private String _email;
-	private HashMap<Integer, Model> _models = new HashMap<Integer, Model>();
+	private ConcurrentHashMap<Integer, Model> _models = new ConcurrentHashMap<>();
 
 	private Account() {
 	}
@@ -80,7 +80,7 @@ public class Account {
 	}
 
 	@JsonIgnore
-	public HashMap<Integer, Model> getModels() {
+	public ConcurrentHashMap<Integer, Model> getModels() {
 		return _models;
 	}
 

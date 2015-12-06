@@ -24,7 +24,6 @@ import org.joda.time.format.DateTimeFormatter;
 import com.google.common.base.Optional;
 import com.patrickkee.jaxrs.util.UnprocessableEntityStatusType;
 import com.patrickkee.model.account.Account;
-import com.patrickkee.model.event.type.Period;
 import com.patrickkee.model.model.SavingsForecastModel;
 import com.patrickkee.model.model.type.Model;
 import com.patrickkee.model.response.ResponseValueNumeric;
@@ -87,10 +86,13 @@ public class ModelResource {
 
 			UriBuilder locationBuilder = uriInfo.getAbsolutePathBuilder();
 			locationBuilder.path(Integer.toString(savingsForecastModel.getModelId()));
-			
+
 			return Response.created(locationBuilder.build()).entity(savingsForecastModel).build();
 		} else {
 			return Response.status(Status.NOT_FOUND).entity(
+					// TODO: Refactor this - account not found is returned in
+					// multiple places, so reponse message should be centralized
+					// ..DRY
 					ResponseMessage.getNew("ACCOUNT_NOT_FOUND", "Unable to create model because account was not found"))
 					.build();
 		}
@@ -124,10 +126,11 @@ public class ModelResource {
 	@GET
 	@Path("/{modelId}/value")
 	@Produces("application/json")
-	public Response getValueByDate(@PathParam("email") String email, @PathParam("modelId") int modelId, @QueryParam("date") String date) {
+	public Response getValueByDate(@PathParam("email") String email, @PathParam("modelId") int modelId,
+			@QueryParam("date") String date) {
 		Optional<Account> acct = FinancialModelsDb.getAccount(email);
-		
-		//TODO: Refactor this into central date handling
+
+		// TODO: Refactor this into central date handling
 		// Parse the dates and throw unprocessable entity response if date
 		// formats are invalid
 		LocalDate valueAsOfDate = null;
@@ -139,30 +142,43 @@ public class ModelResource {
 					ResponseMessage.getNew("Could not parse date", "Date should be provided in mm/dd/yyyy format"))
 					.build();
 		}
-		
+
 		if (acct.isPresent() && acct.get().getModel(modelId).isPresent()) {
 			Model model = acct.get().getModel(modelId).get();
 			return Response.ok().entity(ResponseValueNumeric.getNew(model.getValue(valueAsOfDate))).build();
-			
+
 		} else {
 			return Response.status(Status.NOT_FOUND).entity(ResponseMessage.getNew("MODEL_AND_ACCT_NOT_FOUND",
 					"Could not find the specified account and model")).build();
 		}
 	}
-	
+
 	@GET
 	@Path("/{modelId}/values")
 	@Produces("application/json")
 	public Response getValues(@PathParam("email") String email, @PathParam("modelId") int modelId) {
 		Optional<Account> acct = FinancialModelsDb.getAccount(email);
-		
+
 		if (acct.isPresent() && acct.get().getModel(modelId).isPresent()) {
 			Model model = acct.get().getModel(modelId).get();
 			return Response.ok().entity(model.getValues()).build();
-			
+
 		} else {
 			return Response.status(Status.NOT_FOUND).entity(ResponseMessage.getNew("MODEL_AND_ACCT_NOT_FOUND",
 					"Could not find the specified account and model")).build();
+		}
+	}
+
+	@GET
+	@Produces("application/json")
+	public Response getModels(@PathParam("email") String email) {
+		Optional<Account> acct = FinancialModelsDb.getAccount(email);
+
+		if (acct.isPresent()) {
+			return Response.ok().entity(acct.get().getModels()).build();
+		} else {
+			return Response.status(404).entity(ResponseMessage.getNew("ACCOUNT_NOT_FOUND",
+					"Unable to retrieve model because the account specified was not found")).build();
 		}
 	}
 }

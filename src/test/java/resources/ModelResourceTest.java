@@ -15,8 +15,8 @@ import org.joda.time.format.DateTimeFormat;
 import org.joda.time.format.DateTimeFormatter;
 import org.junit.Test;
 
-import com.patrickkee.model.event.Event;
-import com.patrickkee.model.event.type.EventType;
+import com.patrickkee.api.event.RecurringDeposit;
+import com.patrickkee.api.event.RecurringYield;
 import com.patrickkee.model.event.type.Period;
 import com.patrickkee.model.model.SavingsForecastModel;
 import com.patrickkee.model.response.ResponseValueNumeric;
@@ -145,13 +145,7 @@ public class ModelResourceTest extends BaseJerseyTest {
 		dt = DATE_FORMATTER.parseDateTime(END_DATE);
 		LocalDate endDate = new LocalDate(dt.getYear(), dt.getMonthOfYear(), dt.getDayOfMonth());
 
-		Event event = new Event();
-		event.setPeriod(Period.MONTHLY);
-		event.setName("anEvent");
-		event.setEventType(EventType.RECURRING_DEPOSIT);
-		event.setStartDate(startDate);
-		event.setEndDate(endDate);
-		event.setValue(BigDecimal.valueOf(101.24));
+		RecurringDeposit event = RecurringDeposit.getNew("getModelValueTest", Period.MONTHLY, startDate, endDate, BigDecimal.valueOf(101.24));
 
 		// Post the new event
 		response = target("accounts/" + EMAIL + "/models/" + MODEL_ID + "/events")
@@ -194,36 +188,32 @@ public class ModelResourceTest extends BaseJerseyTest {
 		LocalDate endDate = new LocalDate(dt.getYear(), dt.getMonthOfYear(), dt.getDayOfMonth());
 
 		// Create a recurring deposit event
-		Event event = new Event();
-		event.setPeriod(Period.MONTHLY);
-		event.setName("Recurring Savings");
-		event.setEventType(EventType.RECURRING_DEPOSIT);
-		event.setStartDate(startDate);
-		event.setEndDate(endDate);
-		event.setValue(BigDecimal.valueOf(101.24));
+		RecurringDeposit depositEvent = RecurringDeposit.getNew("Recurring Savings", Period.MONTHLY, startDate, endDate, BigDecimal.valueOf(101.24));
 		response = target("accounts/" + EMAIL + "/models/" + MODEL_ID + "/events")
 				.request(MediaType.APPLICATION_JSON_TYPE)
-				.post(Entity.entity(event, MediaType.APPLICATION_JSON_TYPE), Response.class);
+				.post(Entity.entity(depositEvent, MediaType.APPLICATION_JSON_TYPE), Response.class);
 
 		// Create a recurring yield event
-		event = new Event();
-		event.setPeriod(Period.MONTHLY);
-		event.setName("Recurring Interest");
-		event.setEventType(EventType.RECURRING_YIELD);
-		event.setStartDate(startDate);
-		event.setEndDate(endDate);
-		event.setValue(BigDecimal.valueOf(0.00416));
+		RecurringYield yieldEvent = RecurringYield.getNew("Recurring Interest", Period.MONTHLY, startDate, endDate, BigDecimal.valueOf(0.00416));
 		response = target("accounts/" + EMAIL + "/models/" + MODEL_ID + "/events")
 				.request(MediaType.APPLICATION_JSON_TYPE)
-				.post(Entity.entity(event, MediaType.APPLICATION_JSON_TYPE), Response.class);
+				.post(Entity.entity(yieldEvent, MediaType.APPLICATION_JSON_TYPE), Response.class);
 
 		// Get the model's values
 		response = target("accounts/" + EMAIL + "/models/" + MODEL_ID + "/values")
 				.request(MediaType.APPLICATION_JSON_TYPE).get(Response.class);
 
-		//TODO: Enhance this validation, currently can't do much with the response as a string
+		// TODO: Enhance this validation, currently can't do much with the
+		// response as a string
 		String respMsg = response.readEntity(String.class);
 		assertEquals(200, response.getStatus());
 		assertTrue(respMsg.length() > 0);
 	}
+
+	@Test
+	public void getModelsTest() {
+		// TODO: Implement test to validate that account models are returned.
+		assertTrue(false);
+	}
+
 }

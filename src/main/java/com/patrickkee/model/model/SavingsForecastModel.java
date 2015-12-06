@@ -4,9 +4,9 @@ import java.io.IOException;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.HashMap;
 import java.util.List;
 import java.util.TreeMap;
+import java.util.concurrent.ConcurrentHashMap;
 
 import org.joda.time.LocalDate;
 
@@ -33,7 +33,7 @@ public class SavingsForecastModel implements Model {
 	private BigDecimal _targetValue;
 	private LocalDate _startDate;
 	private LocalDate _endDate;
-	private HashMap<Integer, Event> _events = new HashMap<>();
+	private ConcurrentHashMap<Integer, Event> _events = new ConcurrentHashMap<>();
 
 	private SavingsForecastModel() { }
 

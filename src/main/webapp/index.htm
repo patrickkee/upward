@@ -1,35 +1,55 @@
+<!DOCTYPE html>
 <html>
-<head>
-
-<script src="https://code.jquery.com/jquery-2.1.4.min.js"></script>
-
-</head>
-
+	<head>
+		<script src="https://code.jquery.com/jquery-2.1.4.min.js"></script>
+		<script src="react.js"></script>
+		<script src="react-dom.js"></script>
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/babel-core/5.8.24/browser.min.js"></script>
+		<link rel="stylesheet" type="text/css" href="styles.css">
+	</head>
 <body>
-
 <script type="text/javascript">
+		function login(email){
+		   $.ajax({
+			    url : "http://www.patrickkee.com/api/accounts/" + email,
+			    type: "GET",
+			    dataType: "json",
+			    success: function(results)
+			    {
+			    	$("#msgid").html(JSON.stringify(results));
+			    },
+			    error: function (jqXHR, textStatus, errorThrown)
+			    {
+			    	$("#msgid").html(errorThrown);
+			    }
+			});
+			
+		};
+	</script>
+	<script type="text/babel">
+      var Counter = React.createClass({
+        getInitialState: function () {
+          return { clickCount: 0 };
+        },
+        handleClick: function () {
+          this.setState(function(state) {
+            return {clickCount: state.clickCount + 1};
+          });
+        },
+        render: function () {
+          return (<button onClick={this.handleClick}>Click me! Number of clicks: {this.state.clickCount}</button>);
+        }
+      });
+      ReactDOM.render(
+        <Counter />,
+        document.getElementById('content')
+      );
+	</script>
 
-$(document).ready(function(){
-   //$("#msgid").html("This is Hello World by JQuery");
-   $.ajax({
-	    url : "http://ec2-54-85-161-10.compute-1.amazonaws.com/api/accounts?accountName=foobar&firstName=patrick&lastName=kee&email=patrickpdk@gmail.com",
-	    type: "POST",
-	    dataType: "json",
-	    success: function(results)
-	    {
-	    	$("#msgid").html(JSON.stringify(results));
-	    },
-	    error: function (jqXHR, textStatus, errorThrown)
-	    {
-	    	$("#msgid").html(errorThrown);
-	    }
-	});
-	
-});
-</script>
+	<div id="msgid">
 
-<div id="msgid">
-</div>
+	<textarea class="app-login" rows="1" cols="1"></textarea>
+<button type="button">Login</button>
 
 </body>
 </html>

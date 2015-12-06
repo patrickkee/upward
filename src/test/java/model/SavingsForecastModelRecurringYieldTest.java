@@ -10,8 +10,7 @@ import org.joda.time.format.DateTimeFormat;
 import org.joda.time.format.DateTimeFormatter;
 import org.junit.Test;
 
-import com.patrickkee.model.event.Event;
-import com.patrickkee.model.event.type.EventType;
+import com.patrickkee.api.event.RecurringYield;
 import com.patrickkee.model.event.type.Period;
 import com.patrickkee.model.model.SavingsForecastModel;
 
@@ -32,13 +31,7 @@ public class SavingsForecastModelRecurringYieldTest {
 				.initialValue(BigDecimal.valueOf(2000.0)).targetValue(BigDecimal.valueOf(10000.0));
 		
 		//Create the event and add it to the model
-		Event event = new Event();
-		event.setName("VALUE_TEST_EVENT");
-		event.setPeriod(Period.MONTHLY);
-		event.setEventType(EventType.RECURRING_YIELD);
-		event.setValue(BigDecimal.valueOf(0.00416));
-		event.setStartDate(startDate);
-		event.setEndDate(endDate);
+		RecurringYield event = RecurringYield.getNew("VALUE_TEST_EVENT", Period.MONTHLY, startDate, endDate, BigDecimal.valueOf(0.00416));
 		model.addEvent(event);
 
 		model.getValues();
