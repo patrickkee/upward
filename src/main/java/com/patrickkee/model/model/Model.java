@@ -1,4 +1,4 @@
-package com.patrickkee.model.model.type;
+package com.patrickkee.model.model;
 
 import java.math.BigDecimal;
 import java.util.TreeMap;

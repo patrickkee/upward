@@ -4,25 +4,23 @@ import java.math.BigDecimal;
 
 import org.joda.time.LocalDate;
 
-import com.patrickkee.model.event.type.Operation;
-
 public class EventInstance implements Comparable<EventInstance> {
 
-	private Operation _operation;
+	private Operations _operation;
 	private LocalDate _date;
 	private BigDecimal _value;
 
-	public EventInstance(LocalDate date, BigDecimal percent, Operation operation) { 
+	public EventInstance(LocalDate date, BigDecimal percent, Operations operation) { 
 		setDate(date);
 		setValue(percent);
 		setOperation(operation);
 	}
 
-	public Operation getOperation() {
+	public Operations getOperation() {
 		return _operation;
 	}
 
-	public void setOperation(Operation operation) {
+	public void setOperation(Operations operation) {
 		this._operation = operation;
 	}
 	

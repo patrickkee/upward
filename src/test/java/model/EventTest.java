@@ -16,8 +16,8 @@ import com.fasterxml.jackson.databind.SerializationFeature;
 import com.patrickkee.api.event.RecurringDeposit;
 import com.patrickkee.api.event.RecurringYield;
 import com.patrickkee.model.event.Event;
-import com.patrickkee.model.event.type.EventType;
-import com.patrickkee.model.event.type.Period;
+import com.patrickkee.model.event.EventTypes;
+import com.patrickkee.model.event.Periods;
 
 public class EventTest {
 
@@ -33,7 +33,7 @@ public class EventTest {
 		LocalDate endDate = new LocalDate(dt.getYear(), dt.getMonthOfYear(), dt.getDayOfMonth());
 
 		// Create the yield event and add it to the model
-		RecurringYield event = RecurringYield.getNew("name", Period.MONTHLY, startDate, endDate,BigDecimal.valueOf(0.00416));
+		RecurringYield event = RecurringYield.getNew("name", Periods.MONTHLY, startDate, endDate,BigDecimal.valueOf(0.00416));
 
 		ObjectMapper mapper = new ObjectMapper();
 		mapper.configure(SerializationFeature.FAIL_ON_EMPTY_BEANS, false);
@@ -45,8 +45,8 @@ public class EventTest {
 			assertEquals(startDate, deserializedObj.getStartDate());
 			assertEquals(endDate, deserializedObj.getEndDate());
 			assertEquals(BigDecimal.valueOf(0.00416), deserializedObj.getValue());
-			assertEquals(Period.MONTHLY, deserializedObj.getPeriod());
-			assertEquals(EventType.RECURRING_YIELD, deserializedObj.getEventType());
+			assertEquals(Periods.MONTHLY, deserializedObj.getPeriod());
+			assertEquals(EventTypes.RECURRING_YIELD, deserializedObj.getEventType());
 		} catch (IOException e) {
 			e.printStackTrace();
 			assertEquals(0, 1);
@@ -63,7 +63,7 @@ public class EventTest {
 		dt = formatter.parseDateTime("12/31/2019");
 		LocalDate endDate = new LocalDate(dt.getYear(), dt.getMonthOfYear(), dt.getDayOfMonth());
 
-		RecurringDeposit event = RecurringDeposit.getNew("anEvent", Period.MONTHLY, startDate, endDate,
+		RecurringDeposit event = RecurringDeposit.getNew("anEvent", Periods.MONTHLY, startDate, endDate,
 				BigDecimal.valueOf(101.24));
 
 		int eventId = event.getEventId();
@@ -78,8 +78,8 @@ public class EventTest {
 			assertEquals("anEvent", obj.getName());
 			assertEquals(startDate, obj.getStartDate());
 			assertEquals(endDate, obj.getEndDate());
-			assertEquals(Period.MONTHLY, obj.getPeriod());
-			assertEquals(EventType.RECURRING_DEPOSIT, obj.getEventType());
+			assertEquals(Periods.MONTHLY, obj.getPeriod());
+			assertEquals(EventTypes.RECURRING_DEPOSIT, obj.getEventType());
 			assertEquals(BigDecimal.valueOf(101.24), obj.getValue());
 		} catch (IOException e) {
 			e.printStackTrace();

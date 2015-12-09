@@ -11,7 +11,7 @@ import org.joda.time.format.DateTimeFormatter;
 import org.junit.Test;
 
 import com.patrickkee.api.event.RecurringDeposit;
-import com.patrickkee.model.event.type.Period;
+import com.patrickkee.model.event.Periods;
 import com.patrickkee.model.model.SavingsForecastModel;
 
 public class SavingsForecastModelRecurringDepositTest {
@@ -32,7 +32,7 @@ public class SavingsForecastModelRecurringDepositTest {
 				.initialValue(BigDecimal.valueOf(2000.0)).targetValue(BigDecimal.valueOf(10000.0));
 		
 		//Create the event
-		RecurringDeposit event = RecurringDeposit.getNew("VALUE_TEST_EVENT", Period.MONTHLY, startDate, endDate, BigDecimal.valueOf(100.50));
+		RecurringDeposit event = RecurringDeposit.getNew("VALUE_TEST_EVENT", Periods.MONTHLY, startDate, endDate, BigDecimal.valueOf(100.50));
 		model.addEvent(event);
 
 		// Test intermediary model value

@@ -5,16 +5,13 @@ import java.util.ArrayList;
 import org.joda.time.LocalDate;
 
 import com.patrickkee.model.event.EventInstance;
-import com.patrickkee.model.event.type.Operation;
-import com.patrickkee.model.event.type.OperationType;
-import com.patrickkee.model.event.type.Period;
 
 public class EventGenerator {
 
-	public static ArrayList<EventInstance> getInstances(Event event, Operation operation, LocalDate dateLimit) {
+	public static ArrayList<EventInstance> getInstances(Event event, Operations operation, LocalDate dateLimit) {
 		ArrayList<EventInstance> tmpInstances = new ArrayList<EventInstance>();
 
-		if (event.getPeriod().equals((Period.POINT_IN_TIME))) {
+		if (event.getPeriod().equals((Periods.POINT_IN_TIME))) {
 			tmpInstances.add(new EventInstance(event.getEndDate(), event.getValue(), operation));
 		} else {
 			tmpInstances = generateRecurringInstances(event, operation, dateLimit);
@@ -23,7 +20,7 @@ public class EventGenerator {
 		return tmpInstances;
 	}
 
-	private static ArrayList<EventInstance> generateRecurringInstances(Event event, Operation operation,
+	private static ArrayList<EventInstance> generateRecurringInstances(Event event, Operations operation,
 			LocalDate dateLimit) {
 		ArrayList<EventInstance> tmpInstances = new ArrayList<EventInstance>();
 		LocalDate currDate;
@@ -34,9 +31,9 @@ public class EventGenerator {
 			// Multipliers should be applied at the end of the period, addends
 			// should be applied at the beginning
 			currDate = itr.getCursor();
-			if (operation.getType().equals(OperationType.MULTIPLICAND)) {
+			if (operation.getType().equals(OperationTypes.MULTIPLICAND)) {
 				currDate = event.getPeriod().getEnd(itr.getCursor());
-			} else if (operation.getType().equals(OperationType.ADDEND)) {
+			} else if (operation.getType().equals(OperationTypes.ADDEND)) {
 				currDate = event.getPeriod().getBeginning(itr.getCursor());
 			} else {
 				throw new IllegalArgumentException();

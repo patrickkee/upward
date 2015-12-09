@@ -5,8 +5,8 @@ import java.math.BigDecimal;
 import org.joda.time.LocalDate;
 
 import com.patrickkee.model.event.Event;
-import com.patrickkee.model.event.type.EventType;
-import com.patrickkee.model.event.type.Period;
+import com.patrickkee.model.event.EventTypes;
+import com.patrickkee.model.event.Periods;
 
 /**
  * The RecurringWithdrawl class allows users to adjust the value of the model
@@ -17,13 +17,13 @@ import com.patrickkee.model.event.type.Period;
  */
 public class RecurringWithdrawl extends Event {
 
-	private RecurringWithdrawl(String name, Period period, EventType eventType, LocalDate startDate, LocalDate endDate,
+	private RecurringWithdrawl(String name, Periods period, EventTypes eventType, LocalDate startDate, LocalDate endDate,
 			BigDecimal value) {
 		super(name, period, eventType, startDate, endDate, value);
 	}
 
-	public static RecurringWithdrawl getNew(String name, Period period, LocalDate startDate, LocalDate endDate,
+	public static RecurringWithdrawl getNew(String name, Periods period, LocalDate startDate, LocalDate endDate,
 			BigDecimal value) {
-		return new RecurringWithdrawl(name, period, EventType.RECURRING_WITHDRAWL, startDate, endDate, value);
+		return new RecurringWithdrawl(name, period, EventTypes.RECURRING_WITHDRAWL, startDate, endDate, value);
 	}
 }

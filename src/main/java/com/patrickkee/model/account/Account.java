@@ -12,7 +12,8 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
 import com.google.common.base.Optional;
-import com.patrickkee.model.model.type.Model;
+import com.google.common.base.Preconditions;
+import com.patrickkee.model.model.Model;
 
 /**
  * Stores a collection of models and metadata about the owner of those models.
@@ -24,13 +25,28 @@ import com.patrickkee.model.model.type.Model;
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class Account {
 
-	private String _accountName;
-	private String _firstName;
-	private String _lastName;
-	private String _email;
-	private ConcurrentHashMap<Integer, Model> _models = new ConcurrentHashMap<>();
+	private String name;
+	private String firstName;
+	private String lastName;
+	private String email;
+	private ConcurrentHashMap<Integer, Model> models = new ConcurrentHashMap<>();
 
-	private Account() {
+	private Account() {	} //Hidden to prevent null instances
+
+	public Account(@JsonProperty("acctName") String name, 
+				   @JsonProperty("firstName") String firstName, 
+				   @JsonProperty("lastName") String lastName, 
+				   @JsonProperty("email") String email) {
+		
+		Preconditions.checkNotNull(name);
+		Preconditions.checkNotNull(firstName);
+		Preconditions.checkNotNull(lastName);
+		Preconditions.checkNotNull(email);
+
+		this.name = name;
+		this.firstName = firstName;
+		this.lastName = lastName;
+		this.email = email;
 	}
 
 	// Getters
@@ -41,61 +57,41 @@ public class Account {
 
 	@JsonProperty("acctName")
 	public String getAccountName() {
-		return _accountName;
-	}
-
-	@JsonProperty("acctName")
-	public void setAccountName(String name) {
-		this._accountName = name;
+		return name;
 	}
 
 	@JsonProperty("firstName")
 	public String getFirstName() {
-		return _firstName;
-	}
-
-	@JsonProperty("firstName")
-	public void setFirstName(String firstName) {
-		this._firstName = firstName;
+		return firstName;
 	}
 
 	@JsonProperty("lastName")
 	public String getLastName() {
-		return _lastName;
-	}
-
-	@JsonProperty("lastName")
-	public void setLastName(String lastName) {
-		this._lastName = lastName;
+		return lastName;
 	}
 
 	@JsonProperty("email")
 	public String getEmail() {
-		return _email;
-	}
-
-	@JsonProperty("email")
-	public void setEmail(String email) {
-		this._email = email;
+		return email;
 	}
 
 	@JsonIgnore
 	public ConcurrentHashMap<Integer, Model> getModels() {
-		return _models;
+		return models;
 	}
 
 	public void addModel(Model model) {
-		_models.putIfAbsent(model.getModelId(), model);
+		models.putIfAbsent(model.getModelId(), model);
 	}
 
 	public void removeModel(int modelId) {
-		_models.remove(modelId);
+		models.remove(modelId);
 	}
 
 	public Optional<Model> getModel(int modelId) {
-		Model m = _models.get(modelId);
+		Model m = models.get(modelId);
 		if (null != m) {
-			return Optional.of(_models.get(modelId));
+			return Optional.of(models.get(modelId));
 		} else {
 			return Optional.absent();
 		}
@@ -112,35 +108,10 @@ public class Account {
 	 */
 	public BigDecimal getValue(LocalDate date) {
 		BigDecimal totalValue = BigDecimal.valueOf(0.0);
-		for (Model model : _models.values()) {
+		for (Model model : models.values()) {
 			totalValue = totalValue.add(model.getValue(date));
 		}
 		return totalValue.setScale(2, BigDecimal.ROUND_HALF_UP);
-	}
-
-	// Builder pattern for account construction
-	public static Account newAccount() {
-		return new Account();
-	}
-
-	public Account accountName(String name) {
-		this._accountName = name;
-		return this;
-	}
-
-	public Account firstName(String firstName) {
-		this._firstName = firstName;
-		return this;
-	}
-
-	public Account lastName(String lastName) {
-		this._lastName = lastName;
-		return this;
-	}
-
-	public Account email(String email) {
-		this._email = email;
-		return this;
 	}
 
 	// Hashcode & Equals
@@ -148,7 +119,7 @@ public class Account {
 	public int hashCode() {
 		final int prime = 31;
 		int result = 1;
-		result = prime * result + ((_accountName == null) ? 0 : _accountName.hashCode());
+		result = prime * result + ((name == null) ? 0 : name.hashCode());
 		return result * -1;
 	}
 
@@ -161,25 +132,25 @@ public class Account {
 		if (getClass() != obj.getClass())
 			return false;
 		Account other = (Account) obj;
-		if (_accountName == null) {
-			if (other._accountName != null)
+		if (name == null) {
+			if (other.name != null)
 				return false;
-		} else if (!_accountName.equals(other._accountName))
+		} else if (!name.equals(other.name))
 			return false;
-		if (_email == null) {
-			if (other._email != null)
+		if (email == null) {
+			if (other.email != null)
 				return false;
-		} else if (!_email.equals(other._email))
+		} else if (!email.equals(other.email))
 			return false;
-		if (_firstName == null) {
-			if (other._firstName != null)
+		if (firstName == null) {
+			if (other.firstName != null)
 				return false;
-		} else if (!_firstName.equals(other._firstName))
+		} else if (!firstName.equals(other.firstName))
 			return false;
-		if (_lastName == null) {
-			if (other._lastName != null)
+		if (lastName == null) {
+			if (other.lastName != null)
 				return false;
-		} else if (!_lastName.equals(other._lastName))
+		} else if (!lastName.equals(other.lastName))
 			return false;
 		return true;
 	}

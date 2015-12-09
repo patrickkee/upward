@@ -13,7 +13,7 @@ import javax.ws.rs.core.UriInfo;
 import com.google.common.base.Optional;
 import com.patrickkee.model.account.Account;
 import com.patrickkee.model.event.Event;
-import com.patrickkee.model.model.type.Model;
+import com.patrickkee.model.model.Model;
 import com.patrickkee.persistence.FinancialModelsDb;
 
 @Path("accounts/{email}/models/{modelId}/events")

@@ -1,14 +1,10 @@
-package com.patrickkee.model.event.type;
+package com.patrickkee.model.event;
 
 import java.util.ArrayList;
 
 import org.joda.time.LocalDate;
 
-import com.patrickkee.model.event.Event;
-import com.patrickkee.model.event.EventGenerator;
-import com.patrickkee.model.event.EventInstance;
-
-public enum EventType {
+public enum EventTypes {
 	/*
 	 * A a recurring yield which is applied as a multiple, expressed as a
 	 * decimal. Ex: 0.005 for 5% annual percentage rate
@@ -16,7 +12,7 @@ public enum EventType {
 	RECURRING_YIELD {
 		@Override
 		public ArrayList<EventInstance> getInstances(Event event, LocalDate dateLimit) {
-			return EventGenerator.getInstances(event, Operation.ADD_PERCENT, dateLimit);
+			return EventGenerator.getInstances(event, Operations.ADD_PERCENT, dateLimit);
 		}
 	},
 	/*
@@ -26,7 +22,7 @@ public enum EventType {
 	RECURRING_INFLATION {
 		@Override
 		public ArrayList<EventInstance> getInstances(Event event, LocalDate dateLimit) {
-			return EventGenerator.getInstances(event, Operation.SUBTRACT_PERCENT, dateLimit);
+			return EventGenerator.getInstances(event, Operations.SUBTRACT_PERCENT, dateLimit);
 		}
 	},
 	/*
@@ -35,7 +31,7 @@ public enum EventType {
 	RECURRING_DEPOSIT {
 		@Override
 		public ArrayList<EventInstance> getInstances(Event event, LocalDate dateLimit) {
-			return EventGenerator.getInstances(event, Operation.ADD, dateLimit);
+			return EventGenerator.getInstances(event, Operations.ADD, dateLimit);
 		}
 	},
 	/*
@@ -45,7 +41,7 @@ public enum EventType {
 	RECURRING_WITHDRAWL {
 		@Override
 		public ArrayList<EventInstance> getInstances(Event event, LocalDate dateLimit) {
-			return EventGenerator.getInstances(event, Operation.SUBTRACT, dateLimit);
+			return EventGenerator.getInstances(event, Operations.SUBTRACT, dateLimit);
 		}
 	},
 	/*
@@ -54,7 +50,7 @@ public enum EventType {
 	ONE_TIME_DEPOSIT {
 		@Override
 		public ArrayList<EventInstance> getInstances(Event event, LocalDate dateLimit) {
-			return EventGenerator.getInstances(event, Operation.ADD, dateLimit);
+			return EventGenerator.getInstances(event, Operations.ADD, dateLimit);
 		}
 	},
 	/*
@@ -63,7 +59,7 @@ public enum EventType {
 	ONE_TIME_WITHDRAWL {
 		@Override
 		public ArrayList<EventInstance> getInstances(Event event, LocalDate dateLimit) {
-			return EventGenerator.getInstances(event, Operation.SUBTRACT, dateLimit);
+			return EventGenerator.getInstances(event, Operations.SUBTRACT, dateLimit);
 		}
 	},
 	/*
@@ -73,7 +69,7 @@ public enum EventType {
 	ACTUAL {
 		@Override
 		public ArrayList<EventInstance> getInstances(Event event, LocalDate dateLimit) {
-			return EventGenerator.getInstances(event, Operation.REPLACE, dateLimit);
+			return EventGenerator.getInstances(event, Operations.REPLACE, dateLimit);
 		}
 	};
 

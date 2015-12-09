@@ -17,7 +17,7 @@ import org.junit.Test;
 
 import com.patrickkee.api.event.RecurringDeposit;
 import com.patrickkee.api.event.RecurringYield;
-import com.patrickkee.model.event.type.Period;
+import com.patrickkee.model.event.Periods;
 import com.patrickkee.model.model.SavingsForecastModel;
 import com.patrickkee.model.response.ResponseValueNumeric;
 import com.patrickkee.resources.ResponseMessage;
@@ -145,7 +145,7 @@ public class ModelResourceTest extends BaseJerseyTest {
 		dt = DATE_FORMATTER.parseDateTime(END_DATE);
 		LocalDate endDate = new LocalDate(dt.getYear(), dt.getMonthOfYear(), dt.getDayOfMonth());
 
-		RecurringDeposit event = RecurringDeposit.getNew("getModelValueTest", Period.MONTHLY, startDate, endDate, BigDecimal.valueOf(101.24));
+		RecurringDeposit event = RecurringDeposit.getNew("getModelValueTest", Periods.MONTHLY, startDate, endDate, BigDecimal.valueOf(101.24));
 
 		// Post the new event
 		response = target("accounts/" + EMAIL + "/models/" + MODEL_ID + "/events")
@@ -188,13 +188,13 @@ public class ModelResourceTest extends BaseJerseyTest {
 		LocalDate endDate = new LocalDate(dt.getYear(), dt.getMonthOfYear(), dt.getDayOfMonth());
 
 		// Create a recurring deposit event
-		RecurringDeposit depositEvent = RecurringDeposit.getNew("Recurring Savings", Period.MONTHLY, startDate, endDate, BigDecimal.valueOf(101.24));
+		RecurringDeposit depositEvent = RecurringDeposit.getNew("Recurring Savings", Periods.MONTHLY, startDate, endDate, BigDecimal.valueOf(101.24));
 		response = target("accounts/" + EMAIL + "/models/" + MODEL_ID + "/events")
 				.request(MediaType.APPLICATION_JSON_TYPE)
 				.post(Entity.entity(depositEvent, MediaType.APPLICATION_JSON_TYPE), Response.class);
 
 		// Create a recurring yield event
-		RecurringYield yieldEvent = RecurringYield.getNew("Recurring Interest", Period.MONTHLY, startDate, endDate, BigDecimal.valueOf(0.00416));
+		RecurringYield yieldEvent = RecurringYield.getNew("Recurring Interest", Periods.MONTHLY, startDate, endDate, BigDecimal.valueOf(0.00416));
 		response = target("accounts/" + EMAIL + "/models/" + MODEL_ID + "/events")
 				.request(MediaType.APPLICATION_JSON_TYPE)
 				.post(Entity.entity(yieldEvent, MediaType.APPLICATION_JSON_TYPE), Response.class);

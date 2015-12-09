@@ -19,7 +19,7 @@ import org.junit.Test;
 
 import com.patrickkee.api.event.RecurringDeposit;
 import com.patrickkee.api.event.RecurringYield;
-import com.patrickkee.model.event.type.Period;
+import com.patrickkee.model.event.Periods;
 import com.patrickkee.model.model.SavingsForecastModel;
 import com.patrickkee.model.response.ResponseValueNumeric;
 
@@ -96,13 +96,13 @@ public class AccountResourceTest extends BaseJerseyTest {
 
 		
 		//Add a recurring deposit event
-		RecurringDeposit depositEvent = RecurringDeposit.getNew("Payroll Contribution", Period.MONTHLY, startDate, endDate, BigDecimal.valueOf(101.24));
+		RecurringDeposit depositEvent = RecurringDeposit.getNew("Payroll Contribution", Periods.MONTHLY, startDate, endDate, BigDecimal.valueOf(101.24));
 		response = target("accounts/" + EMAIL + "/models/" + MODEL_ID + "/events")
 					.request(MediaType.APPLICATION_JSON_TYPE)
 					.post(Entity.entity(depositEvent, MediaType.APPLICATION_JSON_TYPE), Response.class);
 
 		//Add a recurring yield event
-		RecurringYield yieldEvent = RecurringYield.getNew("Savings Interest", Period.MONTHLY, startDate, endDate, BigDecimal.valueOf(0.00416));
+		RecurringYield yieldEvent = RecurringYield.getNew("Savings Interest", Periods.MONTHLY, startDate, endDate, BigDecimal.valueOf(0.00416));
 		response = target("accounts/" + EMAIL + "/models/" + MODEL_ID + "/events")
 					.request(MediaType.APPLICATION_JSON_TYPE)
 					.post(Entity.entity(yieldEvent, MediaType.APPLICATION_JSON_TYPE), Response.class);

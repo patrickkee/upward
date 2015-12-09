@@ -1,4 +1,4 @@
-package com.patrickkee.jaxrs.provider;
+package com.patrickkee.application;
 
 import javax.ws.rs.Produces;
 import javax.ws.rs.ext.ContextResolver;

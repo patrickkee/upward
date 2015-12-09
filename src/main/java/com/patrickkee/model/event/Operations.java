@@ -1,8 +1,8 @@
-package com.patrickkee.model.event.type;
+package com.patrickkee.model.event;
 
 import java.math.BigDecimal;
 
-public enum Operation {
+public enum Operations {
 	/**
 	 * Add a value to an existing value
 	 */
@@ -13,8 +13,8 @@ public enum Operation {
 		}
 
 		@Override
-		public OperationType getType() {
-			return OperationType.ADDEND;
+		public OperationTypes getType() {
+			return OperationTypes.ADDEND;
 		}
 	},
 	SUBTRACT {
@@ -24,8 +24,8 @@ public enum Operation {
 		}
 
 		@Override
-		public OperationType getType() {
-			return OperationType.ADDEND;
+		public OperationTypes getType() {
+			return OperationTypes.ADDEND;
 		}
 	},
 	/**
@@ -41,8 +41,8 @@ public enum Operation {
 		}
 
 		@Override
-		public OperationType getType() {
-			return OperationType.MULTIPLICAND;
+		public OperationTypes getType() {
+			return OperationTypes.MULTIPLICAND;
 		}
 	},
 	/**
@@ -58,8 +58,8 @@ public enum Operation {
 		}
 
 		@Override
-		public OperationType getType() {
-			return OperationType.MULTIPLICAND;
+		public OperationTypes getType() {
+			return OperationTypes.MULTIPLICAND;
 		}
 	},
 	/**
@@ -72,8 +72,8 @@ public enum Operation {
 		}
 
 		@Override
-		public OperationType getType() {
-			return OperationType.ADDEND;
+		public OperationTypes getType() {
+			return OperationTypes.ADDEND;
 		}
 	};
 
@@ -87,5 +87,5 @@ public enum Operation {
 	 * @return
 	 */
 	public abstract BigDecimal ex(BigDecimal x1, BigDecimal x2);
-	public abstract OperationType getType(); 
+	public abstract OperationTypes getType(); 
 }

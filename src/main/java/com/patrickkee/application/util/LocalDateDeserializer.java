@@ -1,4 +1,4 @@
-package com.patrickkee.jaxrs.util;
+package com.patrickkee.application.util;
 
 import java.io.IOException;
 

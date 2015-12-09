@@ -22,8 +22,8 @@ import com.patrickkee.api.event.RecurringInflation;
 import com.patrickkee.api.event.RecurringWithdrawl;
 import com.patrickkee.api.event.RecurringYield;
 import com.patrickkee.model.event.Event;
-import com.patrickkee.model.event.type.EventType;
-import com.patrickkee.model.event.type.Period;
+import com.patrickkee.model.event.EventTypes;
+import com.patrickkee.model.event.Periods;
 import com.patrickkee.model.model.SavingsForecastModel;
 
 public class SavingsForecastModelTest {
@@ -44,7 +44,7 @@ public class SavingsForecastModelTest {
 				.initialValue(BigDecimal.valueOf(2000.0)).targetValue(BigDecimal.valueOf(10000.0));
 		
 		//Create the event and add it to the model
-		RecurringYield event = RecurringYield.getNew(EVENT_NAME, Period.MONTHLY, startDate, endDate, BigDecimal.valueOf(0.00416));
+		RecurringYield event = RecurringYield.getNew(EVENT_NAME, Periods.MONTHLY, startDate, endDate, BigDecimal.valueOf(0.00416));
 		model.addEvent(event);
 
 		assertEquals(BigDecimal.valueOf(-6708.60).setScale(2, BigDecimal.ROUND_HALF_UP),
@@ -95,11 +95,11 @@ public class SavingsForecastModelTest {
 				.initialValue(BigDecimal.valueOf(2000.0)).targetValue(BigDecimal.valueOf(10000.0));
 		
 		//Create the yield event and add it to the model
-		RecurringYield yieldEvent = RecurringYield.getNew("Monthly Yield", Period.MONTHLY, modelStartDate, modelEndDate, BigDecimal.valueOf(0.00416));
+		RecurringYield yieldEvent = RecurringYield.getNew("Monthly Yield", Periods.MONTHLY, modelStartDate, modelEndDate, BigDecimal.valueOf(0.00416));
 		model.addEvent(yieldEvent);
 		
 		//Create the deposit event and add it to the model
-		RecurringDeposit depositEvent = RecurringDeposit.getNew("Monthly Deposit", Period.MONTHLY, modelStartDate, modelEndDate, BigDecimal.valueOf(100));
+		RecurringDeposit depositEvent = RecurringDeposit.getNew("Monthly Deposit", Periods.MONTHLY, modelStartDate, modelEndDate, BigDecimal.valueOf(100));
 		model.addEvent(depositEvent);
 		
 		//Create the one time deposit event and add it to the model
@@ -121,11 +121,11 @@ public class SavingsForecastModelTest {
 		dt = formatter.parseDateTime("09/30/2010");
 		LocalDate withdrawlEndDate = new LocalDate(dt.getYear(), dt.getMonthOfYear(), dt.getDayOfMonth());
 		
-		RecurringWithdrawl withdrawl = RecurringWithdrawl.getNew("Recurring Withdrawl", Period.MONTHLY, withdrawlStartDate, withdrawlEndDate, BigDecimal.valueOf(500));
+		RecurringWithdrawl withdrawl = RecurringWithdrawl.getNew("Recurring Withdrawl", Periods.MONTHLY, withdrawlStartDate, withdrawlEndDate, BigDecimal.valueOf(500));
 		model.addEvent(withdrawl);
 		
 		//Create a recurring inflation event and add it to the model
-		RecurringInflation inflation = RecurringInflation.getNew("Forecasted CPI", Period.MONTHLY, modelStartDate, withdrawlEndDate, BigDecimal.valueOf(0.002083));
+		RecurringInflation inflation = RecurringInflation.getNew("Forecasted CPI", Periods.MONTHLY, modelStartDate, withdrawlEndDate, BigDecimal.valueOf(0.002083));
 		model.addEvent(inflation);
 		
 		TreeMap<LocalDate, BigDecimal> modelValues = model.getValues();

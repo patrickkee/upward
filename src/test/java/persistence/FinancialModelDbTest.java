@@ -19,7 +19,7 @@ public class FinancialModelDbTest {
 
 	@Test
 	public void testGetByIdWhenPresent() {
-		Account acct = Account.newAccount().accountName("foo").firstName("bar").lastName("man").email("choo");
+		Account acct = new Account("foo", "bar", "man", "choo");
 		FinancialModelsDb.persistAccount(acct);
 		acct = null;
 		acct = FinancialModelsDb.getAccount("choo").get();

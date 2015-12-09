@@ -1,4 +1,4 @@
-package com.patrickkee.jaxrs.application;
+package com.patrickkee.application;
 
 import javax.ws.rs.ApplicationPath;
 

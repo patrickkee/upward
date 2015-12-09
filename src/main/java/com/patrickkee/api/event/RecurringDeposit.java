@@ -5,8 +5,8 @@ import java.math.BigDecimal;
 import org.joda.time.LocalDate;
 
 import com.patrickkee.model.event.Event;
-import com.patrickkee.model.event.type.EventType;
-import com.patrickkee.model.event.type.Period;
+import com.patrickkee.model.event.EventTypes;
+import com.patrickkee.model.event.Periods;
 
 /**
  * The RecurringDeposit class allows users to adjust the value of the model for
@@ -17,13 +17,13 @@ import com.patrickkee.model.event.type.Period;
  */
 public class RecurringDeposit extends Event {
 
-	private RecurringDeposit(String name, Period period, EventType eventType, LocalDate startDate, LocalDate endDate,
+	private RecurringDeposit(String name, Periods period, EventTypes eventType, LocalDate startDate, LocalDate endDate,
 			BigDecimal value) {
 		super(name, period, eventType, startDate, endDate, value);
 	}
 
-	public static RecurringDeposit getNew(String name, Period period, LocalDate startDate, LocalDate endDate,
+	public static RecurringDeposit getNew(String name, Periods period, LocalDate startDate, LocalDate endDate,
 			BigDecimal value) {
-		return new RecurringDeposit(name, period, EventType.RECURRING_DEPOSIT, startDate, endDate, value);
+		return new RecurringDeposit(name, period, EventTypes.RECURRING_DEPOSIT, startDate, endDate, value);
 	}
 }

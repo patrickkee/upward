@@ -18,7 +18,7 @@ import org.joda.time.format.DateTimeFormat;
 import org.joda.time.format.DateTimeFormatter;
 
 import com.google.common.base.Optional;
-import com.patrickkee.jaxrs.util.UnprocessableEntityStatusType;
+import com.patrickkee.application.util.UnprocessableEntityStatusType;
 import com.patrickkee.model.account.Account;
 import com.patrickkee.model.response.ResponseValueNumeric;
 import com.patrickkee.persistence.FinancialModelsDb;
@@ -51,8 +51,8 @@ public class AccountResource {
 	public Response createAccount(@QueryParam("accountName") String accountName,
 			@QueryParam("firstName") String firstName, @QueryParam("lastName") String lastName,
 			@QueryParam("email") String email, @Context UriInfo uriInfo) {
-		Account acct = Account.newAccount().accountName(accountName).firstName(firstName).lastName(lastName)
-				.email(email);
+		
+		Account acct = new Account(accountName, firstName, lastName, email);
 		FinancialModelsDb.persistAccount(acct);
 
 		UriBuilder locationBuilder = uriInfo.getAbsolutePathBuilder();

@@ -1,8 +1,8 @@
-package com.patrickkee.model.event.type;
+package com.patrickkee.model.event;
 
 import org.joda.time.LocalDate;
 
-public enum Period {
+public enum Periods {
 	POINT_IN_TIME 
 	{
 		@Override

@@ -5,8 +5,8 @@ import java.math.BigDecimal;
 import org.joda.time.LocalDate;
 
 import com.patrickkee.model.event.Event;
-import com.patrickkee.model.event.type.EventType;
-import com.patrickkee.model.event.type.Period;
+import com.patrickkee.model.event.EventTypes;
+import com.patrickkee.model.event.Periods;
 
 /**
  * The Actual class allows users to specify the actual value of the account that
@@ -17,12 +17,12 @@ import com.patrickkee.model.event.type.Period;
  */
 public class Actual extends Event {
 
-	private Actual(String name, Period period, EventType eventType, LocalDate startDate, LocalDate endDate,
+	private Actual(String name, Periods period, EventTypes eventType, LocalDate startDate, LocalDate endDate,
 			BigDecimal value) {
 		super(name, period, eventType, startDate, endDate, value);
 	}
 
 	public static Actual getNew(LocalDate effectiveDate, BigDecimal value) {
-		return new Actual("ACTUAL", Period.POINT_IN_TIME, EventType.ACTUAL, effectiveDate, effectiveDate, value);
+		return new Actual("ACTUAL", Periods.POINT_IN_TIME, EventTypes.ACTUAL, effectiveDate, effectiveDate, value);
 	}
 }

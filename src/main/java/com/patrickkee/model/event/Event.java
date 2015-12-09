@@ -13,31 +13,34 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
-import com.patrickkee.jaxrs.util.LocalDateDeserializer;
-import com.patrickkee.jaxrs.util.LocalDateSerializer;
-import com.patrickkee.model.event.type.EventType;
-import com.patrickkee.model.event.type.Period;
+import com.google.common.base.Preconditions;
+import com.patrickkee.application.util.LocalDateDeserializer;
+import com.patrickkee.application.util.LocalDateSerializer;
 
 public class Event {
 
 	private int eventId;
 	private String name;
-	private Period period;
-	private EventType eventType;
+	private Periods period;
+	private EventTypes eventType;
 	private LocalDate startDate;
 	private LocalDate endDate;
 	private BigDecimal value;
 
-	@SuppressWarnings("unused") //Intentionally hiding the construction for immutability
+	private static final String VALUE_ERROR_MSG = "Event value must be greater than zero";
+	
+	@SuppressWarnings("unused") //Intentionally hidden for immutability
 	private Event() {} 
 	
 	@JsonCreator
 	protected Event(@JsonProperty("name") String name,
-				 @JsonProperty("period") Period period,
-				 @JsonProperty("type") EventType eventType,
-				 @JsonDeserialize(using = LocalDateDeserializer.class) @JsonProperty("startDate") LocalDate startDate,
-				 @JsonDeserialize(using = LocalDateDeserializer.class) @JsonProperty("endDate") LocalDate endDate,
-				 @JsonProperty("value") BigDecimal value) {
+				 	@JsonProperty("period") Periods period,
+				 	@JsonProperty("type") EventTypes eventType,
+				 	@JsonDeserialize(using = LocalDateDeserializer.class) @JsonProperty("startDate") LocalDate startDate,
+				 	@JsonDeserialize(using = LocalDateDeserializer.class) @JsonProperty("endDate") LocalDate endDate,
+				 	@JsonProperty("value") BigDecimal value) {
+		
+		Preconditions.checkState(value.compareTo(BigDecimal.valueOf(0)) > 0 , VALUE_ERROR_MSG);
 		
 		this.name = name;
 		this.period = period;
@@ -63,12 +66,12 @@ public class Event {
 	}
 
 	@JsonProperty("period")
-	public Period getPeriod() {
+	public Periods getPeriod() {
 		return period;
 	}
 
 	@JsonProperty("type")
-	public EventType getEventType() {
+	public EventTypes getEventType() {
 		return eventType;
 	}
 

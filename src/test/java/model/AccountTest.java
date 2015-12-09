@@ -16,8 +16,8 @@ import org.junit.Test;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
 import com.patrickkee.model.account.Account;
+import com.patrickkee.model.model.Model;
 import com.patrickkee.model.model.SavingsForecastModel;
-import com.patrickkee.model.model.type.Model;
 
 public class AccountTest {
 
@@ -25,8 +25,8 @@ public class AccountTest {
 
 	@Test
 	public void testAccountCreation() {
-		Account acct = Account.newAccount().accountName("Savings").firstName("Patrick").lastName("Kee")
-				.email("patrick.kee0@gmail.com");
+		Account acct = new Account("Savings", "Patrick", "Kee", "patrick.kee0@gmail.com");
+		
 		assertEquals("Savings", acct.getAccountName());
 		assertEquals("Patrick", acct.getFirstName());
 		assertEquals("Kee", acct.getLastName());
@@ -35,8 +35,8 @@ public class AccountTest {
 
 	@Test
 	public void testGetAccountValue() {
-		Account acct = Account.newAccount().accountName("Savings").firstName("Patrick").lastName("Kee")
-				.email("patrick.kee0@gmail.com");
+		Account acct = new Account("Savings", "Patrick", "Kee", "patrick.kee0@gmail.com");
+
 		DateTime dt = DATE_FORMATTER.parseDateTime("10/01/2015");
 		LocalDate valueAsOfDate = new LocalDate(dt.getYear(), dt.getMonthOfYear(), dt.getDayOfMonth());
 		
@@ -54,8 +54,7 @@ public class AccountTest {
 		Model savingsForecastModel = SavingsForecastModel.getNew().name("Lilah's College Savings")
 				.initialValue(new BigDecimal(2000)).targetValue(new BigDecimal(100000)).startDate(localStartDate)
 				.endDate(localEndDate);
-		Account acct = Account.newAccount().accountName("Savings").firstName("Patrick").lastName("Kee")
-				.email("patrick.kee0@gmail.com");
+		Account acct = new Account("Savings", "Patrick", "Kee", "patrick.kee0@gmail.com");
 		acct.addModel(savingsForecastModel);
 		assertEquals(1, acct.getModels().size());
 	}
@@ -71,8 +70,7 @@ public class AccountTest {
 		Model savingsForecastModel = SavingsForecastModel.getNew().name("Lilah's College Savings")
 				.initialValue(new BigDecimal(2000)).targetValue(new BigDecimal(100000)).startDate(localStartDate)
 				.endDate(localEndDate);
-		Account acct = Account.newAccount().accountName("Savings").firstName("Patrick").lastName("Kee")
-				.email("patrick.kee0@gmail.com");
+		Account acct = new Account("Savings", "Patrick", "Kee", "patrick.kee0@gmail.com");
 		acct.addModel(savingsForecastModel);
 		acct.removeModel(savingsForecastModel.getModelId());
 		assertEquals(0, acct.getModels().size());
@@ -80,7 +78,7 @@ public class AccountTest {
 
 	@Test
 	public void testAccountSerialization() {
-		Account acct = Account.newAccount().accountName("Savings").firstName("Patrick").lastName("Kee").email("patrick.kee0@gmail.com");
+		Account acct = new Account("Savings", "Patrick", "Kee", "patrick.kee0@gmail.com");
 		
 		ObjectMapper mapper = new ObjectMapper();
 		mapper.configure(SerializationFeature.FAIL_ON_EMPTY_BEANS, false);

@@ -1,4 +1,4 @@
-package com.patrickkee.jaxrs.util;
+package com.patrickkee.application.util;
 
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.StatusType;

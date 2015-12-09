@@ -22,10 +22,10 @@ import org.joda.time.format.DateTimeFormat;
 import org.joda.time.format.DateTimeFormatter;
 
 import com.google.common.base.Optional;
-import com.patrickkee.jaxrs.util.UnprocessableEntityStatusType;
+import com.patrickkee.application.util.UnprocessableEntityStatusType;
 import com.patrickkee.model.account.Account;
+import com.patrickkee.model.model.Model;
 import com.patrickkee.model.model.SavingsForecastModel;
-import com.patrickkee.model.model.type.Model;
 import com.patrickkee.model.response.ResponseValueNumeric;
 import com.patrickkee.persistence.FinancialModelsDb;
 

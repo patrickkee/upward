@@ -17,11 +17,10 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
-import com.patrickkee.jaxrs.util.LocalDateDeserializer;
-import com.patrickkee.jaxrs.util.LocalDateSerializer;
+import com.patrickkee.application.util.LocalDateDeserializer;
+import com.patrickkee.application.util.LocalDateSerializer;
 import com.patrickkee.model.event.Event;
 import com.patrickkee.model.event.EventInstance;
-import com.patrickkee.model.model.type.Model;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class SavingsForecastModel implements Model {

@@ -17,8 +17,8 @@ import org.junit.Test;
 
 import com.patrickkee.api.event.RecurringDeposit;
 import com.patrickkee.model.event.Event;
-import com.patrickkee.model.event.type.EventType;
-import com.patrickkee.model.event.type.Period;
+import com.patrickkee.model.event.EventTypes;
+import com.patrickkee.model.event.Periods;
 import com.patrickkee.model.model.SavingsForecastModel;
 import com.patrickkee.resources.ResponseMessage;
 
@@ -53,7 +53,7 @@ public class EventResourceTest extends BaseJerseyTest {
 		dt = DATE_FORMATTER.parseDateTime(END_DATE);
 		LocalDate endDate = new LocalDate(dt.getYear(), dt.getMonthOfYear(), dt.getDayOfMonth());
 
-		RecurringDeposit event = RecurringDeposit.getNew("Payroll Contribution", Period.MONTHLY, startDate, endDate, BigDecimal.valueOf(101.24));
+		RecurringDeposit event = RecurringDeposit.getNew("Payroll Contribution", Periods.MONTHLY, startDate, endDate, BigDecimal.valueOf(101.24));
 		
 		int eventId = event.getEventId(); //Store for validation of location response
 		

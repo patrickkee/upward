@@ -5,14 +5,12 @@ import java.util.NoSuchElementException;
 
 import org.joda.time.LocalDate;
 
-import com.patrickkee.model.event.type.Period;
-
 public final class FrequencyIterator implements Iterator<LocalDate> {
 	private LocalDate cursor;
 	private final LocalDate end;
-	private final Period freq;
+	private final Periods freq;
 
-	private FrequencyIterator(Period freq, LocalDate start, LocalDate end) {
+	private FrequencyIterator(Periods freq, LocalDate start, LocalDate end) {
 		this.cursor = start;
 		this.end = end;
 		this.freq = freq;
@@ -27,7 +25,7 @@ public final class FrequencyIterator implements Iterator<LocalDate> {
 			throw new NoSuchElementException();
 		}
 		
-		if (freq.equals(Period.MONTHLY)) {
+		if (freq.equals(Periods.MONTHLY)) {
 			cursor = cursor.plusMonths(1);
 		} 
 		return cursor;
@@ -37,7 +35,7 @@ public final class FrequencyIterator implements Iterator<LocalDate> {
 		throw new UnsupportedOperationException();
 	}
 	
-	public static FrequencyIterator getNew(Period freq, LocalDate start, LocalDate end) {
+	public static FrequencyIterator getNew(Periods freq, LocalDate start, LocalDate end) {
 		return new FrequencyIterator(freq, start, end);
 		
 	}
