@@ -11,6 +11,13 @@ var AppActions = {
 	AppDispatcher.dispatch(action);
   },
   
+  logout: function() {
+  	var action = {
+  					actionType: ActionTypes.LOGOUT
+			  	 }
+	AppDispatcher.dispatch(action);
+  },
+
 };
 
 module.exports = AppActions;

@@ -1,17 +1,21 @@
 var React = require('react');
 var Header = require('./Header.react');
 var MainSection = require('./MainSection.react');
+var UserPanel = require('./UserPanel.react');
 var LoginInput = require('./LoginInput.react');
-
+var AppStore = require('../stores/AppStore');
+var AppStates = require('../constants/AppStates');
 
 var App = React.createClass({
 
   getInitialState: function() {
-    return null
+    return  {
+              viewState: AppStore.getViewState()
+            } 
   },
 
   componentDidMount: function() {
-    //TBD
+    AppStore.addChangeListener(this._onChange);
   },
 
   componentWillUnmount: function() {
@@ -19,17 +23,30 @@ var App = React.createClass({
   },
 
   render: function() {
+    if (this.state.viewState==AppStates.CONTENT_VIEW) {
+      userPanel = <UserPanel />
+      loginPanel = ""
+    } else {
+      userPanel = "";
+      loginPanel = <LoginInput />
+    }
+    
+
     return (
       <div>
         <Header />
-        <LoginInput />
+        {userPanel}
+        {loginPanel}
         <MainSection />
       </div>
     );
   },
 
   _onChange: function() {
-    //TBD
+    this.props.username = AppStore.getUsername();
+    this.setState({
+                      viewState: AppStore.getViewState()
+                  });
   }
 
 });

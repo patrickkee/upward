@@ -63,7 +63,7 @@ button, input {
 	font-size: 70px;
 	font-weight: bold;
 	text-align: left;
-	color: #b3b3b3;
+	color: #595959;
 	color: rgba(255, 255, 255, 0.3);
 	text-shadow: -1px -1px rgba(0, 0, 0, 0.2);
 	-webkit-text-rendering: optimizeLegibility;
@@ -91,7 +91,7 @@ button, input {
 	border-radius: 6px;
 	box-shadow: 2px 2px 3px 5px rgba(0, 0, 0, 0.05),
 				2px 2px 5px 2px rgba(0, 0, 0, 0.05);
-	border: 1px solid #F8F8FF;  //TEMP for positioning
+	border: 1px solid #F8F8FF;
 }
 
 #login label {
@@ -111,6 +111,33 @@ button, input {
 	width: 50px;
 	margin-left: 4px;
 	height: 26px;
+}
+
+#userpanel {
+	border-radius: 4px;
+	padding: 5px;
+	margin: 5px;
+	position: absolute;
+	display: inline-block;
+	text-align: right;
+    right: 0px;
+}
+
+#userpanel:hover {
+	background-color: #f1f1f1;
+}
+
+#userpanel img {
+	vertical-align: middle;
+	height: 19px;
+}
+
+#userpanel p {
+	display: inline;
+	padding: 4px;
+	vertical-align: middle;
+	font-weight: bold;
+	font-size: 18px;
 }
 
 #info {

@@ -51,7 +51,13 @@ AppDispatcher.register(function(action) {
   switch(action.actionType) {
     case ActionTypes.LOGIN:
       username = action.value;
-      authenticated = AppConstants.TRUE;
+      currentViewState = AppStates.CONTENT_VIEW;
+      AppStore.emitChange();
+      break;
+
+    case ActionTypes.LOGOUT:
+      username = "";
+      currentViewState = AppStates.LOGIN_VIEW;
       AppStore.emitChange();
       break;
 
