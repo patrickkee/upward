@@ -13,16 +13,6 @@ var UserPanel = React.createClass({
             } 
   },
 
-  componentDidMount: function() {
-    AppStore.addChangeListener(this._onChange);
-  },
-
-  _onChange: function() {
-    this.setState({
-      username: AppStore.getUsername()
-    });
-  },
-
   _logout: function() {
     AppActions.logout();
   },
