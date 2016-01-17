@@ -48,6 +48,16 @@ sourceSets {
     }
 }
 
+//Exclude all the un-compiled ES6 code and NPM stuff, only **/js/app.js and **/js/bundle.js is distributed
+war {
+  exclude('**/node_modules/**')
+  exclude('**/js/actions/**')
+  exclude('**/js/components/**')
+  exclude('**/js/constants/**')
+  exclude('**/js/dispatcher/**')
+  exclude('**/js/stores/**')
+}
+
 task copyTestResources(type: Copy) {
     from "${projectDir}/src/test/java/resources"
     into "${buildDir}/classes/test/resources"
