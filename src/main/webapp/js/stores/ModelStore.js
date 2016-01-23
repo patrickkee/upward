@@ -4,7 +4,7 @@ var ActionTypes = require('../constants/ActionTypes');
 var AppConstants = require('../constants/AppConstants');
 var assign = require('object-assign');
 
-var CHANGE_EVENT = 'model-change';
+var CHANGE_EVENT = 'change';
 
 var ModelStore = assign({}, EventEmitter.prototype, {
 

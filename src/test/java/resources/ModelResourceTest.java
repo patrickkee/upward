@@ -13,6 +13,7 @@ import org.joda.time.DateTime;
 import org.joda.time.LocalDate;
 import org.joda.time.format.DateTimeFormat;
 import org.joda.time.format.DateTimeFormatter;
+import org.junit.Ignore;
 import org.junit.Test;
 
 import com.patrickkee.api.event.RecurringDeposit;
@@ -210,6 +211,7 @@ public class ModelResourceTest extends BaseJerseyTest {
 		assertTrue(respMsg.length() > 0);
 	}
 
+	@Ignore
 	@Test
 	public void getModelsTest() {
 		// TODO: Implement test to validate that account models are returned.

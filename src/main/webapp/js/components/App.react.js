@@ -2,6 +2,8 @@ var React = require('react');
 var Header = require('./Header.react');
 var MainSection = require('./MainSection.react');
 var UserPanel = require('./UserPanel.react');
+var ModelPanel = require('./ModelPanel.react');
+var EventPanel = require('./EventPanel.react');
 var LoginInput = require('./LoginInput.react');
 var AppStore = require('../stores/AppStore');
 var AppStates = require('../constants/AppStates');
@@ -9,6 +11,7 @@ var AppStates = require('../constants/AppStates');
 var App = React.createClass({
 
   getInitialState: function() {
+    //AppStore.loadFromLocalStorage(); //having trouble loading initial state 
     return  {
               viewState: AppStore.getViewState()
             } 
@@ -19,36 +22,55 @@ var App = React.createClass({
   },
 
   componentWillUnmount: function() {
-    //TBD
+    AppStore.removeChangeListener(this._onChange);
   },
 
   render: function() {
-    if (this.state.viewState==AppStates.CONTENT_VIEW) {
-      userPanel = <UserPanel />
-      loginPanel = ""
-    } else {
-      userPanel = "";
-      loginPanel = <LoginInput />
-    }
+    //TODO: Move State mapping to separate library
+    var viewStateUi = getViewStateUi(this.state.viewState);
     
-
     return (
       <div>
         <Header />
-        {userPanel}
-        {loginPanel}
+        {viewStateUi}
         <MainSection />
       </div>
     );
   },
 
   _onChange: function() {
-    this.props.username = AppStore.getUsername();
     this.setState({
-                      viewState: AppStore.getViewState()
+                  viewState: AppStore.getViewState()
                   });
   }
 
 });
+
+function getViewStateUi(viewState) {
+  var viewStateUi = "";
+
+  switch(viewState) {
+    case AppStates.LOGIN_VIEW:
+      viewStateUi = <LoginInput loginFailed={false}/>
+      break;
+
+    case AppStates.LOGIN_FAIL_VIEW:
+      viewStateUi = <LoginInput loginFailed={true}/>
+      break;
+
+    case AppStates.CONTENT_VIEW:
+      viewStateUi = <div>
+                      <UserPanel />
+                      <ModelPanel />
+                      <EventPanel />
+                    </div>
+      break;
+
+    default:
+      // no op
+  }
+
+  return viewStateUi;
+};
 
 module.exports = App;

@@ -16,14 +16,25 @@ var LoginInput = React.createClass({
     this.props.username = event.target.value
   },
 
-  _onKeyDown: function() {
+  _onKeyDown: function(event) {
     if (event.keyCode === ENTER_KEY_CODE) {
+          this.props.username = event.target.value;
           this._login();
         }
   },
 
   render: function() {
+    if (this.props.loginFailed) { 
+      var failText = <p>Login failed, please retry</p>
+    } else {
+      var failText = ""
+    }
+
+    var focus = true
+
     return (
+      
+
       <div id="login">
         <label>Username</label>
         <input
@@ -32,12 +43,13 @@ var LoginInput = React.createClass({
           name="username"
           onChange={this._onTextEntry}
           onKeyDown={this._onKeyDown}
+          autoFocus={focus}
         />
         <button onClick={this._login}>Login</button>
+        {failText}
       </div>  
     );
   }
-
 });
 
 module.exports = LoginInput;

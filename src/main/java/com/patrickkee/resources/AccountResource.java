@@ -12,6 +12,7 @@ import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriBuilder;
 import javax.ws.rs.core.UriInfo;
 
+import org.glassfish.jersey.server.JSONP;
 import org.joda.time.DateTime;
 import org.joda.time.LocalDate;
 import org.joda.time.format.DateTimeFormat;
@@ -30,7 +31,8 @@ public class AccountResource {
 	
 	@GET
 	@Path("/{email}")
-	@Produces("application/json")
+	@JSONP(callback = "callback", queryParam = "callback")
+	@Produces({"application/json", "application/javascript"})
 	/**
 	 * Allows users to get a particular account by email
 	 * 
@@ -47,7 +49,8 @@ public class AccountResource {
 	}
 
 	@POST
-	@Produces("application/json")
+	@JSONP(callback = "callback", queryParam = "callback")
+	@Produces({"application/json", "application/javascript"})
 	public Response createAccount(@QueryParam("accountName") String accountName,
 			@QueryParam("firstName") String firstName, @QueryParam("lastName") String lastName,
 			@QueryParam("email") String email, @Context UriInfo uriInfo) {

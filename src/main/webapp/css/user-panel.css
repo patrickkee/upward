@@ -1,0 +1,27 @@
+#userpanel {
+	border-radius: 4px;
+	padding: 5px;
+	margin: 5px;
+	position: absolute;
+	display: inline-block;
+	text-align: right;
+    right: 0px;
+}
+
+#userpanel:hover {
+	background-color: #f1f1f1;
+}
+
+#userpanel img {
+	vertical-align: middle;
+	height: 19px;
+	padding-left: 4px;
+}
+
+#userpanel label {
+	display: inline;
+	padding: 4px;
+	vertical-align: middle;
+	font-weight: bold;
+	font-size: 18px;
+}

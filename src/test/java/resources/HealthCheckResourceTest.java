@@ -19,4 +19,14 @@ public class HealthCheckResourceTest extends BaseJerseyTest {
 		String status = response.readEntity(String.class);
 		Assert.assertTrue(status.contains("Application is healthy!"));
 	}
+	
+	@Test
+	public void healthCheckJsonpTest() {
+		Response response = target("health/jsonp").request(MediaType.APPLICATION_JSON).get();
+		
+		assertEquals(200, response.getStatus());
+		
+		String status = response.readEntity(String.class);
+		Assert.assertTrue(status.contains("Application is healthy!"));
+	}
 }

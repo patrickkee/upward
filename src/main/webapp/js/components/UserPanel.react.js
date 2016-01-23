@@ -20,7 +20,8 @@ var UserPanel = React.createClass({
   render: function() {
     return (
       <div id="userpanel">
-        <img src="./images/user.svg" onClick={this._logout} /><p onClick={this._logout}>{this.state.username}</p>
+        <img src="./images/user.svg" />
+        <img src="./images/logout.png" onClick={this._logout} />
       </div>
     );
   },

@@ -1,3 +1,8 @@
+@import url("login-panel.css");
+@import url("user-panel.css");
+@import url("model-panel.css");
+@import url("event-panel.css");
+
 html, body {
 	margin: 0;
 	padding: 0;
@@ -8,7 +13,8 @@ body {
 	line-height: 1.4em;
 	background: #eaeaea url('bg.png');
 	color: #4d4d4d;
-	width: 800px;
+	min-width: 800px;
+	max-width: 90%;
 	margin: 0 auto;
 	-webkit-font-smoothing: antialiased;
 	-moz-font-smoothing: antialiased;
@@ -27,7 +33,7 @@ button, input {
 	margin: 100px 0 40px 0;
 	border: 1px solid #ccc;
 	position: relative;
-	height: 600px;
+	min-height: 300px;
 	border-radius: 6px;
 	box-shadow: 0 2px 6px 0 rgba(0, 0, 0, 0.2),
 				0 25px 25px 0 rgba(0, 0, 0, 0.15);
@@ -79,65 +85,6 @@ button, input {
 	border-top: 1px;
 	border-bottom: 1px;
 	//border: 1px solid #FF0000; //TEMP for positioning
-}
-
-#login {
-	position: relative;
-	margin: 0 auto;
-	padding: 10px;
-	margin-top: 263px;
-	width: 330px;
-	z-index: 2;
-	border-radius: 6px;
-	box-shadow: 2px 2px 3px 5px rgba(0, 0, 0, 0.05),
-				2px 2px 5px 2px rgba(0, 0, 0, 0.05);
-	border: 1px solid #F8F8FF;
-}
-
-#login label {
-	margin-right: 4px;
-	font-weight: bold;
-	height: 20px;
-}
-
-#login input {
-	width: 200px;
-	height: 20px;
-	vertical-align: bottom;
-}
-
-#login button {
-	vertical-align: center;
-	width: 50px;
-	margin-left: 4px;
-	height: 26px;
-}
-
-#userpanel {
-	border-radius: 4px;
-	padding: 5px;
-	margin: 5px;
-	position: absolute;
-	display: inline-block;
-	text-align: right;
-    right: 0px;
-}
-
-#userpanel:hover {
-	background-color: #f1f1f1;
-}
-
-#userpanel img {
-	vertical-align: middle;
-	height: 19px;
-}
-
-#userpanel p {
-	display: inline;
-	padding: 4px;
-	vertical-align: middle;
-	font-weight: bold;
-	font-size: 18px;
 }
 
 #info {

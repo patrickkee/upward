@@ -4,25 +4,58 @@ var ActionTypes = require('../constants/ActionTypes');
 var AppConstants = require('../constants/AppConstants');
 var AppStates = require('../constants/AppStates');
 var assign = require('object-assign');
-
+var $ = require ('jquery')
 var CHANGE_EVENT = 'change';
 
-var username;
-var authenticated = AppConstants.FALSE;
-var currentViewState = AppStates.LOGIN_VIEW;
+var appState = {viewState: AppStates.LOGIN_VIEW,
+                user: {email: ""}
+               };
+
+function fetchAccount(email, callback) {
+  $.ajax({
+    url: "http://www.patrickkee.com/api/accounts/" + email,
+    jsonp: "callback",
+    dataType: 'jsonp',
+    type: 'GET',
+    async: false,
+    headers: {"Accept" : "application/javascript; charset=utf-8"},
+    success: function(data) {
+      appState.user = data;
+      appState.viewState = AppStates.CONTENT_VIEW;
+      AppStore.persistToLocalStorage();
+      callback();     
+    },
+    error: function(xhr, status, err) {
+      appState.user = "";
+      appState.viewState = AppStates.LOGIN_FAIL_VIEW;
+      AppStore.persistToLocalStorage();
+      callback();
+    }    
+  });
+};
 
 var AppStore = assign({}, EventEmitter.prototype, {
 
+  persistToLocalStorage: function() {
+    localStorage.setItem("appState", JSON.stringify(appState));
+  },
+
+  loadFromLocalStorage: function() {
+    appState = appState;
+    console.log(JSON.parse(localStorage.getItem("appState")));
+    //appState = (localStorage.getItem("appState") === null ? appState : localStorage.getItem("appState");
+  },
+
   getViewState: function() {
-    return currentViewState;
+    return appState.viewState;
+  },
+
+  getUser: function() {
+    return appState.user;
   },
 
   getUsername: function() {
-    return username;
-  },
-
-  isAuthenticated: function() {
-    return authenticated;
+    return appState.user.email;
   },
 
   emitChange: function() {
@@ -50,14 +83,14 @@ AppDispatcher.register(function(action) {
  
   switch(action.actionType) {
     case ActionTypes.LOGIN:
-      username = action.value;
-      currentViewState = AppStates.CONTENT_VIEW;
-      AppStore.emitChange();
+      fetchAccount(action.value, 
+                   function() {AppStore.emitChange()}
+                  );
       break;
 
     case ActionTypes.LOGOUT:
-      username = "";
-      currentViewState = AppStates.LOGIN_VIEW;
+      appState.user = "";
+      appState.viewState = AppStates.LOGIN_VIEW;
       AppStore.emitChange();
       break;
 

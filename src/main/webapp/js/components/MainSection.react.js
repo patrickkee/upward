@@ -2,6 +2,7 @@ var React = require('react');
 var LoginInput = require('./LoginInput.react');
 var AppStore = require('../stores/AppStore');
 
+
 var ReactPropTypes = React.PropTypes;
 
 var MainSection = React.createClass({
@@ -14,6 +15,10 @@ var MainSection = React.createClass({
 
   componentDidMount: function() {
     AppStore.addChangeListener(this._onChange);
+  },
+
+  componentWillUnmount: function() {
+    AppStore.removeChangeListener(this._onChange);
   },
 
   _onChange: function() {
