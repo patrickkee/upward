@@ -2,8 +2,10 @@ var React = require('react');
 var LoginInput = require('./LoginInput.react');
 var AppStore = require('../stores/AppStore');
 var AppActions = require('../actions/AppActions');
+var Event = require('./Event.react');
+var EventTypes = require('../constants/EventTypes');
 
-var ReactPropTypes = React.PropTypes;
+var NEW_EVENT_ICON = "./images/plus_grey.png"
 
 var ModelPanel = React.createClass({
 
@@ -19,22 +21,18 @@ var ModelPanel = React.createClass({
     return (
       <nav id="eventpanel">
         <div>
-          <label className="eventLbl">Events</label>
+          <label className="title">Events</label>
         </div>
         <div>
-          <ul>
-            <li>
-              
-              <label className="newEvent">+  click to add event</label>
-            </li>
-            <li>
-              <img src="./images/recur_dollar.svg" />
-              <label>Monthly Savings</label>
-            </li>          
-            <li>
-              <img src="./images/dollar.svg" />
-              <label>Initial Deposit</label>
-            </li>
+          <ul className="events">
+            <li className="event">
+              <img className="newIcon" src={NEW_EVENT_ICON} />
+              <label className="newEventName">add new</label>
+            </li> 
+            <Event eventType={EventTypes.ACTUAL} eventName="Actual Account Value"/>
+            <Event eventType={EventTypes.RECURRING_YIELD} eventName="Monthly Interest"/>
+            <Event eventType={EventTypes.RECURRING_DEPOSIT} eventName="Monthly Savings"/>
+            <Event eventType={EventTypes.ONE_TIME_DEPOSIT} eventName="Initial Deposit"/>
           </ul>  
         </div>
       </nav>

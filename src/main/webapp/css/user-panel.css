@@ -8,17 +8,13 @@
     right: 0px;
 }
 
-#userpanel:hover {
-	background-color: #f1f1f1;
-}
-
-#userpanel img {
+#userpanel .user, .logout {
 	vertical-align: middle;
-	height: 19px;
-	padding-left: 4px;
+	height: 22px;
+	padding-left: 6px;
 }
 
-#userpanel label {
+#userpanel .userName {
 	display: inline;
 	padding: 4px;
 	vertical-align: middle;

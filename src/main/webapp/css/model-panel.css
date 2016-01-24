@@ -3,29 +3,33 @@
 	display: block;
 }
 
-#modelpanel .goalLbl, select {
+#modelpanel .title, .model {
 	margin-top: 8px;
 	margin-left: 6px;
 	display: inline-block;
-	font-size: 20px;
 	font-weight: bold;
 	vertical-align: middle;
 }
 
-#modelpanel .goalLbl {
+#modelpanel .title, .model {
+	font-size: 18px;
+}
+
+#modelpanel .title {
 	margin-top: 9px;
 }
 
-#modelpanel .targetValLbl {
+#modelpanel .targetValueLabel, .targetDateLabel {
 	float: left;
 	display: inline-block;
 	margin-top: 10px;
 	margin-left: 20px;
 	font-weight: bold;
 	vertical-align: middle;
+	font-size: 16px;
 }
 
-#modelpanel .targetValTxt {
+#modelpanel .targetValueText, .targetDateText {
 	float: left;
 	display: inline-block;
 	margin-left: 6px;

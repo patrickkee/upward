@@ -19,23 +19,23 @@ var ModelPanel = React.createClass({
     return (
       <nav id="modelpanel">
         <div>
-          <label className="goalLbl">Goal</label>
-          <select>
+          <label className="title">Goal</label>
+          <select className="model">
             <option value="Save for Car">Save for Car</option>
             <option value="new">+ add new</option>
           </select>
         </div>
         <table>
           <tr>
-            <td><label className="targetValLbl">Target Value</label></td>
-            <td><input className="targetValTxt"
+            <td><label className="targetValueLabel">Target Value</label></td>
+            <td><input className="targetValueText"
               type="text"
               name="targetVal"
             /></td>
           </tr>
           <tr>
-            <td><label className="targetValLbl">Target Date</label></td>
-            <td><input className="targetValTxt"
+            <td><label className="targetDateLabel">Target Date</label></td>
+            <td><input className="targetDateText"
             type="text"
             name="targetDate"
           /></td>

@@ -94,6 +94,12 @@ AppDispatcher.register(function(action) {
       AppStore.emitChange();
       break;
 
+    case ActionTypes.SIGNUP:
+      appState.user = action.value;
+      appState.viewState = AppStates.CONTENT_VIEW;
+      AppStore.emitChange();
+      break;
+
     default:
       // no op
   }

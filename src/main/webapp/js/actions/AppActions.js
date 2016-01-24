@@ -18,6 +18,14 @@ var AppActions = {
 	AppDispatcher.dispatch(action);
   },
 
+  signup: function(user) {
+    var action = {
+            actionType: ActionTypes.SIGNUP,
+              value: user
+           }
+  AppDispatcher.dispatch(action);
+  },
+
 };
 
 module.exports = AppActions;
