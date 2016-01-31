@@ -8,11 +8,11 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
 import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.Context;
+import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriBuilder;
 import javax.ws.rs.core.UriInfo;
 
-import org.glassfish.jersey.server.JSONP;
 import org.joda.time.DateTime;
 import org.joda.time.LocalDate;
 import org.joda.time.format.DateTimeFormat;
@@ -31,8 +31,7 @@ public class AccountResource {
 	
 	@GET
 	@Path("/{email}")
-	@JSONP(callback = "callback", queryParam = "callback")
-	@Produces({"application/json", "application/javascript"})
+	@Produces(MediaType.APPLICATION_JSON)
 	/**
 	 * Allows users to get a particular account by email
 	 * 
@@ -49,8 +48,7 @@ public class AccountResource {
 	}
 
 	@POST
-	@JSONP(callback = "callback", queryParam = "callback")
-	@Produces({"application/json", "application/javascript"})
+	@Produces(MediaType.APPLICATION_JSON)
 	public Response createAccount(@QueryParam("accountName") String accountName,
 			@QueryParam("firstName") String firstName, @QueryParam("lastName") String lastName,
 			@QueryParam("email") String email, @Context UriInfo uriInfo) {
@@ -73,7 +71,7 @@ public class AccountResource {
 	 */
 	@GET
 	@Path("/{email}/value")
-	@Produces("application/json")
+	@Produces(MediaType.APPLICATION_JSON)
 	public Response getValueByDate(@PathParam("email") String email, @QueryParam("date") String date ) {
 		Optional<Account> acct = FinancialModelsDb.getAccount(email);
 		

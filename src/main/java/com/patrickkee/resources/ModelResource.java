@@ -11,6 +11,7 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
 import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.Context;
+import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status;
 import javax.ws.rs.core.UriBuilder;
@@ -48,7 +49,7 @@ public class ModelResource {
 	 * @return Response with the account
 	 */
 	@POST
-	@Produces("application/json")
+	@Produces(MediaType.APPLICATION_JSON)
 	public Response createModel(@PathParam("email") String email, @QueryParam("modelName") String modelName,
 			@QueryParam("description") String description, @QueryParam("initialValue") BigDecimal initialValue,
 			@QueryParam("targetValue") BigDecimal targetValue, @QueryParam("startDate") String startDate,
@@ -108,7 +109,7 @@ public class ModelResource {
 	 */
 	@DELETE
 	@Path("/{modelId}")
-	@Produces("application/json")
+	@Produces(MediaType.APPLICATION_JSON)
 	public Response removeModel(@PathParam("email") String email, @PathParam("modelId") int modelId) {
 		Optional<Account> acct = FinancialModelsDb.getAccount(email);
 
@@ -125,7 +126,7 @@ public class ModelResource {
 
 	@GET
 	@Path("/{modelId}/value")
-	@Produces("application/json")
+	@Produces(MediaType.APPLICATION_JSON)
 	public Response getValueByDate(@PathParam("email") String email, @PathParam("modelId") int modelId,
 			@QueryParam("date") String date) {
 		Optional<Account> acct = FinancialModelsDb.getAccount(email);
@@ -155,7 +156,7 @@ public class ModelResource {
 
 	@GET
 	@Path("/{modelId}/values")
-	@Produces("application/json")
+	@Produces(MediaType.APPLICATION_JSON)
 	public Response getValues(@PathParam("email") String email, @PathParam("modelId") int modelId) {
 		Optional<Account> acct = FinancialModelsDb.getAccount(email);
 
@@ -170,7 +171,7 @@ public class ModelResource {
 	}
 
 	@GET
-	@Produces("application/json")
+	@Produces(MediaType.APPLICATION_JSON)
 	public Response getModels(@PathParam("email") String email) {
 		Optional<Account> acct = FinancialModelsDb.getAccount(email);
 

@@ -1,0 +1,46 @@
+#userprofile .iconHighlight {
+	width: 20px;
+	border-radius: 25px;
+	box-shadow: 1px 0px 10px 0px rgba(0, 0, 0, 0.5);
+}
+
+#userprofile .iconNoHighlight {
+	width: 20px;
+	border-radius: 25px;
+	box-shadow: 1px 0px 10px 0px rgba(0, 0, 0, 0);
+}
+
+#userprofile img {
+	height: 22px;
+	vertical-align: middle;
+}
+
+#userprofile .popout {
+	border-color: gray;
+	border-width: 1px;
+	border-style: solid;
+	height: 90px;
+	width: 275px;
+	left: -120px;
+	top: 30px;
+	position: absolute;
+	border-radius: 4px;
+	box-shadow: 5px 5px 10px 5px rgba(0, 0, 0, 0.05);
+	background-color: white;
+	
+}
+#userprofile .popout label {
+	display: block;
+	margin: 8px;
+	font-weight: bold;
+	font-size: 16px;
+	text-align: left;
+}
+
+#userprofile .userName {
+	display: inline;
+	padding: 4px;
+	vertical-align: middle;
+	font-weight: bold;
+	font-size: 18px;
+}

@@ -1,23 +1,11 @@
 #userpanel {
-	border-radius: 4px;
 	padding: 5px;
 	margin: 5px;
 	position: absolute;
-	display: inline-block;
 	text-align: right;
     right: 0px;
 }
 
-#userpanel .user, .logout {
-	vertical-align: middle;
-	height: 22px;
-	padding-left: 6px;
-}
-
-#userpanel .userName {
-	display: inline;
-	padding: 4px;
-	vertical-align: middle;
-	font-weight: bold;
-	font-size: 18px;
+#userpanel div {
+	display: inline-block;
 }

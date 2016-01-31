@@ -6,6 +6,7 @@ import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.Context;
+import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriBuilder;
 import javax.ws.rs.core.UriInfo;
@@ -20,7 +21,7 @@ import com.patrickkee.persistence.FinancialModelsDb;
 public class EventResource {
 
 	@POST
-	@Produces("application/json")
+	@Produces(MediaType.APPLICATION_JSON)
 	public Response createEvent(@PathParam("email") String email, @PathParam("modelId") int modelId, Event event,
 			@Context UriInfo uriInfo) {
 

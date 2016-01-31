@@ -8,17 +8,16 @@ var $ = require ('jquery')
 var CHANGE_EVENT = 'change';
 
 var appState = {viewState: AppStates.LOGIN_VIEW,
-                user: {email: ""}
+                user: {email: "",
+                       firstName: "",
+                       password: ""}
                };
 
 function fetchAccount(email, callback) {
   $.ajax({
     url: "http://www.patrickkee.com/api/accounts/" + email,
-    jsonp: "callback",
-    dataType: 'jsonp',
+    dataType: 'json',
     type: 'GET',
-    async: false,
-    headers: {"Accept" : "application/javascript; charset=utf-8"},
     success: function(data) {
       appState.user = data;
       appState.viewState = AppStates.CONTENT_VIEW;
@@ -33,6 +32,33 @@ function fetchAccount(email, callback) {
     }    
   });
 };
+
+function persistAccount(account, callback) {
+  $.ajax({
+    url: "http://patrickkee.com/api/accounts?" +
+          "&accountName=default"+
+          "&firstName="+account.firstName+
+          "&lastName=default"+
+          "&email="+account.email,
+    contentType: "application/json; charset=utf-8",
+    dataType: "json",
+    type: 'POST',
+    success: function(data) {
+      appState.user = data;
+      appState.viewState = AppStates.CONTENT_VIEW;
+      AppStore.persistToLocalStorage();
+      callback();     
+    },
+    error: function(xhr, status, err) {
+      appState.user = "";
+      appState.viewState = AppStates.LOGIN_FAIL_VIEW;
+      AppStore.persistToLocalStorage();
+      callback();
+    }    
+  });
+};
+
+//http://patrickkee.com/api/accounts?accountName=foobar2&firstName=patrick&lastName=kee&email=patrickpdk@gmail.com
 
 var AppStore = assign({}, EventEmitter.prototype, {
 
@@ -95,9 +121,9 @@ AppDispatcher.register(function(action) {
       break;
 
     case ActionTypes.SIGNUP:
-      appState.user = action.value;
-      appState.viewState = AppStates.CONTENT_VIEW;
-      AppStore.emitChange();
+      persistAccount(action.value, 
+                     function() {AppStore.emitChange()}
+                    );
       break;
 
     default:

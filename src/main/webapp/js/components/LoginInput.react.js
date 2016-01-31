@@ -2,7 +2,7 @@ var React = require('react');
 var AppActions = require('../actions/AppActions');
 var AppConstants = require('../constants/AppConstants');
 var AppStore = require('../stores/AppStore');
-var ReactPropTypes = React.PropTypes;
+var Icons = require('../constants/Icons');
 
 var ENTER_KEY_CODE = 13;
 
@@ -13,29 +13,26 @@ var LoginInput = React.createClass({
   },
 
   _login: function() {
-     if (this.props.loginFailed && this.props.email 
-        && this.props.password && this.props.firstName) {
-      AppActions.signup({ email: this.props.email,
-                          password: this.props.password,
-                          firstName: this.props.firstName });
+     if (this.props.loginFailed && this.state.email 
+        && this.state.password && this.state.firstName) {
+      AppActions.signup({ email: this.state.email,
+                          password: this.state.password,
+                          firstName: this.state.firstName });
     } else {
-      this.replaceState({email: this.props.email,
-                         password: this.props.password,
-                         firstName: this.props.firstName })
-      AppActions.login(this.props.email);
+      AppActions.login(this.state.email);
     }
   },
 
   _onEmailTextEntry: function(/*object*/ event) {
-    this.props.email = event.target.value
+    this.state.email = event.target.value
   },
 
   _onPasswordTextEntry: function(/*object*/ event) {
-    this.props.password = event.target.value
+    this.state.password = event.target.value
   },
 
   _onFirstNameTextEntry: function(/*object*/ event) {
-    this.props.firstName = event.target.value
+    this.state.firstName = event.target.value
   },
 
   _onKeyDown: function(event) {
@@ -88,7 +85,7 @@ var LoginInput = React.createClass({
 
         <div className="loginButton">
           <button onClick={this._login}>
-            <img className="loginImg" src="./images/logout.png" />
+            <img className="loginImg" src={Icons.LOGOUT} />
             Login or Signup
           </button>
         </div>
