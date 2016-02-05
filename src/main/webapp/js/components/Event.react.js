@@ -1,5 +1,6 @@
 var React = require('react');
 var EventTypes = require('../constants/EventTypes');
+var Icons = require('../constants/Icons');
 
 var ReactPropTypes = React.PropTypes;
 
@@ -23,19 +24,19 @@ function getIcon(eventType) {
 
     switch(eventType) {
       case EventTypes.ACTUAL:
-        icon = "./images/thumbtack.png"
+        icon = Icons.THUMBTACK
         break;
 
       case EventTypes.RECURRING_YIELD:
-        icon = "./images/recur_pct.png"
+        icon = Icons.RECUR_PCT
         break;
 
       case EventTypes.RECURRING_DEPOSIT:
-        icon = "./images/recur_dollar.png"
+        icon = Icons.RECUR_DOLLAR
         break;
 
       case EventTypes.ONE_TIME_DEPOSIT:
-        icon = "./images/moneybag_lg.png"
+        icon = Icons.MONEYBAG
         break;
 
       default:

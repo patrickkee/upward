@@ -1,6 +1,8 @@
 package com.patrickkee.resources;
 
 import java.math.BigDecimal;
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
@@ -176,7 +178,9 @@ public class ModelResource {
 		Optional<Account> acct = FinancialModelsDb.getAccount(email);
 
 		if (acct.isPresent()) {
-			return Response.ok().entity(acct.get().getModels()).build();
+			List<Model> modelList = new ArrayList<Model>(acct.get().getModels().values());
+			
+			return Response.ok().entity(modelList).build();
 		} else {
 			return Response.status(404).entity(ResponseMessage.getNew("ACCOUNT_NOT_FOUND",
 					"Unable to retrieve model because the account specified was not found")).build();

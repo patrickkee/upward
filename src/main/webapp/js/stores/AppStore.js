@@ -4,18 +4,20 @@ var ActionTypes = require('../constants/ActionTypes');
 var AppConstants = require('../constants/AppConstants');
 var AppStates = require('../constants/AppStates');
 var assign = require('object-assign');
-var $ = require ('jquery')
+var $ = require('jquery')
 var CHANGE_EVENT = 'change';
 
 var appState = {viewState: AppStates.LOGIN_VIEW,
                 user: {email: "",
                        firstName: "",
-                       password: ""}
+                       password: ""},
+                models: [],
+                currentModel: {}
                };
 
 function fetchAccount(email, callback) {
   $.ajax({
-    url: "http://www.patrickkee.com/api/accounts/" + email,
+    url: "http://patrickkee.com/api/accounts/" + email,
     dataType: 'json',
     type: 'GET',
     success: function(data) {
@@ -58,7 +60,26 @@ function persistAccount(account, callback) {
   });
 };
 
-//http://patrickkee.com/api/accounts?accountName=foobar2&firstName=patrick&lastName=kee&email=patrickpdk@gmail.com
+function fetchModels(callback) {
+  $.ajax({
+    url: "http://patrickkee.com/api/accounts/" + appState.user.email + "/models/",
+    dataType: 'json',
+    type: 'GET',
+    success: function(data) {
+      appState.models = data;
+      appState.currentModel = (appState.models.length > 0) ? appState.models[0] : {}
+      AppStore.persistToLocalStorage();
+      callback();     
+    },
+    error: function(xhr, status, err) {
+      appState.models = "";
+      appState.currentModel = "";
+      appState.viewState = AppStates.LOGIN_FAIL_VIEW;
+      AppStore.persistToLocalStorage();
+      callback();
+    }    
+  });
+};
 
 var AppStore = assign({}, EventEmitter.prototype, {
 
@@ -82,6 +103,14 @@ var AppStore = assign({}, EventEmitter.prototype, {
 
   getUsername: function() {
     return appState.user.email;
+  },
+
+  getCurrentModel: function() {
+    return appState.currentModel;
+  },
+
+  getModels: function(callback) {
+    return appState.models;
   },
 
   emitChange: function() {
@@ -109,13 +138,13 @@ AppDispatcher.register(function(action) {
  
   switch(action.actionType) {
     case ActionTypes.LOGIN:
-      fetchAccount(action.value, 
-                   function() {AppStore.emitChange()}
-                  );
+      var func0 = function() {AppStore.emitChange()};
+      var func1 = function() {fetchModels(func0)};
+      fetchAccount(action.value,func1);
       break;
 
     case ActionTypes.LOGOUT:
-      appState.user = "";
+      appState = "";
       appState.viewState = AppStates.LOGIN_VIEW;
       AppStore.emitChange();
       break;
@@ -124,6 +153,25 @@ AppDispatcher.register(function(action) {
       persistAccount(action.value, 
                      function() {AppStore.emitChange()}
                     );
+      break;
+
+    case ActionTypes.SELECT_MODEL:
+      //Find the given model in the collection of models
+      for (m in appState.models) {
+        if (appState.models[m].name == action.value) {
+          appState.currentModel = appState.models[m];
+        }
+      }
+      AppStore.emitChange();
+      break;
+
+    case ActionTypes.SELECT_DEFAULT_MODEL:
+      if (appState.models.length > 0) {
+        appState.currentModel = appState.models[0]
+      } else {
+        appState.currentModel = {}
+      }
+      AppStore.emitChange();
       break;
 
     default:

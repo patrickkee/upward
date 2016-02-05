@@ -1,9 +1,17 @@
 #modelpanel {
-	max-width: 30%;
-	display: block;
+	width: 300px;
+	display: inline-block;
 }
 
-#modelpanel .title, .model {
+#modelpanel .title {
+	margin-top: 9px;
+}
+
+#modelpanel .icon {
+	width: 24px;
+}
+
+#modelpanel .title, .model, .newModel {
 	margin-top: 8px;
 	margin-left: 6px;
 	display: inline-block;
@@ -11,12 +19,12 @@
 	vertical-align: middle;
 }
 
-#modelpanel .title, .model {
+#modelpanel .title, .model, .newModel {
 	font-size: 18px;
 }
 
-#modelpanel .title {
-	margin-top: 9px;
+#modelpanel .model, .newModel {
+	width: 170px;
 }
 
 #modelpanel .targetValueLabel, .targetDateLabel {

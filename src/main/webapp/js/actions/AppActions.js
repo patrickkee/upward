@@ -8,14 +8,14 @@ var AppActions = {
   					actionType: ActionTypes.LOGIN,
 			      	value: username
 			  	 }
-	AppDispatcher.dispatch(action);
+	   AppDispatcher.dispatch(action);
   },
   
   logout: function() {
   	var action = {
   					actionType: ActionTypes.LOGOUT
 			  	 }
-	AppDispatcher.dispatch(action);
+	   AppDispatcher.dispatch(action);
   },
 
   signup: function(user) {
@@ -23,7 +23,22 @@ var AppActions = {
             actionType: ActionTypes.SIGNUP,
               value: user
            }
-  AppDispatcher.dispatch(action);
+    AppDispatcher.dispatch(action);
+  },
+
+  selectModel: function(modelName) {
+    var action = {
+                  actionType: ActionTypes.SELECT_MODEL,
+                  value: modelName
+                }
+    AppDispatcher.dispatch(action);
+  },
+
+  selectDefaultModel: function() {
+    var action = {
+                  actionType: ActionTypes.SELECT_DEFAULT_MODEL
+                }
+    AppDispatcher.dispatch(action);
   },
 
 };
