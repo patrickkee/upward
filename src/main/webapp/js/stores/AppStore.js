@@ -7,13 +7,15 @@ var assign = require('object-assign');
 var $ = require('jquery')
 var CHANGE_EVENT = 'change';
 
-var appState = {viewState: AppStates.LOGIN_VIEW,
-                user: {email: "",
-                       firstName: "",
-                       password: ""},
-                models: [],
-                currentModel: {}
-               };
+var defaultAppState = { viewState: AppStates.LOGIN_VIEW,
+                        user: {email: "",
+                               firstName: "",
+                               password: ""},
+                        models: [],
+                        currentModel: {}
+                       };
+
+var appState = defaultAppState;
 
 function fetchAccount(email, callback) {
   $.ajax({
@@ -81,6 +83,31 @@ function fetchModels(callback) {
   });
 };
 
+function persistModel(callback) {
+  $.ajax({
+    url: "http://patrickkee.com/api/accounts/" + appState.user.email + "/models/?" +
+          "&accountName=default"+
+          "&firstName="+account.firstName+
+          "&lastName=default"+
+          "&email="+account.email,
+    contentType: "application/json; charset=utf-8",
+    dataType: "json",
+    type: 'POST',
+    success: function(data) {
+      appState.user = data;
+      appState.viewState = AppStates.CONTENT_VIEW;
+      AppStore.persistToLocalStorage();
+      callback();     
+    },
+    error: function(xhr, status, err) {
+      appState.user = "";
+      appState.viewState = AppStates.LOGIN_FAIL_VIEW;
+      AppStore.persistToLocalStorage();
+      callback();
+    }    
+  });
+};
+
 var AppStore = assign({}, EventEmitter.prototype, {
 
   persistToLocalStorage: function() {
@@ -138,13 +165,15 @@ AppDispatcher.register(function(action) {
  
   switch(action.actionType) {
     case ActionTypes.LOGIN:
+      //Enforce the order of async callbacks to ensure that user information
+      //is loaded before model and event info
       var func0 = function() {AppStore.emitChange()};
       var func1 = function() {fetchModels(func0)};
       fetchAccount(action.value,func1);
       break;
 
     case ActionTypes.LOGOUT:
-      appState = "";
+      appState = defaultAppState;
       appState.viewState = AppStates.LOGIN_VIEW;
       AppStore.emitChange();
       break;

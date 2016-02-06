@@ -1,48 +1,70 @@
 #modelpanel {
 	width: 300px;
 	display: inline-block;
+	margin: 6px;
+	vertical-align: text-bottom;
+}
+
+.modelSelect {
+	height: 24px;
+	font-size: 18px;
+	margin-left: 6px;
+	vertical-align: top;
+	border-radius: 2px;
+    border-width: 1px;
+    border-style: solid;
+    border-color: gray;
+    vertical-align: middle;
 }
 
 #modelpanel .title {
-	margin-top: 9px;
+	font-size: 23px;
+	font-weight: bold;
+	vertical-align: middle;
 }
 
 #modelpanel .icon {
-	width: 24px;
-}
-
-#modelpanel .title, .model, .newModel {
-	margin-top: 8px;
-	margin-left: 6px;
-	display: inline-block;
-	font-weight: bold;
+	width: 18px;
+	margin-left: 4px;
 	vertical-align: middle;
-}
+}	
 
-#modelpanel .title, .model, .newModel {
-	font-size: 18px;
-}
-
-#modelpanel .model, .newModel {
-	width: 170px;
-}
-
-#modelpanel .targetValueLabel, .targetDateLabel {
-	float: left;
+#newModel {
+	width: auto;
 	display: inline-block;
-	margin-top: 10px;
-	margin-left: 20px;
-	font-weight: bold;
-	vertical-align: middle;
-	font-size: 16px;
+	margin-left: 4px;
 }
 
-#modelpanel .targetValueText, .targetDateText {
-	float: left;
-	display: inline-block;
-	margin-left: 6px;
-	vertical-align: middle;
-	margin-top: 8px;
-	font-size: 16px;
+#newModel input {
+	width: auto;
+	margin-left: 4px;
+	border-radius: 2px;
+    border-width: 1px;
+    border-style: solid;
+    border-color: gray;
+    vertical-align: middle;
+    height: 20px;
+}
+
+#modelpanel .target {
+	margin: 8px;
+	max-width: 215px;
+}
+
+#modelpanel .target input {
+	float: right;
+	clear: both;
 	width: 100px;
+	font-size: 14px;
+	vertical-align: middle;
+    border-radius: 2px;
+    border-width: 1px;
+    border-style: solid;
+    border-color: gray;
+}
+
+#modelpanel .target label {
+	font-size: 16px;
+	font-weight: bold;
+	vertical-align: middle;
 }

@@ -3,15 +3,11 @@ var LoginInput = require('./LoginInput.react');
 var AppStore = require('../stores/AppStore');
 var AppActions = require('../actions/AppActions');
 var Icons = require('../constants/Icons');
-
+var NewModelForm = require('./NewModelForm');
+var ModelSelect = require('./ModelSelect');
 var ADD_NEW_MODEL = "ADD_NEW_MODEL";
 
 var ModelPanel = React.createClass({
-
-  //Reverts the UI back to the model selection mode & chooses the first model in the collection
-  _cancelNewModel: function() {
-    AppActions.selectDefaultModel();
-  },
 
   //Callback triggered by AppStore change listener
   _onChange: function() {
@@ -31,6 +27,11 @@ var ModelPanel = React.createClass({
     } else {
       AppActions.selectModel(event.target.value);
     }
+  },
+
+  _createModel: function(/*object*/ event) {
+    //TODO: COLLECT INFO FROM MODEL FORM AND CREATE EVENT
+    console.log("hello")
   },
 
   _onTargetValueChange: function(/*object*/ event) {
@@ -67,23 +68,11 @@ var ModelPanel = React.createClass({
   render: function() {
     var modelView = ""
     if (this.state.addModelUi || typeof this.state.selectedModel === "undefined") {
-      //Build the create new model textbox
-      modelView = <div className="newModel">
-                    <input  className="newModel" type="text" name="newModel"/>
-                    <img className="icon" src={Icons.CANCEL} onClick={this._cancelNewModel} />
-                    <img className="icon" src={Icons.SAVE} />
-                  </div>
+      modelView = <NewModelForm createModelCallback={this._createModel}/>
     } else {
-      //Build the models dropdown
-      var modelDropdown = []
-      for (var p in this.state.models) {
-         modelDropdown.push(<option key={p} value={this.state.models[p].name}>{this.state.models[p].name}</option>) 
-      }   
-
-      modelView = <select className="model" value={this.state.selectedModel.name} onChange={this._onSelectModel}>
-                    {modelDropdown}
-                    <option value={ADD_NEW_MODEL}>+ add new</option>)
-                  </select>
+      modelView = <ModelSelect  models={this.state.models} 
+                                selectedModel={this.state.selectedModel} 
+                                selectModelCallback={this._onSelectModel}/>
     }
 
     //Null handling for the case when we're adding a new model, so selectedModel is null
@@ -101,28 +90,24 @@ var ModelPanel = React.createClass({
       <div id="modelpanel">
           <label className="title">Goal</label>
           {modelView}
-        <table>
-          <tr>
-            <td><label className="targetValueLabel">Target Value</label></td>
-            <td><input className="targetValueText"
+        <div> 
+          <div className="target"> 
+            <label className="targetValueLabel">Target Value</label>
+            <input className="targetValueText"
                   type="text"
                   name="targetVal"
                   value={targetValue}
-                  onChange={this._onTargetValueChange}
-                />
-            </td>
-          </tr>
-          <tr>
-            <td><label className="targetDateLabel">Target Date</label></td>
-            <td><input className="targetDateText"
+                  onChange={this._onTargetValueChange}/>
+          </div> 
+          <div className="target"> 
+            <label className="targetDateLabel">Target Date</label>
+            <input className="targetDateText"
                   type="text"
                   name="targetDate"
                   value={targetDate}
-                  onChange={this._onTargetDateChange}
-                />
-            </td>
-          </tr>
-        </table>
+                  onChange={this._onTargetDateChange}/>
+          </div> 
+        </div> 
       </div>
     );
   },
