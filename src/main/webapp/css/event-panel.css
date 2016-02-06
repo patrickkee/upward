@@ -1,11 +1,12 @@
 #eventpanel {
-	max-width: 30%;
+	max-width: 300px;
+	min-width: 225px;
 	display: block;
+	margin: 6px;
+	vertical-align: text-bottom;
 }
 
 #eventpanel .title {
-	margin-top: 25px;
-	margin-left: 6px;
 	display: inline-block;
 	font-size: 20px;
 	font-weight: bold;
