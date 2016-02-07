@@ -41,6 +41,14 @@ var AppActions = {
     AppDispatcher.dispatch(action);
   },
 
+  createModel: function(model) {
+    var action = {
+                  actionType: ActionTypes.CREATE_MODEL,
+                  value: model
+                }
+    AppDispatcher.dispatch(action);
+  },
+
 };
 
 module.exports = AppActions;

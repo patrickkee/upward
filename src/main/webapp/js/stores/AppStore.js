@@ -69,7 +69,12 @@ function fetchModels(callback) {
     type: 'GET',
     success: function(data) {
       appState.models = data;
-      appState.currentModel = (appState.models.length > 0) ? appState.models[0] : {}
+      if (appState.currentModel == {} ||
+          appState.currentModel === "undefined") {
+          
+          setDefaultModel();
+      }
+
       AppStore.persistToLocalStorage();
       callback();     
     },
@@ -83,29 +88,31 @@ function fetchModels(callback) {
   });
 };
 
-function persistModel(callback) {
+function persistModel(model, callback) {
   $.ajax({
-    url: "http://patrickkee.com/api/accounts/" + appState.user.email + "/models/?" +
-          "&accountName=default"+
-          "&firstName="+account.firstName+
-          "&lastName=default"+
-          "&email="+account.email,
+    url: "http://patrickkee.com/api/accounts/" + appState.user.email + "/models?" +
+          "&modelName=" + model.modelName +
+          "&description=" +
+          "&initialValue=0" +
+          "&targetValue=" + model.targetValue +
+          "&startDate=" + "01/01/2000" +
+          "&endDate=" + model.targetDate,
     contentType: "application/json; charset=utf-8",
     dataType: "json",
     type: 'POST',
     success: function(data) {
-      appState.user = data;
-      appState.viewState = AppStates.CONTENT_VIEW;
-      AppStore.persistToLocalStorage();
-      callback();     
+      appState.currentModel = data;
+      fetchModels(callback); //If we were successful then reload all the models from the backend
     },
     error: function(xhr, status, err) {
-      appState.user = "";
-      appState.viewState = AppStates.LOGIN_FAIL_VIEW;
-      AppStore.persistToLocalStorage();
+      setDefaultModel();
       callback();
     }    
   });
+};
+
+function setDefaultModel() {
+  appState.currentModel = (appState.models.length > 0) ? appState.models[0] : {}
 };
 
 var AppStore = assign({}, EventEmitter.prototype, {
@@ -195,12 +202,14 @@ AppDispatcher.register(function(action) {
       break;
 
     case ActionTypes.SELECT_DEFAULT_MODEL:
-      if (appState.models.length > 0) {
-        appState.currentModel = appState.models[0]
-      } else {
-        appState.currentModel = {}
-      }
+      setDefaultModel();
       AppStore.emitChange();
+      break;
+
+    case ActionTypes.CREATE_MODEL:
+      persistModel(action.value, 
+                   function() {AppStore.emitChange()}
+                  );
       break;
 
     default:

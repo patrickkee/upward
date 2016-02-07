@@ -24,15 +24,15 @@ var LoginInput = React.createClass({
   },
 
   _onEmailTextEntry: function(/*object*/ event) {
-    this.state.email = event.target.value
+     this.setState({email: event.target.value});
   },
 
   _onPasswordTextEntry: function(/*object*/ event) {
-    this.state.password = event.target.value
+     this.setState({password: event.target.value});
   },
 
   _onFirstNameTextEntry: function(/*object*/ event) {
-    this.state.firstName = event.target.value
+     this.setState({firstName: event.target.value});
   },
 
   _onKeyDown: function(event) {
@@ -53,7 +53,7 @@ var LoginInput = React.createClass({
                               <label>First Name</label>
                               <input  className="firstName" type="text" name="firstName"
                                       onChange={this._onFirstNameTextEntry}
-                                      defaultValue={this.state.firstName} />  
+                                      value={this.state.firstName} />  
                             </div> 
     } else {
       var failText = ""
@@ -69,14 +69,14 @@ var LoginInput = React.createClass({
           <div id="formItem">
             <label>Email</label>
             <input  className="email" type="text" name="email" 
-                    defaultValue={this.state.email}
+                    value={this.state.email}
                     onChange={this._onEmailTextEntry}
                     autoFocus={focus} />
           </div>
           <div id="formItem">
             <label>Password</label>
             <input  className="password" type="password" name="password" 
-                    defaultValue={this.state.password}
+                    value={this.state.password}
                     onChange={this._onPasswordTextEntry}
                     onKeyDown={this._onKeyDown} />
           </div>

@@ -30,8 +30,9 @@ var ModelPanel = React.createClass({
   },
 
   _createModel: function(/*object*/ event) {
-    //TODO: COLLECT INFO FROM MODEL FORM AND CREATE EVENT
-    console.log("hello")
+    AppActions.createModel({ modelName: this.refs.newModelForm.state.modelName,
+                             targetValue: this.state.selectedModel.targetValue,
+                             targetDate: this.state.selectedModel.endDate });
   },
 
   _onTargetValueChange: function(/*object*/ event) {
@@ -68,7 +69,7 @@ var ModelPanel = React.createClass({
   render: function() {
     var modelView = ""
     if (this.state.addModelUi || typeof this.state.selectedModel === "undefined") {
-      modelView = <NewModelForm createModelCallback={this._createModel}/>
+      modelView = <NewModelForm ref="newModelForm" createModelCallback={this._createModel}/>
     } else {
       modelView = <ModelSelect  models={this.state.models} 
                                 selectedModel={this.state.selectedModel} 
