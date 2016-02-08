@@ -80,10 +80,15 @@ public class Account {
 		return models;
 	}
 
-	public void addModel(Model model) {
-		models.putIfAbsent(model.getModelId(), model);
+	public void addOrUpdateModel(Model model) {
+		models.remove(model.getModelId());
+		models.put(model.getModelId(), model);
 	}
 
+	public void updateModel(Model model) {
+		models.put(model.getModelId(), model);
+	}
+	
 	public void removeModel(int modelId) {
 		models.remove(modelId);
 	}

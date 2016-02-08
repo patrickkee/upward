@@ -12,7 +12,7 @@ var defaultAppState = { viewState: AppStates.LOGIN_VIEW,
                                firstName: "",
                                password: ""},
                         models: [],
-                        currentModel: {}
+                        currentModel: ""
                        };
 
 var appState = defaultAppState;
@@ -70,8 +70,9 @@ function fetchModels(callback) {
     success: function(data) {
       appState.models = data;
       if (appState.currentModel == {} ||
-          appState.currentModel === "undefined") {
-          
+          appState.currentModel === "undefined" ||
+          appState.currentModel == "" ) {
+
           setDefaultModel();
       }
 
@@ -107,6 +108,22 @@ function persistModel(model, callback) {
     error: function(xhr, status, err) {
       setDefaultModel();
       callback();
+    }    
+  });
+};
+
+function deleteModel(model, callback) {
+  $.ajax({
+    url: "http://patrickkee.com/api/accounts/" + appState.user.email + "/models/" + model.modelId,
+    contentType: "application/json; charset=utf-8",
+    dataType: "json",
+    type: 'DELETE',
+    success: function(data) {
+      appState.currentModel = "";
+      fetchModels(callback); //If we were successful then reload all the models from the backend
+    },
+    error: function(xhr, status, err) {
+      //TODO: Something intelligent on error
     }    
   });
 };
@@ -210,6 +227,18 @@ AppDispatcher.register(function(action) {
       persistModel(action.value, 
                    function() {AppStore.emitChange()}
                   );
+      break;
+
+    case ActionTypes.UPDATE_MODEL:
+      persistModel(action.value, 
+                   function() {AppStore.emitChange()}
+                  );
+      break;
+
+    case ActionTypes.DELETE_MODEL:
+      var func0 = function() {AppStore.emitChange()};
+      var func1 = function() {fetchModels(func0)};
+      deleteModel(action.value,func1);
       break;
 
     default:

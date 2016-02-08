@@ -49,6 +49,22 @@ var AppActions = {
     AppDispatcher.dispatch(action);
   },
 
+  updateModel: function(model) {
+    var action = {
+                  actionType: ActionTypes.UPDATE_MODEL,
+                  value: model
+                }
+    AppDispatcher.dispatch(action);
+  },
+
+  deleteModel: function(model) {
+    var action = {
+                  actionType: ActionTypes.DELETE_MODEL,
+                  value: model
+                }
+    AppDispatcher.dispatch(action);
+  },
+
 };
 
 module.exports = AppActions;

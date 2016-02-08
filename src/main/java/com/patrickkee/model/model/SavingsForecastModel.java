@@ -34,12 +34,12 @@ public class SavingsForecastModel implements Model {
 	private LocalDate _endDate;
 	private ConcurrentHashMap<Integer, Event> _events = new ConcurrentHashMap<>();
 
-	private SavingsForecastModel() { }
+	private SavingsForecastModel() {}
 
 	public static SavingsForecastModel getNew() {
 		return new SavingsForecastModel();
 	}
-	
+
 	// Getters & Setters
 	@Override
 	@JsonProperty("modelId")
@@ -51,65 +51,71 @@ public class SavingsForecastModel implements Model {
 			return _modelId;
 		}
 	}
-	
+
 	@JsonProperty("name")
 	public String getName() {
 		return _name;
 	}
+
 	@JsonProperty("name")
 	public void setName(String name) {
 		this._name = name;
 	}
-	
+
 	@JsonProperty("description")
 	public String getDescription() {
 		return _description;
 	}
+
 	@JsonProperty("description")
 	public void setDescription(String description) {
 		this._description = description;
 	}
-	
+
 	@JsonProperty("initialValue")
 	public BigDecimal getInitialValue() {
 		return _initialValue;
 	}
+
 	@JsonProperty("initialValue")
 	public void setInitialValue(BigDecimal initialValue) {
 		this._initialValue = initialValue;
 	}
-	
+
 	@JsonProperty("targetValue")
 	public BigDecimal getTargetValue() {
 		return _targetValue;
 	}
+
 	@JsonProperty("targetValue")
 	public void setTargetValue(BigDecimal targetValue) {
 		this._targetValue = targetValue;
 	}
-	
+
 	@JsonSerialize(using = LocalDateSerializer.class)
 	@JsonProperty("startDate")
 	public LocalDate getStartDate() {
 		return _startDate;
 	}
+
 	@JsonDeserialize(using = LocalDateDeserializer.class)
 	@JsonProperty("startDate")
 	public void setStartDate(LocalDate startDate) {
 		this._startDate = startDate;
 	}
-	
+
 	@JsonSerialize(using = LocalDateSerializer.class)
 	@JsonProperty("endDate")
 	public LocalDate getEndDate() {
 		return _endDate;
-	} 
+	}
+
 	@JsonDeserialize(using = LocalDateDeserializer.class)
 	@JsonProperty("endDate")
 	public void setEndDate(LocalDate endDate) {
 		this._endDate = endDate;
 	}
-	
+
 	@Override
 	public void addEvent(Event event) {
 		_events.putIfAbsent(event.getEventId(), event);
@@ -122,7 +128,7 @@ public class SavingsForecastModel implements Model {
 		BigDecimal currentValue = _initialValue;
 		List<EventInstance> instances = getSortedEventInstances(valueAsOfDate);
 
-		//TODO: Convert to Java8 Stream iteration style
+		// TODO: Convert to Java8 Stream iteration style
 		for (EventInstance e : instances) {
 			currentValue = e.apply(currentValue);
 		}
@@ -144,7 +150,7 @@ public class SavingsForecastModel implements Model {
 		// Apply all the event instances to the account value
 		BigDecimal currentValue = _initialValue;
 		List<EventInstance> instances = getSortedEventInstances(_endDate);
-		
+
 		for (EventInstance e : instances) {
 			currentValue = e.apply(currentValue);
 			modelValues.put(e.getDate(), currentValue.setScale(2, BigDecimal.ROUND_HALF_UP));
@@ -202,13 +208,8 @@ public class SavingsForecastModel implements Model {
 	public int hashCode() {
 		final int prime = 31;
 		int result = 1;
-		result = prime * result + ((_description == null) ? 0 : _description.hashCode());
-		result = prime * result + ((_endDate == null) ? 0 : _endDate.hashCode());
-		result = prime * result + ((_initialValue == null) ? 0 : _initialValue.hashCode());
 		result = prime * result + ((_name == null) ? 0 : _name.hashCode());
-		result = prime * result + ((_startDate == null) ? 0 : _startDate.hashCode());
-		result = prime * result + ((_targetValue == null) ? 0 : _targetValue.hashCode());
-		return result * -1;
+		return result;
 	}
 
 	@Override
@@ -220,35 +221,10 @@ public class SavingsForecastModel implements Model {
 		if (getClass() != obj.getClass())
 			return false;
 		SavingsForecastModel other = (SavingsForecastModel) obj;
-		if (_description == null) {
-			if (other._description != null)
-				return false;
-		} else if (!_description.equals(other._description))
-			return false;
-		if (_endDate == null) {
-			if (other._endDate != null)
-				return false;
-		} else if (!_endDate.equals(other._endDate))
-			return false;
-		if (_initialValue == null) {
-			if (other._initialValue != null)
-				return false;
-		} else if (!_initialValue.equals(other._initialValue))
-			return false;
 		if (_name == null) {
 			if (other._name != null)
 				return false;
 		} else if (!_name.equals(other._name))
-			return false;
-		if (_startDate == null) {
-			if (other._startDate != null)
-				return false;
-		} else if (!_startDate.equals(other._startDate))
-			return false;
-		if (_targetValue == null) {
-			if (other._targetValue != null)
-				return false;
-		} else if (!_targetValue.equals(other._targetValue))
 			return false;
 		return true;
 	}
@@ -259,20 +235,21 @@ public class SavingsForecastModel implements Model {
 		return _events.get(eventName);
 	}
 
-	@Override 
+	@Override
 	public String toString() {
 		ObjectMapper mapper = new ObjectMapper();
 		mapper.configure(SerializationFeature.FAIL_ON_EMPTY_BEANS, false);
 		String json = "";
-		
+
 		try {
 			json = mapper.writeValueAsString(this);
 		} catch (IOException e) {
-			//TODO: Something intelligent rather than ridiculously printing the stack trace
+			// TODO: Something intelligent rather than ridiculously printing the
+			// stack trace
 			e.printStackTrace();
-		} 
-		
+		}
+
 		return json;
 	}
-	
+
 }

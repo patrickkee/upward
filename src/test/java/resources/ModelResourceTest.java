@@ -44,9 +44,9 @@ public class ModelResourceTest extends BaseJerseyTest {
 				.post(Entity.entity("foo", MediaType.APPLICATION_JSON_TYPE), Response.class);
 
 		SavingsForecastModel model = response.readEntity(SavingsForecastModel.class);
-
+		
 		assertEquals(201, response.getStatus());
-		assertTrue(response.getLocation().toString().contains("/accounts/createModelTest@gmail.com/models/338106447"));
+		assertTrue(response.getLocation().toString().contains("/accounts/createModelTest@gmail.com/models/" + model.getModelId()));
 		assertEquals("createModelTestModelName", model.getName());
 		assertEquals("createModelTestModelDesc", model.getDescription());
 		assertEquals(BigDecimal.valueOf(2000), model.getInitialValue());

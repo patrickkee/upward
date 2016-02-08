@@ -6,7 +6,7 @@
 	vertical-align: text-bottom;
 }
 
-.modelSelect {
+#modelSelect .select {
 	height: 24px;
 	font-size: 18px;
 	margin-left: 6px;
@@ -16,6 +16,21 @@
     border-style: solid;
     border-color: gray;
     vertical-align: middle;
+
+}
+
+#modelSelect {
+	display: inline-block;
+}
+
+#modelSelect div {
+	display: inline-block;
+	margin-left: 4px;
+}
+
+#modelSelect img {
+	width: 22px;
+	vertical-align: middle;
 }
 
 #modelpanel .title {
@@ -84,4 +99,17 @@
 	width: 20px;
 	border-radius: 25px;
 	box-shadow: 1px 0px 10px 0px rgba(0, 0, 0, 0);
+}
+
+#modelpanel .squareIconHighlight {
+	width: 20px;
+	height: 20px;
+	border-radius: 1px;
+	box-shadow: 1px 0px 10px 0px rgba(0, 0, 0, 0.35), inset 0 0 6px rgba(0, 0, 0, 0.35);
+}
+
+#modelpanel .squareIconNoHighlight {
+	width: 20px;
+	height: 20px;
+	border-radius: 1px;
 }

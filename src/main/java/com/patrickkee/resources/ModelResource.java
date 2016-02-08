@@ -62,6 +62,7 @@ public class ModelResource {
 
 		// Parse the dates and throw unprocessable entity response if date
 		// formats are invalid
+		//TODO: Bean should come in with dates already de-serialized to prevent the need for this boilerplate stuff
 		LocalDate localStartDate = null;
 		LocalDate localEndDate = null;
 		try {
@@ -84,7 +85,7 @@ public class ModelResource {
 		// Validate that the account could be found and add the model to the
 		// account, otherwise throw not found error
 		if (acct.isPresent()) {
-			acct.get().addModel(savingsForecastModel);
+			acct.get().addOrUpdateModel(savingsForecastModel);
 			FinancialModelsDb.persistAccount(acct.get());
 
 			UriBuilder locationBuilder = uriInfo.getAbsolutePathBuilder();

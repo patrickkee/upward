@@ -22,11 +22,26 @@ var ModelPanel = React.createClass({
   _onSelectModel: function(/*object*/ event) {
     if (event.target.value === ADD_NEW_MODEL) {
         this.setState({addModelUi: true,
-                       selectedModel: {}
+                       selectedModel: {},
+                       edited: false
                       });
     } else {
+      this.setState({edited: false});
       AppActions.selectModel(event.target.value);
     }
+  },
+
+  //Delete the model 
+  _onDeleteModel: function() {
+    AppActions.deleteModel(this.state.selectedModel);
+  },
+
+  //Save the model if changes are present
+  _onDeleteModel: function() {
+    if (this.state.edited) {
+      //AppActions.updateModel(this.state.selectedModel);
+    }
+    
   },
 
   _createModel: function(/*object*/ event) {
@@ -35,18 +50,26 @@ var ModelPanel = React.createClass({
                              targetDate: this.state.selectedModel.endDate });
   },
 
+  _updateModel: function(/*object*/ event) {
+    AppActions.updateModel({ modelName: this.state.selectedModel.name,
+                             targetValue: this.state.selectedModel.targetValue,
+                             targetDate: this.state.selectedModel.endDate });
+  },
+
   _onTargetValueChange: function(/*object*/ event) {
     var tmpModel = this.state.selectedModel
     tmpModel.targetValue = event.target.value
 
-    this.setState({selectedModel: tmpModel});
+    this.setState({selectedModel: tmpModel,
+                   edited: true });
   },
 
   _onTargetDateChange: function(/*object*/ event) {
     var tmpModel = this.state.selectedModel
     tmpModel.endDate = event.target.value
 
-    this.setState({selectedModel: tmpModel});
+    this.setState({selectedModel: tmpModel,
+                   edited: true});
   },
 
   getInitialState: function() {
@@ -54,7 +77,8 @@ var ModelPanel = React.createClass({
     return  {
               models: AppStore.getModels(),
               selectedModel: tmpCurrModel,
-              addModelUi: (typeof tmpCurrModel === "undefined") ? true : false
+              addModelUi: (typeof tmpCurrModel === "undefined") ? true : false,
+              edited: false 
             } 
   },
 
@@ -73,7 +97,10 @@ var ModelPanel = React.createClass({
     } else {
       modelView = <ModelSelect  models={this.state.models} 
                                 selectedModel={this.state.selectedModel} 
-                                selectModelCallback={this._onSelectModel}/>
+                                selectModelCallback={this._onSelectModel}
+                                deleteModelCallback={this._onDeleteModel} 
+                                saveModelCallback={this._updateModel}
+                                showSave={this.state.edited} />
     }
 
     //Null handling for the case when we're adding a new model, so selectedModel is null

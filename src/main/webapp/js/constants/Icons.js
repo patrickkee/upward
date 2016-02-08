@@ -5,8 +5,9 @@ var Icons = {LOGOUT: "./images/logout2.png",
          	 RECUR_PCT: "./images/recur_pct.png",
          	 RECUR_DOLLAR: "./images/recur_dollar.png",
          	 MONEYBAG: "./images/moneybag_lg.png",
-         	 CANCEL: "./images/cancel.png",
-         	 SAVE: "./images/circle_check.png"
+         	 CANCEL: "./images/cancel.svg",
+         	 SAVE: "./images/circle_check.png",
+         	 TRASH: "./images/trash.svg"
          	}
 
 module.exports = Icons;
