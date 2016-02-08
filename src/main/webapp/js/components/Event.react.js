@@ -8,11 +8,12 @@ var Event = React.createClass({
 
   render: function() {
     var icon = getIcon(this.props.eventType);
+    var labelClass = (this.props.eventType != EventTypes.NEW_EVENT) ? "eventName" : "newEventName";
 
     return (
       <li className="event">
         <img className="icon" src={icon} />
-        <label className="eventName">{this.props.eventName}</label>
+        <label className={labelClass}>{this.props.eventName}</label>
       </li>             
     );
   },
@@ -37,6 +38,10 @@ function getIcon(eventType) {
 
       case EventTypes.ONE_TIME_DEPOSIT:
         icon = Icons.MONEYBAG
+        break;
+
+      case EventTypes.NEW_EVENT:
+        icon = Icons.NEW_EVENT
         break;
 
       default:

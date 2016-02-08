@@ -7,7 +7,7 @@ var Icons = {LOGOUT: "./images/logout2.png",
          	 MONEYBAG: "./images/moneybag_lg.png",
          	 CANCEL: "./images/cancel.svg",
          	 SAVE: "./images/circle_check.png",
-         	 TRASH: "./images/trash.svg"
+         	 TRASH: "./images/trash.svg",
          	}
 
 module.exports = Icons;
