@@ -11,15 +11,13 @@ var NewModelForm = React.createClass({
   },
 
   //Simple toggle for icon hover effect
-  _toggleHoverCancel: function() {
-    var newVal = !this.state.cancelHovering;
-    this.setState({cancelHovering: newVal});
+  _toggleHoverCancel: function(/*object*/ event) {
+    this.setState({cancelHovering: (event.type == "mouseenter")});
   },
 
   //Simple toggle for icon hover effect
-  _toggleHoverAccept: function() {
-    var newVal = !this.state.acceptHovering;
-    this.setState({acceptHovering: newVal});
+  _toggleHoverAccept: function(/*object*/ event) {
+    this.setState({acceptHovering: (event.type == "mouseenter")});
   },
 
   _onChange: function(/*object*/ event) {

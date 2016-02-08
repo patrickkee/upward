@@ -9,9 +9,8 @@ var UserProfile = React.createClass({
     this.setState({showUserDetails: newVal});
   },
 
-  _toggleHover: function() {
-    var newVal = !this.state.hovering;
-    this.setState({hovering: newVal});
+  _toggleHover: function(/*object*/ event) {
+    this.setState({hovering: (event.type == "mouseenter")});
   },
 
   getInitialState: function() {

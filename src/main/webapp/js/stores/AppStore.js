@@ -6,6 +6,7 @@ var AppStates = require('../constants/AppStates');
 var assign = require('object-assign');
 var $ = require('jquery')
 var CHANGE_EVENT = 'change';
+var REMOTE_BASE_URL = 'https://patrickkee.com'
 
 var defaultAppState = { viewState: AppStates.LOGIN_VIEW,
                         user: {email: "",
@@ -19,7 +20,7 @@ var appState = defaultAppState;
 
 function fetchAccount(email, callback) {
   $.ajax({
-    url: "http://patrickkee.com/api/accounts/" + email,
+    url: REMOTE_BASE_URL + "/api/accounts/" + email,
     dataType: 'json',
     type: 'GET',
     success: function(data) {
@@ -39,7 +40,7 @@ function fetchAccount(email, callback) {
 
 function persistAccount(account, callback) {
   $.ajax({
-    url: "http://patrickkee.com/api/accounts?" +
+    url: REMOTE_BASE_URL + "/api/accounts?" +
           "&accountName=default"+
           "&firstName="+account.firstName+
           "&lastName=default"+
@@ -64,15 +65,12 @@ function persistAccount(account, callback) {
 
 function fetchModels(callback) {
   $.ajax({
-    url: "http://patrickkee.com/api/accounts/" + appState.user.email + "/models/",
+    url: REMOTE_BASE_URL + "/api/accounts/" + appState.user.email + "/models/",
     dataType: 'json',
     type: 'GET',
     success: function(data) {
       appState.models = data;
-      if (appState.currentModel == {} ||
-          appState.currentModel === "undefined" ||
-          appState.currentModel == "" ) {
-
+      if (Object.keys(appState.currentModel).length < 1) {
           setDefaultModel();
       }
 
@@ -91,7 +89,7 @@ function fetchModels(callback) {
 
 function persistModel(model, callback) {
   $.ajax({
-    url: "http://patrickkee.com/api/accounts/" + appState.user.email + "/models?" +
+    url: REMOTE_BASE_URL + "/api/accounts/" + appState.user.email + "/models?" +
           "&modelName=" + model.modelName +
           "&description=" +
           "&initialValue=0" +
@@ -114,7 +112,7 @@ function persistModel(model, callback) {
 
 function deleteModel(model, callback) {
   $.ajax({
-    url: "http://patrickkee.com/api/accounts/" + appState.user.email + "/models/" + model.modelId,
+    url: REMOTE_BASE_URL + "/api/accounts/" + appState.user.email + "/models/" + model.modelId,
     contentType: "application/json; charset=utf-8",
     dataType: "json",
     type: 'DELETE',

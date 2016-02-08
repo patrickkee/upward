@@ -15,7 +15,7 @@ var ModelPanel = React.createClass({
     this.setState({
                     models: AppStore.getModels(),
                     selectedModel: tmpCurrModel,
-                    addModelUi: (typeof tmpCurrModel === "undefined") ? true : false
+                    addModelUi: (Object.keys(tmpCurrModel).length < 1) ? true : false
                   });         
   },
 
@@ -36,24 +36,18 @@ var ModelPanel = React.createClass({
     AppActions.deleteModel(this.state.selectedModel);
   },
 
-  //Save the model if changes are present
-  _onDeleteModel: function() {
-    if (this.state.edited) {
-      //AppActions.updateModel(this.state.selectedModel);
-    }
-    
-  },
-
-  _createModel: function(/*object*/ event) {
+  _onCreateModel: function(/*object*/ event) {
     AppActions.createModel({ modelName: this.refs.newModelForm.state.modelName,
                              targetValue: this.state.selectedModel.targetValue,
                              targetDate: this.state.selectedModel.endDate });
+    this.setState({edited: false});
   },
 
-  _updateModel: function(/*object*/ event) {
+  _onUpdateModel: function(/*object*/ event) {
     AppActions.updateModel({ modelName: this.state.selectedModel.name,
                              targetValue: this.state.selectedModel.targetValue,
                              targetDate: this.state.selectedModel.endDate });
+    this.setState({edited: false});
   },
 
   _onTargetValueChange: function(/*object*/ event) {
@@ -77,7 +71,7 @@ var ModelPanel = React.createClass({
     return  {
               models: AppStore.getModels(),
               selectedModel: tmpCurrModel,
-              addModelUi: (typeof tmpCurrModel === "undefined") ? true : false,
+              addModelUi: (Object.keys(tmpCurrModel).length < 1) ? true : false,
               edited: false 
             } 
   },
@@ -92,21 +86,21 @@ var ModelPanel = React.createClass({
 
   render: function() {
     var modelView = ""
-    if (this.state.addModelUi || typeof this.state.selectedModel === "undefined") {
-      modelView = <NewModelForm ref="newModelForm" createModelCallback={this._createModel}/>
+    if (this.state.addModelUi || Object.keys(this.state.selectedModel).length < 1) {
+      modelView = <NewModelForm ref="newModelForm" createModelCallback={this._onCreateModel}/>
     } else {
       modelView = <ModelSelect  models={this.state.models} 
                                 selectedModel={this.state.selectedModel} 
                                 selectModelCallback={this._onSelectModel}
                                 deleteModelCallback={this._onDeleteModel} 
-                                saveModelCallback={this._updateModel}
+                                saveModelCallback={this._onUpdateModel}
                                 showSave={this.state.edited} />
     }
 
     //Null handling for the case when we're adding a new model, so selectedModel is null
     var targetValue = ""
     var targetDate = ""
-    if (typeof this.state.selectedModel === "undefined") {
+    if (Object.keys(this.state.selectedModel).length < 1 ) {
       targetValue = ""
       targetDate = ""
     } else {
