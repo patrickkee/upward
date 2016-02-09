@@ -1,6 +1,7 @@
 package com.patrickkee.model.model;
 
 import java.math.BigDecimal;
+import java.util.Map;
 import java.util.TreeMap;
 
 import org.joda.time.LocalDate;
@@ -44,4 +45,7 @@ public interface Model {
 	public void addEvent(Event event);
 
 	public Event getEvent(String eventName);
+	
+	public Map<Integer, Event> getEvents();
+	
 }

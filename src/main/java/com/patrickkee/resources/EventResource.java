@@ -1,5 +1,9 @@
 package com.patrickkee.resources;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
@@ -43,6 +47,22 @@ public class EventResource {
 		} else {
 			throw new WebApplicationException(404);
 		}
+	}
+	
+	@GET
+	@Produces(MediaType.APPLICATION_JSON)
+	public Response getEvent(@PathParam("email") String email, @PathParam("modelId") int modelId) {
 
+		// Add the event to the model only if the account and model are found
+		Optional<Account> acct = FinancialModelsDb.getAccount(email);
+		if (acct.isPresent() && acct.get().getModel(modelId).isPresent()) {
+			//List<Model> modelList = new ArrayList<Model>(acct.get().getModels().values());
+			List<Event> eventList = new ArrayList<Event>(acct.get().getModel(modelId).get().getEvents().values());
+
+			return Response.ok().entity(eventList).build();
+
+		} else {
+			throw new WebApplicationException(404);
+		}
 	}
 }

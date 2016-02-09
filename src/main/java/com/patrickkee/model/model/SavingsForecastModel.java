@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
 import java.util.TreeMap;
 import java.util.concurrent.ConcurrentHashMap;
@@ -121,6 +122,12 @@ public class SavingsForecastModel implements Model {
 		_events.putIfAbsent(event.getEventId(), event);
 	}
 
+	@JsonIgnore
+	@Override
+	public HashMap<Integer, Event> getEvents() {
+		return new HashMap<Integer,Event>(_events);
+	}
+		
 	@JsonIgnore
 	@Override
 	public BigDecimal getValue(LocalDate valueAsOfDate) {
