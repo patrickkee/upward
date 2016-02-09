@@ -135,7 +135,6 @@ public class SavingsForecastModel implements Model {
 		BigDecimal currentValue = _initialValue;
 		List<EventInstance> instances = getSortedEventInstances(valueAsOfDate);
 
-		// TODO: Convert to Java8 Stream iteration style
 		for (EventInstance e : instances) {
 			currentValue = e.apply(currentValue);
 		}

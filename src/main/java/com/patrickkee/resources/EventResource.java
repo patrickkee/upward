@@ -31,7 +31,7 @@ public class EventResource {
 
 		// Add the event to the model only if the account and model are found
 		Optional<Account> acct = FinancialModelsDb.getAccount(email);
-		if (acct.isPresent() && acct.get().getModel(modelId).isPresent()) {
+		if (acct.isPresent() && acct.get().getModel(modelId).isPresent() && event != null) {
 			Optional<Model> model = acct.get().getModel(modelId);
 
 			model.get().addEvent(event);
