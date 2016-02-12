@@ -1,19 +1,42 @@
 var React = require('react');
 var EventTypes = require('../constants/EventTypes');
 var Icons = require('../constants/Icons');
+var EventDetails = require('./EventDetails');
 
 var ReactPropTypes = React.PropTypes;
 
 var Event = React.createClass({
 
+  _onClick: function() {
+    this.setState({showDetailsPopout: !this.state.showDetailsPopout});
+  },
+
+  //Simple toggle for icon hover effect
+  _onToggleHover: function() {
+    var newVal = !this.state.hovering;
+    this.setState({hovering: newVal});
+    //this.setState({hovering: (event.type == "mouseenter")});
+  },
+
+  getInitialState: function() {
+    return  { hovering: false,
+              showDetailsPopout: false } 
+  },
+
   render: function() {
-    var icon = getIcon(this.props.eventType);
-    var labelClass = (this.props.eventType != EventTypes.NEW_EVENT) ? "eventName" : "newEventName";
+    var icon = getIcon(this.props.modelEvent.type);
+    var labelClass = (this.props.modelEvent.type != EventTypes.NEW_EVENT) ? "eventName" : "newEventName";
+    var hovering = this.state.hovering ? "iconHighlight" : "iconNoHighlight";
+    var eventDetails = (this.state.showDetailsPopout) ? <EventDetails modelEvent={this.props.modelEvent} /> : ""
 
     return (
-      <li className="event">
-        <img className="icon" src={icon} />
-        <label className={labelClass}>{this.props.eventName}</label>
+      <li className="event" onClick={this._onClick}>
+        <div className={hovering}>
+          <img className="icon" src={icon} 
+               onMouseEnter={this._onToggleHover} onMouseLeave={this._onToggleHover}/>
+        </div>
+        <label className={labelClass}>{this.props.modelEvent.name}</label>
+        {eventDetails}
       </li>             
     );
   },

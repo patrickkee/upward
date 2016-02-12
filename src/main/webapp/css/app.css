@@ -4,6 +4,7 @@
 @import url("logout.css");
 @import url("model-panel.css");
 @import url("event-panel.css");
+@import url("event-details.css");
 
 html, body {
 	margin: 0;

@@ -1,0 +1,21 @@
+.app-event-details {
+	border-color: gray;
+	border-width: 1px;
+	border-style: solid;
+	
+	width: 275px;
+	left: 0px;
+	top: 25px;
+	position: absolute;
+	border-radius: 4px;
+	box-shadow: 5px 5px 10px 5px rgba(0, 0, 0, 0.05);
+	background-color: white;
+	z-index: 2;
+}
+
+.app-event-details label {
+	display: block;
+	font-size: 16px;
+	font-weight: bold;
+	margin: 4px;
+}

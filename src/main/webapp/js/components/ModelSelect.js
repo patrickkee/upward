@@ -22,7 +22,6 @@ var ModelSelect = React.createClass({
     return  { trashHovering: false } 
   },
 
-
   render: function() {
     //Generate the collection of model options
     var modelDropdown = [];

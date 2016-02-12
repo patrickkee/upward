@@ -13,7 +13,7 @@ var defaultAppState = { viewState: AppStates.LOGIN_VIEW,
                                firstName: "",
                                password: ""},
                         models: [],
-                        currentModel: ""
+                        currentModel: {}
                        };
 
 var appState = defaultAppState;
@@ -130,6 +130,44 @@ function setDefaultModel() {
   appState.currentModel = (appState.models.length > 0) ? appState.models[0] : {}
 };
 
+function fetchEvents(callback) {
+  //Don't fetch events if no model is selected
+  if (Object.keys(appState.currentModel).length > 0) {
+
+    $.ajax({
+      url: REMOTE_BASE_URL + "/api/accounts/" + appState.user.email + "/models/" + appState.currentModel.modelId + "/events",
+      dataType: 'json',
+      type: 'GET',
+      success: function(data) {
+        appState.currentModel.events = data;
+        callback();     
+      },
+      error: function(xhr, status, err) {
+        appState.currentModel.events = [];
+        callback();
+      }    
+    });
+
+  }
+};
+
+//TODO: HARD CODED FOR PROTOTYPE ONLY, not functional
+function persistEvent(callback) {
+  $.ajax({
+      url: "https://patrickkee.com/api/accounts/patrickpdk@gmail.com/models/-1048710664/events",
+      contentType: "application/json; charset=utf-8",
+      dataType: "json",
+      type: 'POST',
+      data: JSON.stringify({name:"event1", period:"MONTHLY", type:"RECURRING_DEPOSIT", startDate:"01/25/2010", endDate:"01/25/2020", value:200.0}),
+      success: function(data) {
+        console.log(data)
+      },
+      error: function(xhr, status, err) {
+        console.log(err.message)
+      }    
+  });
+};
+
 var AppStore = assign({}, EventEmitter.prototype, {
 
   persistToLocalStorage: function() {
@@ -190,8 +228,9 @@ AppDispatcher.register(function(action) {
       //Enforce the order of async callbacks to ensure that user information
       //is loaded before model and event info
       var func0 = function() {AppStore.emitChange()};
-      var func1 = function() {fetchModels(func0)};
-      fetchAccount(action.value,func1);
+      var func1 = function() {fetchEvents(func0)};
+      var func2 = function() {fetchModels(func1)};
+      fetchAccount(action.value,func2);
       break;
 
     case ActionTypes.LOGOUT:
