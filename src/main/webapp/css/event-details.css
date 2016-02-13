@@ -2,7 +2,7 @@
 	border-color: gray;
 	border-width: 1px;
 	border-style: solid;
-	
+	padding: 5px;
 	width: 275px;
 	left: 0px;
 	top: 25px;
@@ -14,8 +14,23 @@
 }
 
 .app-event-details label {
-	display: block;
 	font-size: 16px;
 	font-weight: bold;
 	margin: 4px;
+	width: auto;
+	vertical-align: middle;
 }
+
+.app-event-details div {
+	display: inline-block;
+	width: auto;
+}
+
+.app-event-details .eventDetailItem {
+	display: block;
+}
+
+.app-event-details .eventDetailItemInput {
+	vertical-align: middle;
+}
+

@@ -1,6 +1,7 @@
 var AppDispatcher = require('../dispatcher/AppDispatcher');
 var EventEmitter = require('events').EventEmitter;
 var ActionTypes = require('../constants/ActionTypes');
+var EventTypes = require('../constants/EventTypes');
 var AppConstants = require('../constants/AppConstants');
 var AppStates = require('../constants/AppStates');
 var assign = require('object-assign');
@@ -139,6 +140,10 @@ function fetchEvents(callback) {
       dataType: 'json',
       type: 'GET',
       success: function(data) {
+        //Inject the EventType object in place of the type's name for expanded info
+        for (e in data) {
+          data[e].type = EventTypes.get(data[e].type); 
+        }
         appState.currentModel.events = data;
         callback();     
       },

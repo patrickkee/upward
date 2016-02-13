@@ -7,13 +7,25 @@ var EventTypes = require('../constants/EventTypes');
 
 var ModelPanel = React.createClass({
 
+  _onEventClick: function(eventId) {
+    this.setState({ showEventDetailId: (eventId == this.state.showEventDetailId) ? -1 : eventId });
+  },
+
+  getInitialState: function() {
+    return  { showEventDetailId: -1 } 
+  },
+
   render: function() {
     var eventList = [];
-    var events = [{eventId: 0, name: "add new", type: "NEW_EVENT"}]
+    var events = [{eventId: 0, name: "add new", type: EventTypes.get("NEW_EVENT")}] 
     events = events.concat(AppStore.getCurrentModel().events);
     
+    var showDetailPanel;
     for (var e in events) {
-       eventList.push(<Event key={e} modelEvent={events[e]} />) 
+      showDetailPanel = (this.state.showEventDetailId == events[e].eventId);
+      eventList.push(<Event key={e} modelEvent={events[e]} 
+                           onEventClickCallback={this._onEventClick} 
+                           showDetailPanel={showDetailPanel} />) 
     } 
 
     return (

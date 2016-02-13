@@ -8,30 +8,28 @@ var ReactPropTypes = React.PropTypes;
 var Event = React.createClass({
 
   _onClick: function() {
-    this.setState({showDetailsPopout: !this.state.showDetailsPopout});
+    this.props.onEventClickCallback(this.props.modelEvent.eventId);
   },
 
   //Simple toggle for icon hover effect
   _onToggleHover: function() {
     var newVal = !this.state.hovering;
     this.setState({hovering: newVal});
-    //this.setState({hovering: (event.type == "mouseenter")});
   },
 
   getInitialState: function() {
-    return  { hovering: false,
-              showDetailsPopout: false } 
+    return  { hovering: false } 
   },
 
   render: function() {
-    var icon = getIcon(this.props.modelEvent.type);
-    var labelClass = (this.props.modelEvent.type != EventTypes.NEW_EVENT) ? "eventName" : "newEventName";
+    var icon = this.props.modelEvent.type.icon;
+    var labelClass = (this.props.modelEvent.type != EventTypes.NEW_EVENT.type) ? "eventName" : "newEventName";
     var hovering = this.state.hovering ? "iconHighlight" : "iconNoHighlight";
-    var eventDetails = (this.state.showDetailsPopout) ? <EventDetails modelEvent={this.props.modelEvent} /> : ""
+    var eventDetails = (this.props.showDetailPanel) ? <EventDetails modelEvent={this.props.modelEvent} /> : ""
 
     return (
-      <li className="event" onClick={this._onClick}>
-        <div className={hovering}>
+      <li className="event">
+        <div className={hovering} onClick={this._onClick}>
           <img className="icon" src={icon} 
                onMouseEnter={this._onToggleHover} onMouseLeave={this._onToggleHover}/>
         </div>

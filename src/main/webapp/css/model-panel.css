@@ -105,7 +105,7 @@
 	width: 20px;
 	height: 20px;
 	border-radius: 1px;
-	box-shadow: 1px 0px 10px 0px rgba(0, 0, 0, 0.35), inset 0 0 6px rgba(0, 0, 0, 0.35);
+	box-shadow: 1px 0px 10px 0px rgba(0, 0, 0, 0.4), inset 0 0 6px rgba(0, 0, 0, 0.4);
 }
 
 #modelpanel .squareIconNoHighlight {
