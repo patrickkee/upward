@@ -36,7 +36,7 @@ public class EventResource {
 		if (acct.isPresent() && acct.get().getModel(modelId).isPresent() && event != null) {
 			Optional<Model> model = acct.get().getModel(modelId);
 
-			model.get().addEvent(event);
+			model.get().addOrUpdateEvent(event);
 
 			UriBuilder locationBuilder = uriInfo.getAbsolutePathBuilder();
 			locationBuilder.path(Integer.toString(event.getEventId()));

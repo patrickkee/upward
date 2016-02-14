@@ -32,7 +32,7 @@ public class SavingsForecastModelRecurringYieldTest {
 		
 		//Create the event and add it to the model
 		RecurringYield event = RecurringYield.getNew("VALUE_TEST_EVENT", Periods.MONTHLY, startDate, endDate, BigDecimal.valueOf(0.00416));
-		model.addEvent(event);
+		model.addOrUpdateEvent(event);
 
 		model.getValues();
 		

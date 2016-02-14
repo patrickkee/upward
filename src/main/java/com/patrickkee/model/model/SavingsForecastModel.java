@@ -118,8 +118,12 @@ public class SavingsForecastModel implements Model {
 	}
 
 	@Override
-	public void addEvent(Event event) {
-		_events.putIfAbsent(event.getEventId(), event);
+	public void addOrUpdateEvent(Event event) {
+		if (_events.containsKey(event.getEventId())) {
+			_events.replace(event.getEventId(), event);
+		} else {
+			_events.putIfAbsent(event.getEventId(), event);
+		}
 	}
 
 	@JsonIgnore
@@ -237,8 +241,8 @@ public class SavingsForecastModel implements Model {
 
 	@Override
 	@JsonIgnore
-	public Event getEvent(String eventName) {
-		return _events.get(eventName);
+	public Event getEvent(int eventId) {
+		return _events.get(eventId);
 	}
 
 	@Override

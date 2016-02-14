@@ -38,13 +38,13 @@ public interface Model {
 	public TreeMap<LocalDate, BigDecimal> getValues();
 
 	/**
-	 * Adds a new event to the model's collection of events
+	 * Adds a new event or updates an existing event in the model's collection of events
 	 * 
 	 * @param model
 	 */
-	public void addEvent(Event event);
+	public void addOrUpdateEvent(Event event);
 
-	public Event getEvent(String eventName);
+	public Event getEvent(int eventId);
 	
 	public Map<Integer, Event> getEvents();
 	

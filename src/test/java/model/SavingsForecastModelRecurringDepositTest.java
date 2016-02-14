@@ -33,7 +33,7 @@ public class SavingsForecastModelRecurringDepositTest {
 		
 		//Create the event
 		RecurringDeposit event = RecurringDeposit.getNew("VALUE_TEST_EVENT", Periods.MONTHLY, startDate, endDate, BigDecimal.valueOf(100.50));
-		model.addEvent(event);
+		model.addOrUpdateEvent(event);
 
 		// Test intermediary model value
 		dt = formatter.parseDateTime("12/31/2010");

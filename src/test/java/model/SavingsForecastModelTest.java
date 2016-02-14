@@ -21,13 +21,37 @@ import com.patrickkee.api.event.RecurringDeposit;
 import com.patrickkee.api.event.RecurringInflation;
 import com.patrickkee.api.event.RecurringWithdrawl;
 import com.patrickkee.api.event.RecurringYield;
-import com.patrickkee.model.event.Event;
-import com.patrickkee.model.event.EventTypes;
 import com.patrickkee.model.event.Periods;
 import com.patrickkee.model.model.SavingsForecastModel;
 
 public class SavingsForecastModelTest {
 
+	@Test
+	public void updateEventTest() {
+		final String EVENT_NAME = "updateEventTest";
+		// Set up the model
+		DateTimeFormatter formatter = DateTimeFormat.forPattern("MM/dd/yyyy");
+
+		DateTime dt = formatter.parseDateTime("01/01/2010");
+		LocalDate startDate = new LocalDate(dt.getYear(), dt.getMonthOfYear(), dt.getDayOfMonth());
+
+		dt = formatter.parseDateTime("12/31/2019");
+		LocalDate endDate = new LocalDate(dt.getYear(), dt.getMonthOfYear(), dt.getDayOfMonth());
+
+		SavingsForecastModel model = SavingsForecastModel.getNew().name("test").startDate(startDate).endDate(endDate)
+				.initialValue(BigDecimal.valueOf(2000.0)).targetValue(BigDecimal.valueOf(10000.0));
+		
+		//Create the event and add it to the model
+		RecurringYield event = RecurringYield.getNew(EVENT_NAME, Periods.MONTHLY, startDate, endDate, BigDecimal.valueOf(0.00416));
+		model.addOrUpdateEvent(event);	
+		
+		event = RecurringYield.getNew(EVENT_NAME, Periods.MONTHLY, startDate, endDate, BigDecimal.valueOf(2.0));
+		model.addOrUpdateEvent(event);	
+		
+		assertEquals(BigDecimal.valueOf(2.0), model.getEvent(event.getEventId()).getValue());
+		assertEquals(1, model.getEvents().size());
+	}
+	
 	@Test
 	public void valueVsTargetTest() {
 		final String EVENT_NAME = "valueVsTargetTest";
@@ -45,7 +69,7 @@ public class SavingsForecastModelTest {
 		
 		//Create the event and add it to the model
 		RecurringYield event = RecurringYield.getNew(EVENT_NAME, Periods.MONTHLY, startDate, endDate, BigDecimal.valueOf(0.00416));
-		model.addEvent(event);
+		model.addOrUpdateEvent(event);
 
 		assertEquals(BigDecimal.valueOf(-6708.60).setScale(2, BigDecimal.ROUND_HALF_UP),
 				model.valueVsTarget().setScale(2, BigDecimal.ROUND_HALF_UP));
@@ -96,23 +120,23 @@ public class SavingsForecastModelTest {
 		
 		//Create the yield event and add it to the model
 		RecurringYield yieldEvent = RecurringYield.getNew("Monthly Yield", Periods.MONTHLY, modelStartDate, modelEndDate, BigDecimal.valueOf(0.00416));
-		model.addEvent(yieldEvent);
+		model.addOrUpdateEvent(yieldEvent);
 		
 		//Create the deposit event and add it to the model
 		RecurringDeposit depositEvent = RecurringDeposit.getNew("Monthly Deposit", Periods.MONTHLY, modelStartDate, modelEndDate, BigDecimal.valueOf(100));
-		model.addEvent(depositEvent);
+		model.addOrUpdateEvent(depositEvent);
 		
 		//Create the one time deposit event and add it to the model
 		dt = formatter.parseDateTime("03/12/2010");
 		LocalDate effectiveDate = new LocalDate(dt.getYear(), dt.getMonthOfYear(), dt.getDayOfMonth());
 		OneTimeDeposit singleDeposit = OneTimeDeposit.getNew("Bonus Payment", effectiveDate, BigDecimal.valueOf(1000));
-		model.addEvent(singleDeposit);
+		model.addOrUpdateEvent(singleDeposit);
 		
 		//Create an "actual" event and add it to the model
 		dt = formatter.parseDateTime("04/05/2010");
 		effectiveDate = new LocalDate(dt.getYear(), dt.getMonthOfYear(), dt.getDayOfMonth());
 		Actual actualEvent = Actual.getNew(effectiveDate, BigDecimal.valueOf(3460.00));
-		model.addEvent(actualEvent);
+		model.addOrUpdateEvent(actualEvent);
 		
 		//Add the recurring withdrawl event
 		dt = formatter.parseDateTime("06/01/2010");
@@ -122,11 +146,11 @@ public class SavingsForecastModelTest {
 		LocalDate withdrawlEndDate = new LocalDate(dt.getYear(), dt.getMonthOfYear(), dt.getDayOfMonth());
 		
 		RecurringWithdrawl withdrawl = RecurringWithdrawl.getNew("Recurring Withdrawl", Periods.MONTHLY, withdrawlStartDate, withdrawlEndDate, BigDecimal.valueOf(500));
-		model.addEvent(withdrawl);
+		model.addOrUpdateEvent(withdrawl);
 		
 		//Create a recurring inflation event and add it to the model
 		RecurringInflation inflation = RecurringInflation.getNew("Forecasted CPI", Periods.MONTHLY, modelStartDate, withdrawlEndDate, BigDecimal.valueOf(0.002083));
-		model.addEvent(inflation);
+		model.addOrUpdateEvent(inflation);
 		
 		TreeMap<LocalDate, BigDecimal> modelValues = model.getValues();
 		assertTrue(modelValues.equals(manuallyComputedModel));

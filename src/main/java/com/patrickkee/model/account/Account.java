@@ -86,7 +86,7 @@ public class Account {
 	}
 
 	public void updateModel(Model model) {
-		models.put(model.getModelId(), model);
+		models.replace(model.getModelId(), model);
 	}
 	
 	public void removeModel(int modelId) {

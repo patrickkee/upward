@@ -127,6 +127,13 @@ public class ModelResource {
 		}
 	}
 
+	/**
+	 * Returns the value of a model ad a given point in time
+	 * @param email 
+	 * @param modelId
+	 * @param date
+	 * @return the account value as a big decimal 
+	 */
 	@GET
 	@Path("/{modelId}/value")
 	@Produces(MediaType.APPLICATION_JSON)
