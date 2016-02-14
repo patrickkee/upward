@@ -85,7 +85,7 @@ public class ModelResource {
 		// Validate that the account could be found and add the model to the
 		// account, otherwise throw not found error
 		if (acct.isPresent()) {
-			acct.get().addOrUpdateModel(savingsForecastModel);
+			acct.get().addModel(savingsForecastModel);
 			FinancialModelsDb.persistAccount(acct.get());
 
 			UriBuilder locationBuilder = uriInfo.getAbsolutePathBuilder();
@@ -103,6 +103,76 @@ public class ModelResource {
 
 	}
 
+	/**
+	 * Updates a new model for a given account
+	 * 
+	 * @param email
+	 * @param modelName
+	 * @param description
+	 * @param initialValue
+	 * @param targetValue
+	 * @param startDate
+	 * @param endDate
+	 * @param uriInfo
+	 * @return Response with the account
+	 */
+	@Path("/{modelId}")
+	@POST
+	@Produces(MediaType.APPLICATION_JSON)
+	public Response updateModel(@PathParam("email") String email, @PathParam("modelId") int modelId,
+								@QueryParam("description") String description, @QueryParam("initialValue") BigDecimal initialValue,
+								@QueryParam("targetValue") BigDecimal targetValue, @QueryParam("startDate") String startDate,
+								@QueryParam("endDate") String endDate, @Context UriInfo uriInfo) {
+
+		Optional<Account> acct = FinancialModelsDb.getAccount(email);
+		SavingsForecastModel savingsForecastModel = null;
+
+		// Parse the dates and throw unprocessable entity response if date
+		// formats are invalid
+		//TODO: Bean should come in with dates already de-serialized to prevent the need for this boilerplate stuff
+		LocalDate localStartDate = null;
+		LocalDate localEndDate = null;
+		try {
+			DateTime dt = DATE_FORMATTER.parseDateTime(startDate);
+			localStartDate = new LocalDate(dt.getYear(), dt.getMonthOfYear(), dt.getDayOfMonth());
+
+			dt = DATE_FORMATTER.parseDateTime(endDate);
+			localEndDate = new LocalDate(dt.getYear(), dt.getMonthOfYear(), dt.getDayOfMonth());
+
+		} catch (IllegalArgumentException e) {
+			return Response.status(UnprocessableEntityStatusType.getNew()).entity(
+					ResponseMessage.getNew("Could not parse date", "Date should be provided in mm/dd/yyyy format"))
+					.build();
+		}
+		
+		// Validate that the account could be found and add the model to the
+		// account, otherwise throw not found error
+		if (acct.isPresent() && acct.get().getModel(modelId).isPresent()) {
+			// Get the model
+			savingsForecastModel = (SavingsForecastModel) acct.get().getModel(modelId).get();
+			savingsForecastModel.setInitialValue(initialValue);
+			savingsForecastModel.setTargetValue(targetValue);
+			savingsForecastModel.setStartDate(localStartDate);
+			savingsForecastModel.setEndDate(localEndDate);
+			savingsForecastModel.setDescription(description);
+			
+			acct.get().updateModel(savingsForecastModel);
+			FinancialModelsDb.persistAccount(acct.get());
+			
+			UriBuilder locationBuilder = uriInfo.getAbsolutePathBuilder();
+			locationBuilder.path(Integer.toString(savingsForecastModel.getModelId()));
+
+			return Response.created(locationBuilder.build()).entity(savingsForecastModel).build();
+		} else {
+			return Response.status(Status.NOT_FOUND).entity(
+					// TODO: Refactor this - account not found is returned in
+					// multiple places, so reponse message should be centralized
+					// ..DRY
+					ResponseMessage.getNew("ACCOUNT_MODEL_NOT_FOUND", "Unable to create model because account or model was not found"))
+					.build();
+		}
+	}
+	
 	/**
 	 * Deletes a model for the specified account
 	 * 
@@ -164,6 +234,12 @@ public class ModelResource {
 		}
 	}
 
+	/**
+	 * Returns a collection of model values over time for a given model
+	 * @param email
+	 * @param modelId
+	 * @return
+	 */
 	@GET
 	@Path("/{modelId}/values")
 	@Produces(MediaType.APPLICATION_JSON)
@@ -180,6 +256,11 @@ public class ModelResource {
 		}
 	}
 
+	/**
+	 * Returns all models in a given account
+	 * @param email
+	 * @return
+	 */
 	@GET
 	@Produces(MediaType.APPLICATION_JSON)
 	public Response getModels(@PathParam("email") String email) {

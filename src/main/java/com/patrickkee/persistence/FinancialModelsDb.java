@@ -14,7 +14,12 @@ public class FinancialModelsDb {
 	 * @param account
 	 */
 	public synchronized static void persistAccount(Account account) {
-		_accounts.putIfAbsent(account.getEmail(), account);
+		if (_accounts.containsKey(account.getEmail())) {
+			_accounts.replace(account.getEmail(), account);
+		} else {
+			_accounts.putIfAbsent(account.getEmail(), account);
+		}
+		
 	}
 
 	public static Optional<Account> getAccount(String email) {

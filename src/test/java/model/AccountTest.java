@@ -34,7 +34,7 @@ public class AccountTest {
 	}
 
 	@Test
-	public void testAddOrUpdateModel() {
+	public void testUpdateModel() {
 		DateTime dt = DATE_FORMATTER.parseDateTime("10/01/2015");
 		LocalDate localStartDate = new LocalDate(dt.getYear(), dt.getMonthOfYear(), dt.getDayOfMonth());
 
@@ -47,8 +47,8 @@ public class AccountTest {
 		
 		Account acct = new Account("AccountName", "FirstName", "LastName", "testAddOrUpdateModel@gmail.com");
 		
-		acct.addOrUpdateModel(savingsForecastModel);
-		acct.addOrUpdateModel(savingsForecastModel);
+		acct.addModel(savingsForecastModel);
+		acct.addModel(savingsForecastModel);
 		assertEquals(1, acct.getModels().size()); //There Should only be 1 model added, regardless of executions
 		BigDecimal persistedModelTargetValue = ((SavingsForecastModel) acct.getModel(savingsForecastModel.getModelId()).get()).getTargetValue();
 		assertEquals(BigDecimal.valueOf(100000).setScale(2, BigDecimal.ROUND_HALF_UP),
@@ -60,14 +60,12 @@ public class AccountTest {
 		Model updatedSavingsForecastModel = SavingsForecastModel.getNew().name("Lilah's College Savings")
 				.initialValue(new BigDecimal(2000)).targetValue(new BigDecimal(5000)).startDate(localStartDate)
 				.endDate(localEndDate);
-		acct.addOrUpdateModel(updatedSavingsForecastModel);
+		acct.updateModel(updatedSavingsForecastModel);
 		persistedModelTargetValue = ((SavingsForecastModel) acct.getModel(savingsForecastModel.getModelId()).get()).getTargetValue();
 		
 		assertEquals(1, acct.getModels().size()); 
 		assertEquals(BigDecimal.valueOf(5000).setScale(2, BigDecimal.ROUND_HALF_UP),
 				persistedModelTargetValue.setScale(2, BigDecimal.ROUND_HALF_UP));
-				
-		
 	}
 	
 	@Test
@@ -92,7 +90,7 @@ public class AccountTest {
 				.initialValue(new BigDecimal(2000)).targetValue(new BigDecimal(100000)).startDate(localStartDate)
 				.endDate(localEndDate);
 		Account acct = new Account("Savings", "Patrick", "Kee", "patrick.kee0@gmail.com");
-		acct.addOrUpdateModel(savingsForecastModel);
+		acct.addModel(savingsForecastModel);
 		assertEquals(1, acct.getModels().size());
 	}
 
@@ -108,7 +106,7 @@ public class AccountTest {
 				.initialValue(new BigDecimal(2000)).targetValue(new BigDecimal(100000)).startDate(localStartDate)
 				.endDate(localEndDate);
 		Account acct = new Account("Savings", "Patrick", "Kee", "patrick.kee0@gmail.com");
-		acct.addOrUpdateModel(savingsForecastModel);
+		acct.addModel(savingsForecastModel);
 		acct.removeModel(savingsForecastModel.getModelId());
 		assertEquals(0, acct.getModels().size());
 	}

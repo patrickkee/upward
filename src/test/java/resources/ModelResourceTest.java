@@ -5,6 +5,7 @@ import static org.junit.Assert.assertTrue;
 
 import java.math.BigDecimal;
 
+import javax.ws.rs.QueryParam;
 import javax.ws.rs.client.Entity;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
@@ -53,6 +54,61 @@ public class ModelResourceTest extends BaseJerseyTest {
 		assertEquals(BigDecimal.valueOf(20000), model.getTargetValue());
 	}
 
+	@Test
+	public void updateModelTest() {
+		final String EMAIL = "updateModelTest@gmail.com";
+		final String START_DATE = "01/25/2010";
+		final String END_DATE = "01/25/2020";
+		
+		final String UPDATED_START_DATE = "01/25/2012";
+		final String UPDATED_END_DATE = "01/25/2022";
+		
+		DateTimeFormatter formatter = DateTimeFormat.forPattern("MM/dd/yyyy");
+		DateTime dt; 
+		dt = formatter.parseDateTime(UPDATED_START_DATE);
+		LocalDate updatedStartDate = new LocalDate(dt.getYear(), dt.getMonthOfYear(), dt.getDayOfMonth());
+		
+		dt = formatter.parseDateTime(UPDATED_END_DATE);
+		LocalDate updatedEndDate = new LocalDate(dt.getYear(), dt.getMonthOfYear(), dt.getDayOfMonth());
+		
+		Response response = target("accounts").queryParam("accountName", "createModelTest")
+				.queryParam("firstName", "createModelTestFirstName").queryParam("lastName", "createModelTestLastName")
+				.queryParam("email", EMAIL).request(MediaType.APPLICATION_JSON_TYPE)
+				.post(Entity.entity("foo", MediaType.APPLICATION_JSON_TYPE), Response.class);
+
+		//Create the model initially
+		response = target("accounts/" + EMAIL + "/models")
+				.queryParam("modelName", "createModelTestModelName")
+				.queryParam("description", "createModelTestModelDesc")
+				.queryParam("initialValue", 2000)
+				.queryParam("targetValue", 2000)
+				.queryParam("startDate", START_DATE)
+				.queryParam("endDate", END_DATE)
+				.request(MediaType.APPLICATION_JSON_TYPE)
+				.post(Entity.entity("foo", MediaType.APPLICATION_JSON_TYPE), Response.class);
+		SavingsForecastModel initialModel = response.readEntity(SavingsForecastModel.class);
+				
+		//Now update the model that was just created
+		response = target("accounts/" + EMAIL + "/models/" + initialModel.getModelId())
+				.queryParam("description", "updatedCreateModelTestModelDesc")
+				.queryParam("initialValue", 2002)
+				.queryParam("targetValue", 2002)
+				.queryParam("startDate", UPDATED_START_DATE)
+				.queryParam("endDate", UPDATED_END_DATE)
+				.request(MediaType.APPLICATION_JSON_TYPE)
+				.post(Entity.entity("foo", MediaType.APPLICATION_JSON_TYPE), Response.class);
+		SavingsForecastModel updatedModel = response.readEntity(SavingsForecastModel.class);
+		
+		assertEquals(201, response.getStatus());
+		assertEquals("createModelTestModelName", updatedModel.getName());
+		assertEquals("updatedCreateModelTestModelDesc", updatedModel.getDescription());
+		assertEquals(BigDecimal.valueOf(2002), updatedModel.getInitialValue());
+		assertEquals(BigDecimal.valueOf(2002), updatedModel.getTargetValue());
+		assertEquals(updatedStartDate, updatedModel.getStartDate());
+		assertEquals(updatedEndDate, updatedModel.getEndDate());
+	}
+
+	
 	@Test
 	public void createModelTestInvalidDateFormat() {
 		final String START_DATE = "foobar";
