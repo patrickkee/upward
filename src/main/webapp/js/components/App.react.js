@@ -1,20 +1,23 @@
+'use strict';
+
 var React = require('react');
 var Header = require('./Header.react');
 var MainSection = require('./MainSection.react');
 var UserPanel = require('./UserPanel');
 var ModelPanel = require('./ModelPanel.react');
 var EventPanel = require('./EventPanel.react');
-var LoginInput = require('./LoginInput.react');
+var LoginForm = require('./LoginForm');
 var AppStore = require('../stores/AppStore');
 var AppStates = require('../constants/AppStates');
 
 var App = React.createClass({
 
+  _onChange: function() {
+    this.setState({ appState: AppStore.getAppState() });
+  },
+
   getInitialState: function() {
-    //AppStore.loadFromLocalStorage(); //having trouble loading initial state 
-    return  {
-              viewState: AppStore.getViewState()
-            } 
+    return  { appState: AppStore.getAppState() } 
   },
 
   componentDidMount: function() {
@@ -26,43 +29,36 @@ var App = React.createClass({
   },
 
   render: function() {
-    //TODO: Move State mapping to separate library
-    var viewStateUi = getViewStateUi(this.state.viewState);
+    var viewStateUi = getViewStateUi(this.state.appState);
     
     return (
       <div>
         <Header />
         {viewStateUi}
-        <MainSection />
+        <MainSection appState={this.state.appState} />
       </div>
     );
-  },
-
-  _onChange: function() {
-    this.setState({
-                  viewState: AppStore.getViewState()
-                  });
   }
 
 });
 
-function getViewStateUi(viewState) {
+function getViewStateUi(appState) {
   var viewStateUi = "";
 
-  switch(viewState) {
+  switch(appState.viewState) {
     case AppStates.LOGIN_VIEW:
-      viewStateUi = <LoginInput loginFailed={false}/>
+      viewStateUi = <LoginForm loginFailed={false}/>
       break;
 
     case AppStates.LOGIN_FAIL_VIEW:
-      viewStateUi = <LoginInput loginFailed={true}/>
+      viewStateUi = <LoginForm loginFailed={true}/>
       break;
 
     case AppStates.CONTENT_VIEW:
       viewStateUi = <div>
-                      <UserPanel />
-                      <ModelPanel />
-                      <EventPanel />
+                      <UserPanel  appState={appState} />
+                      <ModelPanel appState={appState} />
+                      <EventPanel appState={appState} />
                     </div>
       break;
 

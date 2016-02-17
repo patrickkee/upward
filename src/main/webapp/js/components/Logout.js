@@ -1,6 +1,9 @@
+'use strict';
+
 var React = require('react');
 var AppStore = require('../stores/AppStore');
 var Icons = require('../constants/Icons');
+var ToggleIcon = require('./base/ToggleIcon');
 var AppActions = require('../actions/AppActions');
 
 var Logout = React.createClass({
@@ -9,27 +12,17 @@ var Logout = React.createClass({
     AppActions.logout();
   },
 
-  _toggleHover: function(/*object*/ event) {
-    this.setState({hovering: (event.type == "mouseenter")});
-  },
-
   getInitialState: function() {
-    //AppStore.loadFromLocalStorage(); //having trouble loading initial state 
     return  {
-              showUserDetails: false,
-              hovering: false
+              showUserDetails: false
             } 
   },
 
   render: function() {
-    //Conditionally highlight the user icon based on the state
-    var userImgClass = this.state.hovering ? "iconHighlight" : "iconNoHighlight";
-
     return (
       <div id="logout">
-        <div className={userImgClass}> 
-          <img  src={Icons.LOGOUT} onClick={this._logout} 
-                onMouseEnter={this._toggleHover} onMouseLeave={this._toggleHover}/>
+        <div className="icon"> 
+          <ToggleIcon icon={Icons.LOGOUT} iconSize="22" onClickCallback={this._logout}/>
         </div>
       </div>
     );

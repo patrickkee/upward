@@ -1,11 +1,11 @@
 var AppDispatcher = require('../dispatcher/AppDispatcher');
-var ActionTypes = require('../constants/ActionTypes');
+var ActionTypes = require('../stores/ActionTypes');
 
 var AppActions = {
 
   login: function(username) {
   	var action = {
-  					actionType: ActionTypes.LOGIN,
+  					actionType: ActionTypes.LOGIN.key,
 			      	value: username
 			  	 }
 	   AppDispatcher.dispatch(action);
@@ -13,14 +13,14 @@ var AppActions = {
   
   logout: function() {
   	var action = {
-  					actionType: ActionTypes.LOGOUT
+  					actionType: ActionTypes.LOGOUT.key
 			  	 }
 	   AppDispatcher.dispatch(action);
   },
 
   signup: function(user) {
     var action = {
-            actionType: ActionTypes.SIGNUP,
+            actionType: ActionTypes.SIGNUP.key,
               value: user
            }
     AppDispatcher.dispatch(action);
@@ -28,7 +28,7 @@ var AppActions = {
 
   selectModel: function(modelName) {
     var action = {
-                  actionType: ActionTypes.SELECT_MODEL,
+                  actionType: ActionTypes.SELECT_MODEL.key,
                   value: modelName
                 }
     AppDispatcher.dispatch(action);
@@ -36,14 +36,14 @@ var AppActions = {
 
   selectDefaultModel: function() {
     var action = {
-                  actionType: ActionTypes.SELECT_DEFAULT_MODEL
+                  actionType: ActionTypes.SELECT_DEFAULT_MODEL.key
                 }
     AppDispatcher.dispatch(action);
   },
 
   createModel: function(model) {
     var action = {
-                  actionType: ActionTypes.CREATE_MODEL,
+                  actionType: ActionTypes.CREATE_MODEL.key,
                   value: model
                 }
     AppDispatcher.dispatch(action);
@@ -51,7 +51,7 @@ var AppActions = {
 
   updateModel: function(model) {
     var action = {
-                  actionType: ActionTypes.UPDATE_MODEL,
+                  actionType: ActionTypes.UPDATE_MODEL.key,
                   value: model
                 }
     AppDispatcher.dispatch(action);
@@ -59,8 +59,16 @@ var AppActions = {
 
   deleteModel: function(model) {
     var action = {
-                  actionType: ActionTypes.DELETE_MODEL,
+                  actionType: ActionTypes.DELETE_MODEL.key,
                   value: model
+                }
+    AppDispatcher.dispatch(action);
+  },
+
+  updateModelEvent: function(modelEvent) {
+    var action = {
+                  actionType: ActionTypes.UPDATE_EVENT.key,
+                  value: modelEvent
                 }
     AppDispatcher.dispatch(action);
   },

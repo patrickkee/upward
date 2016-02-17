@@ -1,15 +1,13 @@
+'use strict';
+
 var React = require('react');
-var LoginInput = require('./LoginInput.react');
 var AppStore = require('../stores/AppStore');
-
-
-var ReactPropTypes = React.PropTypes;
 
 var MainSection = React.createClass({
 
   getInitialState: function() {
     return  {
-              username: AppStore.getUsername()
+              username: this.props.appState.email
             } 
   },
 
@@ -23,7 +21,7 @@ var MainSection = React.createClass({
 
   _onChange: function() {
     this.setState({
-      username: AppStore.getUsername()
+      username: this.props.appState.email
     });
   },
 

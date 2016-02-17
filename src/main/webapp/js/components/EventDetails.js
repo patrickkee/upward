@@ -1,56 +1,56 @@
 var React = require('react');
 var EventTypes = require('../constants/EventTypes');
 var Icons = require('../constants/Icons');
+'use strict';
+
 var EventDetailItem = require('./EventDetailItem');
+var AppActions = require('../actions/AppActions');
 
 var ReactPropTypes = React.PropTypes;
 
 var EventDetails = React.createClass({
 
-  _onClickName: function(event) {
-    this.setState({ editField: "Name"});
+  _onClick: function(fieldTitle) {
+    this.setState({ editField: fieldTitle});
   },
 
-  _onClickValue: function(event) {
-    this.setState({ editField: "Value"});
+  _onCancel: function() {
+    this.setState({ editField: ""});
   },
 
-  _onClickPeriod: function(event) {
-    this.setState({ editField: "Period"});
-  },
+  _onSave: function(field, value) {
+    var newModelEvent = this.state.modelEvent; 
+    eval("newModelEvent." + field.toLowerCase() + "=" + value);
 
-  _onClickType: function(event) {
-    this.setState({ editField: "Type"});
-  },
+    AppActions.updateModelEvent(newModelEvent);
 
-  _onClickStart: function(event) {
-    this.setState({ editField: "Start"});
-  },
-
-  _onClickEnd: function(event) {
-    this.setState({ editField: "End"});
-  },
+    this.setState({ editField: "",
+                    modelEvent: newModelEvent });  
+  },  
 
   getInitialState: function() {
-    return  { editField: "" }
+    return  { editField: "",
+              modelEvent: this.props.modelEvent }
   },
 
   render: function() {
-
+    var callbacks = {click: this._onClick,
+                     cancel: this._onCancel,
+                     save: this._onSave }
     return (
       <div className="app-event-details">
-        <EventDetailItem title="Name" value={this.props.modelEvent.name} 
-                         editField={this.state.editField} onClickCallback={this._onClickName} />
-        <EventDetailItem title="Value" value={this.props.modelEvent.value} 
-                         editField={this.state.editField} onClickCallback={this._onClickValue} />
-        <EventDetailItem title="Period" value={this.props.modelEvent.period} 
-                         editField={this.state.editField} onClickCallback={this._onClickPeriod} />
-        <EventDetailItem title="Type" value={this.props.modelEvent.type.pretty} 
-                         editField={this.state.editField} onClickCallback={this._onClickType} />
-        <EventDetailItem title="Start" value={this.props.modelEvent.startDate} 
-                         editField={this.state.editField} onClickCallback={this._onClickStart} />
-        <EventDetailItem title="End" value={this.props.modelEvent.endDate} 
-                         editField={this.state.editField} onClickCallback={this._onClickEnd} />
+        <EventDetailItem title="Name" value={this.state.modelEvent.name} 
+                         editField={this.state.editField} callbacks={callbacks} />
+        <EventDetailItem title="Value" value={this.state.modelEvent.value} 
+                         editField={this.state.editField} callbacks={callbacks} />
+        <EventDetailItem title="Period" value={this.state.modelEvent.period} 
+                         editField={this.state.editField} callbacks={callbacks} />
+        <EventDetailItem title="Type" value={this.state.modelEvent.type.pretty} 
+                         editField={this.state.editField} callbacks={callbacks} />
+        <EventDetailItem title="Start" value={this.state.modelEvent.startDate} 
+                         editField={this.state.editField} callbacks={callbacks} />
+        <EventDetailItem title="End" value={this.state.modelEvent.endDate} 
+                         editField={this.state.editField} callbacks={callbacks} />
       </div>
     );
   }

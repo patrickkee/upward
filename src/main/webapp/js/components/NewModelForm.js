@@ -1,6 +1,9 @@
+'use strict';
+
 var React = require('react');
 var AppStore = require('../stores/AppStore');
 var Icons = require('../constants/Icons');
+var ToggleIcon = require('./base/ToggleIcon');
 var AppActions = require('../actions/AppActions');
 
 var NewModelForm = React.createClass({
@@ -10,42 +13,20 @@ var NewModelForm = React.createClass({
     AppActions.selectDefaultModel();
   },
 
-  //Simple toggle for icon hover effect
-  _toggleHoverCancel: function(/*object*/ event) {
-    this.setState({cancelHovering: (event.type == "mouseenter")});
-  },
-
-  //Simple toggle for icon hover effect
-  _toggleHoverAccept: function(/*object*/ event) {
-    this.setState({acceptHovering: (event.type == "mouseenter")});
-  },
-
   _onChange: function(/*object*/ event) {
     this.setState({modelName: event.target.value});
   },
 
   getInitialState: function() {
-    return  { cancelHovering: false,
-              acceptHovering: false,
-              modelName: "" } 
+    return  { modelName: "" } 
   },
 
   render: function() {
-    //Conditionally highlight the user icon based on the state
-    var cancelHovering = this.state.cancelHovering ? "iconHighlight" : "iconNoHighlight";
-    var acceptHovering = this.state.acceptHovering ? "iconHighlight" : "iconNoHighlight";
-
     return (
       <div id="newModel">
         <input className="newModel" type="text" name="newModel" value={this.state.modelName} onChange={this._onChange}/>
-        <div className={cancelHovering}>
-          <img  className="icon" src={Icons.CANCEL} onClick={this._cancelNewModel} 
-                onMouseEnter={this._toggleHoverCancel} onMouseLeave={this._toggleHoverCancel}/>
-        </div>
-        <div className={acceptHovering}>
-        <img  className="icon" src={Icons.SAVE} onClick={this.props.createModelCallback} 
-              onMouseEnter={this._toggleHoverAccept} onMouseLeave={this._toggleHoverAccept}/>
-        </div>
+        <ToggleIcon icon={Icons.CANCEL} iconSize="15" onClickCallback={this._cancelNewModel}/>
+        <ToggleIcon icon={Icons.SAVE} iconSize="15" onClickCallback={this.props.createModelCallback}/>
       </div>
     );
   },

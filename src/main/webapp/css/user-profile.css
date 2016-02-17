@@ -1,18 +1,4 @@
-#userprofile .iconHighlight {
-	width: 20px;
-	border-radius: 25px;
-	box-shadow: 1px 0px 10px 0px rgba(0, 0, 0, 0.4),
-				0px 0px 10px 0px rgba(0, 0, 0, 0.4) inset ;
-}
-
-#userprofile .iconNoHighlight {
-	width: 20px;
-	border-radius: 25px;
-	box-shadow: 1px 0px 10px 0px rgba(0, 0, 0, 0);
-}
-
-#userprofile img {
-	height: 22px;
+#userprofile .icon {
 	vertical-align: middle;
 }
 

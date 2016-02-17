@@ -1,7 +1,7 @@
+'use strict'; 
+
 var React = require('react');
-var LoginInput = require('./LoginInput.react');
 var AppStore = require('../stores/AppStore');
-var AppActions = require('../actions/AppActions');
 var Event = require('./Event.react');
 var EventTypes = require('../constants/EventTypes');
 
@@ -17,15 +17,19 @@ var ModelPanel = React.createClass({
 
   render: function() {
     var eventList = [];
-    var events = [{eventId: 0, name: "add new", type: EventTypes.get("NEW_EVENT")}] 
-    events = events.concat(AppStore.getCurrentModel().events);
+    var events = [{eventId: 0, name: "add new", type: EventTypes.get("NEW_EVENT")}]
+    var serverEvents = this.props.appState.currentModel.events;
+    if (serverEvents != undefined) {
+      events = events.concat(this.props.appState.currentModel.events);
+    } 
     
-    var showDetailPanel;
-    for (var e in events) {
-      showDetailPanel = (this.state.showEventDetailId == events[e].eventId);
+    var showDetailPanel = "";
+    var e = 0;
+    for (e in events) {
+      showDetailPanel = (this.state.showEventDetailId == (events[e]).eventId);
       eventList.push(<Event key={e} modelEvent={events[e]} 
-                           onEventClickCallback={this._onEventClick} 
-                           showDetailPanel={showDetailPanel} />) 
+                            onEventClickCallback={this._onEventClick} 
+                            showDetailPanel={showDetailPanel} />) 
     } 
 
     return (

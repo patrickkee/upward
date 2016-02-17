@@ -3,7 +3,7 @@
 	border-width: 1px;
 	border-style: solid;
 	padding: 5px;
-	width: 275px;
+	width: 325px;
 	left: 0px;
 	top: 25px;
 	position: absolute;
@@ -13,12 +13,14 @@
 	z-index: 2;
 }
 
-.app-event-details label {
+.app-event-details .eventDetailItem {
 	font-size: 16px;
 	font-weight: bold;
-	margin: 4px;
 	width: auto;
 	vertical-align: middle;
+	margin-bottom: 4px;
+	margin-top: 4px;
+	display: block;
 }
 
 .app-event-details div {
@@ -26,11 +28,43 @@
 	width: auto;
 }
 
-.app-event-details .eventDetailItem {
-	display: block;
+.app-event-details .eventDetailItemLabel {
+	vertical-align: middle;
+}
+
+.app-event-details .eventDetailItemInputDisabled {
+	vertical-align: middle;
+	margin-left: 6px;
+	font-weight: bold;
+	font-size: 16px;
+	padding: 1px;
+	padding-left: 2px;
+	margin-top: 0px;
+	margin-bottom: 0px;
+	color: #4d4d4d;
+	border-radius: 2px;
+	border-style: solid;
+	border-width: 1px;
+	border-color: white;
 }
 
 .app-event-details .eventDetailItemInput {
 	vertical-align: middle;
+	margin-left: 6px;
+	font-weight: bold;
+	font-size: 16px;
+	padding: 1px;
+	padding-left: 2px;
+	margin-top: 0px;
+	margin-bottom: 0px;
+	color: #4d4d4d;
+	border-radius: 2px;
+	border-style: solid;
+	border-width: 1px;
+	border-color: #4d4d4d;
+}
+
+.app-event-details .eventDetailItemIcon {
+	margin-left: 4px;
 }
 

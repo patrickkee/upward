@@ -1,6 +1,9 @@
+'use strict';
+
 var React = require('react');
 var AppStore = require('../stores/AppStore');
 var Icons = require('../constants/Icons');
+var ToggleIcon = require('./base/ToggleIcon');
 
 var UserProfile = React.createClass({
 
@@ -9,39 +12,26 @@ var UserProfile = React.createClass({
     this.setState({showUserDetails: newVal});
   },
 
-  _toggleHover: function(/*object*/ event) {
-    this.setState({hovering: (event.type == "mouseenter")});
-  },
-
   getInitialState: function() {
-    //AppStore.loadFromLocalStorage(); //having trouble loading initial state 
-    return  {
-              showUserDetails: false,
-              hovering: false
-            } 
+    return  { showUserDetails: false } 
   },
 
   render: function() {
-    var user = AppStore.getUser()
-    var popout = ""
-    
-    //Conditionally highlight the user icon based on the state
-    var userImgClass = this.state.hovering ? "iconHighlight" : "iconNoHighlight";
-
     //Conditionally render the popup based on the state
     if (this.state.showUserDetails) {
+      var popout = ""
       popout =  <div className="popout">
-                  <label>Name: {user.firstName}</label>
-                  <label>Email: {user.email}</label>
+                  <label>Name: {this.props.appState.user.firstName}</label>
+                  <label>Email: {this.props.appState.user.email}</label>
                   <label>Password: *********</label>
                 </div>
     } 
 
     return (
       <div id="userprofile">
-        <label className="userName">{user.firstName}</label>
-        <div className={userImgClass} onMouseEnter={this._toggleHover} onMouseLeave={this._toggleHover}>
-          <img className="user" src={Icons.USER} onClick={this._showUserDetails}/>
+        <label className="userName">{this.props.appState.user.firstName}</label>
+        <div className="icon">
+          <ToggleIcon icon={Icons.USER} iconSize="22" onClickCallback={this._showUserDetails}/>
         </div>
         {popout}
       </div>
@@ -49,7 +39,5 @@ var UserProfile = React.createClass({
   },
 
 });
-
-
 
 module.exports = UserProfile;

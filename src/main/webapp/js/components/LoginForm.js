@@ -1,12 +1,15 @@
+'use strict';
+
 var React = require('react');
 var AppActions = require('../actions/AppActions');
 var AppConstants = require('../constants/AppConstants');
 var AppStore = require('../stores/AppStore');
 var Icons = require('../constants/Icons');
+var ToggleIcon = require('./base/ToggleIcon');
 
 var ENTER_KEY_CODE = 13;
 
-var LoginInput = React.createClass({
+var LoginForm = React.createClass({
   
   getInitialState: function() {
     return { email: "", password: "", firstName: "" };
@@ -85,8 +88,8 @@ var LoginInput = React.createClass({
 
         <div className="loginButton">
           <button onClick={this._login}>
-            <img className="loginImg" src={Icons.LOGOUT} />
-            Login or Signup
+            Login or Signup&nbsp;&nbsp;
+            <ToggleIcon icon={Icons.LOGOUT} iconSize="16" onClickCallback={this.props._login}/>
           </button>
         </div>
 
@@ -95,4 +98,4 @@ var LoginInput = React.createClass({
   }
 });
 
-module.exports = LoginInput;
+module.exports = LoginForm;
