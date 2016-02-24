@@ -5,6 +5,7 @@
 @import url("model-panel.css");
 @import url("event-panel.css");
 @import url("event-details.css");
+@import url("vis-panel.css");
 
 html, body {
 	margin: 0;
@@ -31,8 +32,7 @@ button, input {
 }
 
 #app {
-	background: #fff;
-	background: rgba(255, 255, 255, 0.9);
+	background: #fdfdfd;
 	margin: 100px 0 40px 0;
 	border: 1px solid #ccc;
 	position: relative;

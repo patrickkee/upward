@@ -19,7 +19,7 @@ var ToggleIcon = React.createClass({
       borderRadius = "25px";
     }  else 
     if (this.props.icon.shape == "SQUARE") {
-      borderRadius = "1px";
+      borderRadius = "25px";
     }
 
     var hoverStyle =  {
@@ -28,7 +28,7 @@ var ToggleIcon = React.createClass({
                     verticalAlign: 'middle',
                     height: this.props.iconSize,
                     borderRadius: borderRadius,
-                    boxShadow: '0px 0px 10px 0px rgba(0, 0, 0, 0.4),0px 0px 10px 0px rgba(0, 0, 0, 0.4) inset'
+                    boxShadow: '0px 0px 15px 0px rgba(0, 0, 0, 0.3), 0px 0px 15px 0px rgba(0, 0, 0, 0.2) inset'
                   };
 
     var noHoverStyle =  {

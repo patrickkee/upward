@@ -34,7 +34,7 @@ var ModelSelect = React.createClass({
                     <select className="select" value={this.props.selectedModel.modelId} 
                             onChange={this.props.selectModelCallback}>
                       {modelDropdown}
-                      <option value={ADD_NEW_MODEL}>+ add new</option>)
+                      <option value={ADD_NEW_MODEL}>+ add new</option>
                     </select>
                     <div>
                       <ToggleIcon icon={Icons.TRASH} iconSize="20" onClickCallback={this.props.deleteModelCallback}/>

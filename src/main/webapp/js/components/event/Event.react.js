@@ -1,9 +1,9 @@
 'use strict';
 
 var React = require('react');
-var EventTypes = require('../constants/EventTypes');
-var Icons = require('../constants/Icons');
-var ToggleIcon = require('./base/ToggleIcon');
+var EventTypes = require('../../constants/EventTypes');
+var Icons = require('../../constants/Icons');
+var ToggleIcon = require('../base/ToggleIcon');
 var EventDetails = require('./EventDetails');
 
 var ReactPropTypes = React.PropTypes;

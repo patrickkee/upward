@@ -1,8 +1,8 @@
 'use strict';
 
 var React = require('react');
-var Icons = require('../constants/Icons');
-var ToggleIcon = require('./base/ToggleIcon');
+var Icons = require('../../constants/Icons');
+var ToggleIcon = require('../base/ToggleIcon');
 
 //A single event detail such as the name, type, value, etc
 var EventDetailItem = React.createClass({

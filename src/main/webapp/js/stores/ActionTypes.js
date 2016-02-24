@@ -10,30 +10,39 @@ var ActionTypes = {
 		do: function(actionValue, callback, appState) {
 			//Enforce the order of async callbacks to ensure that user information
 			//is loaded before model and event info
+			var fetchCurrentModelValues = function() {
+				//Don't fetch events if no model is selected
+				if (Object.keys(appState.currentModel).length > 0) {
+				  XHR.fetchModelValues(appState.currentModel, callback, appState)
+				} else {
+				  callback();
+				}
+			}
+
 			var fetchEvents = function() {
-				                        //Don't fetch events if no model is selected
-				                        if (Object.keys(appState.currentModel).length > 0) {
-				                          XHR.fetchEvents(appState.currentModel, callback, appState)
-				                        } else {
-				                          callback();
-				                        }
-			                       };
+				//Don't fetch events if no model is selected
+				if (Object.keys(appState.currentModel).length > 0) {
+				  XHR.fetchEvents(appState.currentModel, fetchCurrentModelValues, appState)
+				} else {
+				  fetchCurrentModelValues();
+				}
+			};
 			var setContentView = function() {
-												appState.viewState = AppStates.CONTENT_VIEW;
-												XHR.setDefaultModel(fetchEvents, appState);
-						                   	 };
+				appState.viewState = AppStates.CONTENT_VIEW;
+				XHR.setDefaultModel(fetchEvents, appState);
+			};
 			var fetchModels = function() {
-											//If the login was successful continue loading the account data, otherwise
-											//set the login fail view state to prompt the user to signup
-											if (appState.user.email != "") {
-												XHR.fetchModels(setContentView, appState)
-											} else { 
-												appState.user = "";
-        										appState.viewState = AppStates.LOGIN_FAIL_VIEW;
-												callback();
-											}
-											
-										 };
+				//If the login was successful continue loading the account data, otherwise
+				//set the login fail view state to prompt the user to signup
+				if (appState.user.email != "") {
+					XHR.fetchModels(setContentView, appState)
+				} else { 
+					appState.user = "";
+					appState.viewState = AppStates.LOGIN_FAIL_VIEW;
+					callback();
+				}
+
+			};
 
 			XHR.fetchAccount(actionValue, fetchModels, appState);
 		}
@@ -67,7 +76,16 @@ var ActionTypes = {
 		key: "SELECT_MODEL",
 		do: function(actionValue, callback, appState) {
 			//Find the given model in the collection of models
-			var fetchEvents = function() { XHR.fetchEvents(appState.currentModel, callback, appState) };
+			var fetchCurrentModelValues = function() {
+				//Don't fetch events if no model is selected
+				if (Object.keys(appState.currentModel).length > 0) {
+				  XHR.fetchModelValues(appState.currentModel, callback, appState)
+				} else {
+				  callback();
+				}
+			}
+
+			var fetchEvents = function() { XHR.fetchEvents(appState.currentModel, fetchCurrentModelValues, appState) };
 			var selectModel = function() {
 				var m;
 				for (m in appState.models) {
@@ -106,8 +124,6 @@ var ActionTypes = {
 	UPDATE_MODEL: {
 		key: "UPDATE_MODEL",
 		do: function(actionValue, callback, appState) {
-			//TODO: FIGURE OUT WHY AFTER THIS RUNS SELECT MODEL DOESNT RETURN THE CORRECT DATA
-
 			//Store the events temporarily since we're replacing the parent model
 			var tmpEvents = appState.currentModel.events; 
 			var setEvents = function() {
@@ -130,7 +146,21 @@ var ActionTypes = {
 	UPDATE_EVENT: {
 		key: "UPDATE_EVENT",
 		do: function(actionValue, callback, appState) {
-			XHR.persistEvent(actionValue, callback, appState);
+			var fetchCurrentModelValues = function() {
+				//Don't fetch events if no model is selected
+				if (Object.keys(appState.currentModel).length > 0) {
+				  XHR.fetchModelValues(appState.currentModel, callback, appState)
+				} else {
+				  callback();
+				}
+			}
+
+			//Fetch events after persisting to server to ensure appState is synchronized with server
+			var fetchEvents = function() {
+				XHR.fetchEvents(appState.currentModel, fetchCurrentModelValues, appState)
+			};
+
+			XHR.persistEvent(actionValue, fetchEvents, appState);
 		}
 	}
 }

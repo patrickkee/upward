@@ -104,6 +104,22 @@ var XhrRequests = {
     });
   },
 
+  fetchModelValues: function(model, callback, appState) {
+    $.ajax({
+      url: REMOTE_BASE_URL + "/api/accounts/" + appState.user.email + "/models/" + model.modelId + "/values",
+      contentType: "application/json; charset=utf-8",
+      dataType: "json",
+      type: 'GET',
+      success: function(data) {
+        appState.currentModel.values = data;
+        callback(); 
+      },
+      error: function(xhr, status, err) {
+        callback();
+      }    
+    });
+  },
+
   deleteModel: function(model, callback, appState) {
     $.ajax({
       url: REMOTE_BASE_URL + "/api/accounts/" + appState.user.email + "/models/" + model.modelId,

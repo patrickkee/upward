@@ -1,0 +1,6 @@
+******* Backlog ********
+* Event details date is not updated after deleting part of the date, editing another field, and clicking cancel. 
+	- The correct date value is passed in as props and should re-render with the full date rather than something like 01/01/202, but it doesn't
+* Refactor the Store to sync with the server asynchronously while maintaining the local store as persistence. 
+
+******* v1.0 *********
