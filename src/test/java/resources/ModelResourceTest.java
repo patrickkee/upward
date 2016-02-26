@@ -3,7 +3,9 @@ package resources;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
+import java.io.UnsupportedEncodingException;
 import java.math.BigDecimal;
+import java.net.URLEncoder;
 
 import javax.ws.rs.QueryParam;
 import javax.ws.rs.client.Entity;
@@ -177,7 +179,7 @@ public class ModelResourceTest extends BaseJerseyTest {
 	}
 
 	@Test
-	public void getModelValueTest() {
+	public void getModelValueTest() throws UnsupportedEncodingException {
 		final String EMAIL = "getModelValueTest@gmail.com";
 		final String START_DATE = "01/25/2010";
 		final String END_DATE = "01/25/2020";
@@ -210,7 +212,7 @@ public class ModelResourceTest extends BaseJerseyTest {
 				.post(Entity.entity(event, MediaType.APPLICATION_JSON_TYPE), Response.class);
 
 		// Get the model's value
-		response = target("accounts/" + EMAIL + "/models/" + MODEL_ID + "/value").queryParam("date", "12/31/2010")
+		response = target("accounts/" + EMAIL + "/models/" + MODEL_ID + "/values/" + URLEncoder.encode("12/31/2010", "UTF-8"))
 				.request(MediaType.APPLICATION_JSON_TYPE).get(Response.class);
 
 		ResponseValueNumeric respMsg = response.readEntity(ResponseValueNumeric.class);

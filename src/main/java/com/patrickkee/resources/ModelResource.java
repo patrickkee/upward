@@ -205,10 +205,10 @@ public class ModelResource {
 	 * @return the account value as a big decimal 
 	 */
 	@GET
-	@Path("/{modelId}/value")
+	@Path("/{modelId}/values/{date}")
 	@Produces(MediaType.APPLICATION_JSON)
 	public Response getValueByDate(@PathParam("email") String email, @PathParam("modelId") int modelId,
-			@QueryParam("date") String date) {
+			@PathParam("date") String date) {
 		Optional<Account> acct = FinancialModelsDb.getAccount(email);
 
 		// TODO: Refactor this into central date handling

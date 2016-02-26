@@ -41,6 +41,10 @@ public class Event {
 				 	@JsonDeserialize(using = LocalDateDeserializer.class) @JsonProperty("endDate") LocalDate endDate,
 				 	@JsonProperty("value") BigDecimal value) {
 		
+		Preconditions.checkNotNull(name);
+		Preconditions.checkNotNull(eventType);
+		Preconditions.checkNotNull(startDate);
+		Preconditions.checkNotNull(endDate);
 		Preconditions.checkState(value.compareTo(BigDecimal.valueOf(0)) > 0 , VALUE_ERROR_MSG);
 		
 		//Enforce the default values for one time events
