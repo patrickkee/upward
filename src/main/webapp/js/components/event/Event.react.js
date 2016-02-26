@@ -16,7 +16,7 @@ var Event = React.createClass({
 
   render: function() {
     var labelClass = (this.props.modelEvent.type.type != EventTypes.NEW_EVENT.type) ? "eventName" : "newEventName";
-    var eventDetails = (this.props.showDetailPanel) ? <EventDetails modelEvent={this.props.modelEvent} /> : ""
+    var eventDetails = (this.props.showDetailPanel) ? <EventDetails modelEvent={this.props.modelEvent} isNewEvent={this.props.isNewEvent} /> : ""
 
     return (
       <li className="event">

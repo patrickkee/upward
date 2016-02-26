@@ -73,6 +73,21 @@ var AppActions = {
     AppDispatcher.dispatch(action);
   },
 
+  createModelEvent: function(modelEvent) {
+    var action = {
+                  actionType: ActionTypes.CREATE_EVENT.key,
+                  value: modelEvent
+                }
+    AppDispatcher.dispatch(action);
+  },
+
+  deleteModelEvent: function(modelEvent) {
+    var action = {
+                  actionType: ActionTypes.DELETE_EVENT.key,
+                  value: modelEvent
+                }
+    AppDispatcher.dispatch(action);
+  },
 };
 
 module.exports = AppActions;

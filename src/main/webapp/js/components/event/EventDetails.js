@@ -53,7 +53,12 @@ var EventDetails = React.createClass({
   },
 
   _onSave: function() {
-    AppActions.updateModelEvent(this.state.modelEvent);
+    if (this.props.isNewEvent) {
+      AppActions.createModelEvent(this.state.modelEvent);
+    } else {
+      AppActions.updateModelEvent(this.state.modelEvent);
+    }
+    
 
     this.setState({ editField: "",
                     hasEdit: false });  
@@ -63,6 +68,10 @@ var EventDetails = React.createClass({
     this.setState({ editField: "",
                     hasEdit: false,
                     modelEvent: JSON.parse(JSON.stringify(this.state.initialModelEvent)) });
+  },
+
+  _onDelete: function() {
+    AppActions.deleteModelEvent(this.state.modelEvent);
   },
 
   getInitialState: function() {
@@ -75,40 +84,48 @@ var EventDetails = React.createClass({
     var callbacks = {click: this._onClick,
                      cancel: this._onCancel,
                      save: this._onSave, 
-                     edit: this._onEditField }
+                     edit: this._onEditField,
+                     delete: this._onDelete }
 
     var formButtons = "";
+    var deleteButton = (!this.props.isNewEvent) ? <div className="eventDetailItemIcon"><ToggleIcon icon={Icons.TRASH} iconSize="16" onClickCallback={callbacks.delete} /></div> : "";
+
     if (this.state.hasEdit) {
       formButtons = <div className="eventDetailsIcons"> 
                       <div className="eventDetailItemIcon"><ToggleIcon icon={Icons.CANCEL} iconSize="16" onClickCallback={callbacks.cancel}/></div>
                       <div className="eventDetailItemIcon"><ToggleIcon icon={Icons.SAVE} iconSize="16" onClickCallback={callbacks.save} /></div>
+                      {deleteButton}
                     </div>
-    }       
+    } else {
+      formButtons = <div className="eventDetailsIcons"> 
+                      {deleteButton}
+                    </div>
+    }
 
     var formFields = [];
     var reqAttrs = this.state.modelEvent.type.requiredAttrs;
     for (var e in reqAttrs) {
       switch(reqAttrs[e]) {
         case "EVENT_NAME":
-          formFields.push(<EventName value={this.state.modelEvent.name} editField={this.state.editField} callbacks={callbacks} />);
+          formFields.push(<EventName key={e} value={this.state.modelEvent.name} editField={this.state.editField} callbacks={callbacks} />);
           break;
         case "EVENT_TYPE":
-          formFields.push(<EventType value={this.state.modelEvent.type} editField={this.state.editField} callbacks={callbacks} />);
+          formFields.push(<EventType key={e} value={this.state.modelEvent.type} editField={this.state.editField} callbacks={callbacks} />);
           break;
         case "EVENT_VALUE":
-          formFields.push(<EventValue value={this.state.modelEvent.value} editField={this.state.editField} callbacks={callbacks} />);
+          formFields.push(<EventValue key={e} value={this.state.modelEvent.value} editField={this.state.editField} callbacks={callbacks} />);
           break;          
         case "EVENT_PERIOD":
-          formFields.push(<EventPeriod value={this.state.modelEvent.period} editField={this.state.editField} callbacks={callbacks} />);
+          formFields.push(<EventPeriod key={e} value={this.state.modelEvent.period} editField={this.state.editField} callbacks={callbacks} />);
           break;   
         case "START_DATE":
-          formFields.push(<EventDate value={this.state.modelEvent.startDate} fieldName="Start" editField={this.state.editField} callbacks={callbacks} />);
+          formFields.push(<EventDate key={e} value={this.state.modelEvent.startDate} fieldName="Start" editField={this.state.editField} callbacks={callbacks} />);
           break;   
         case "END_DATE":
-          formFields.push(<EventDate value={this.state.modelEvent.endDate} fieldName="End" editField={this.state.editField} callbacks={callbacks} />);
+          formFields.push(<EventDate key={e} value={this.state.modelEvent.endDate} fieldName="End" editField={this.state.editField} callbacks={callbacks} />);
           break;   
         case "EFFECTIVE_DATE":
-          formFields.push(<EventDate value={this.state.modelEvent.startDate} fieldName="Date" editField={this.state.editField} callbacks={callbacks} />);
+          formFields.push(<EventDate key={e} value={this.state.modelEvent.startDate} fieldName="Date" editField={this.state.editField} callbacks={callbacks} />);
           break;   
         default: //do nothing
       }

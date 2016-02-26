@@ -47,6 +47,7 @@ var EventType = React.createClass({
                                name={this.FIELD_NAME}
                                value={this.props.value}
                                placeholderChar=" " 
+                               onChange={this._onValueChange}
                                onClick={this._onClick}/>  
                 </div>
     }

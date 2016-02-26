@@ -28,9 +28,13 @@ var ModelPanel = React.createClass({
     
     var showDetailPanel = "";
     var e = 0;
+    var isNew;
     for (e in events) {
       showDetailPanel = (this.state.showEventDetailId == (events[e]).eventId);
-      eventList.push(<Event key={e} modelEvent={events[e]} 
+      isNew = (events[e].type == EventTypes.NEW_EVENT);
+      eventList.push(<Event key={e} 
+                            modelEvent={events[e]} 
+                            isNewEvent={isNew}
                             onEventClickCallback={this._onEventClick} 
                             showDetailPanel={showDetailPanel} />) 
     } 

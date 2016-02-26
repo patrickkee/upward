@@ -11,9 +11,9 @@ Models.Events.Period = {
 		pretty: "Monthly"
 	},
 
-	ANNUALLY: {
-		type: "ANNUALLY",
-		pretty: "Annually"
+	POINT_IN_TIME: {
+		type: "POINT_IN_TIME",
+		pretty: "Point In Time"
 	},
 
 	get: function(eventPeriod) {
@@ -21,8 +21,8 @@ Models.Events.Period = {
     		case "MONTHLY":
     			return this.MONTHLY;
     			break;
-    		case "ANNUALLY":
-    			return this.ANNUALLY;
+    		case "POINT_IN_TIME":
+    			return this.POINT_IN_TIME;
     			break;    			
     	default:
     		//Nothing

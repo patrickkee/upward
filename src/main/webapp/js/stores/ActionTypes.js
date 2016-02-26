@@ -162,6 +162,48 @@ var ActionTypes = {
 
 			XHR.persistEvent(actionValue, fetchEvents, appState);
 		}
+	},
+
+	CREATE_EVENT: {
+		key: "CREATE_EVENT",
+		do: function(actionValue, callback, appState) {
+			var fetchCurrentModelValues = function() {
+				//Don't fetch events if no model is selected
+				if (Object.keys(appState.currentModel).length > 0) {
+				  XHR.fetchModelValues(appState.currentModel, callback, appState)
+				} else {
+				  callback();
+				}
+			}
+
+			//Fetch events after persisting to server to ensure appState is synchronized with server
+			var fetchEvents = function() {
+				XHR.fetchEvents(appState.currentModel, fetchCurrentModelValues, appState)
+			};
+
+			XHR.createEvent(actionValue, fetchEvents, appState);
+		}
+	},
+
+	DELETE_EVENT: {
+		key: "DELETE_EVENT",
+		do: function(actionValue, callback, appState) {
+			var fetchCurrentModelValues = function() {
+				//Don't fetch events if no model is selected
+				if (Object.keys(appState.currentModel).length > 0) {
+				  XHR.fetchModelValues(appState.currentModel, callback, appState)
+				} else {
+				  callback();
+				}
+			}
+
+			//Fetch events after persisting to server to ensure appState is synchronized with server
+			var fetchEvents = function() {
+				XHR.fetchEvents(appState.currentModel, fetchCurrentModelValues, appState)
+			};
+
+			XHR.deleteEvent(actionValue, fetchEvents, appState);
+		}
 	}
 }
 

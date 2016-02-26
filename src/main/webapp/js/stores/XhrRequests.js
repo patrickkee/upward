@@ -188,6 +188,53 @@ var XhrRequests = {
           callback();
         }    
     });
+  }, 
+
+  createEvent: function(modelEvent, callback, appState) {
+    //Prepare model for post by removing front end enhancement to the event.type
+    //TODO: This seems to be a technical debt from deciding to modify the object on the client side. 
+    //It'd be best to fix this by providing a functional interface to the type attribute, rather than modify the
+    //base object, that way it could be persisted as is. Refactor this...
+    var serverEvent = JSON.parse(JSON.stringify(modelEvent));
+    serverEvent.type = serverEvent.type.type;
+
+    $.ajax({
+        url: REMOTE_BASE_URL + "/api/accounts/" + appState.user.email + "/models/" + appState.currentModel.modelId + "/events/",
+        contentType: "application/json; charset=utf-8",
+        dataType: "json",
+        type: 'POST',
+        data: JSON.stringify(serverEvent),
+        success: function(data) {
+          callback();
+        },
+        error: function(xhr, status, err) {
+          console.log(err.message);
+          callback();
+        }    
+    });
+  }, 
+
+  deleteEvent: function(modelEvent, callback, appState) {
+    //Prepare model for post by removing front end enhancement to the event.type
+    //TODO: This seems to be a technical debt from deciding to modify the object on the client side. 
+    //It'd be best to fix this by providing a functional interface to the type attribute, rather than modify the
+    //base object, that way it could be persisted as is. Refactor this...
+    var serverEvent = JSON.parse(JSON.stringify(modelEvent));
+    serverEvent.type = serverEvent.type.type;
+
+    $.ajax({
+        url: REMOTE_BASE_URL + "/api/accounts/" + appState.user.email + "/models/" + appState.currentModel.modelId + "/events/" + modelEvent.eventId,
+        contentType: "application/json; charset=utf-8",
+        dataType: "json",
+        type: 'DELETE',
+        success: function(data) {
+          callback();
+        },
+        error: function(xhr, status, err) {
+          console.log(err.message);
+          callback();
+        }    
+    });
   }
 
 };

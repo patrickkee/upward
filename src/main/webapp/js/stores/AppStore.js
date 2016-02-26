@@ -84,6 +84,13 @@ AppDispatcher.register(function(action) {
          ActionTypes.UPDATE_EVENT.do(action.value, emitChange, appState);
       break;
 
+    case ActionTypes.CREATE_EVENT.key:
+         ActionTypes.CREATE_EVENT.do(action.value, emitChange, appState);
+      break;
+
+    case ActionTypes.DELETE_EVENT.key:
+         ActionTypes.DELETE_EVENT.do(action.value, emitChange, appState);
+      break;      
     default:
       // no op
   }

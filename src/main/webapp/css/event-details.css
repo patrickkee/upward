@@ -3,7 +3,7 @@
 	border-width: 1px;
 	border-style: solid;
 	padding: 5px;
-	width: 325px;
+	width: 335px;
 	left: 0px;
 	top: 25px;
 	position: absolute;
@@ -15,7 +15,7 @@
 
 .app-event-details .eventDetailsIcons {
 	position: absolute;
-	left: 289px;
+	right: 5px;
 }
 
 .app-event-details .eventDetailItem {
