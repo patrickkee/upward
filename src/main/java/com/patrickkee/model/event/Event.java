@@ -14,6 +14,7 @@ import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.google.common.base.Preconditions;
+import com.patrickkee.api.event.Actual;
 import com.patrickkee.application.util.LocalDateDeserializer;
 import com.patrickkee.application.util.LocalDateSerializer;
 
@@ -42,6 +43,15 @@ public class Event {
 		
 		Preconditions.checkState(value.compareTo(BigDecimal.valueOf(0)) > 0 , VALUE_ERROR_MSG);
 		
+		//Enforce the default values for one time events
+		if (eventType.equals(EventTypes.ACTUAL) ||
+			eventType.equals(EventTypes.ONE_TIME_DEPOSIT) ||
+			eventType.equals(EventTypes.ONE_TIME_WITHDRAWL)) {
+			
+			period = Periods.POINT_IN_TIME;
+        	endDate = startDate;
+		}
+						
 		this.name = name;
 		this.period = period;
 		this.eventType = eventType;

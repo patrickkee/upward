@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import javax.ws.rs.Consumes;
+import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
@@ -72,6 +73,12 @@ public class EventResource {
 			acct.get().getModel(modelId).get().getEvent(eventId) != null && updatedEvent != null) {
 			Optional<Model> model = acct.get().getModel(modelId);
 
+			//If the user has changed the event such that it has a new identity, then we need to 
+			//remove the old event so the new event replaces it
+			if (updatedEvent.getEventId() != eventId ) {
+				model.get().removeEvent(eventId);
+			} 
+			
 			model.get().addOrUpdateEvent(updatedEvent);
 
 			UriBuilder locationBuilder = uriInfo.getAbsolutePathBuilder();
@@ -90,13 +97,33 @@ public class EventResource {
 	@Produces(MediaType.APPLICATION_JSON)
 	public Response getEvent(@PathParam("email") String email, @PathParam("modelId") int modelId) {
 
-		// Add the event to the model only if the account and model are found
+		// Return the events only if the account and model are found
 		Optional<Account> acct = FinancialModelsDb.getAccount(email);
 		if (acct.isPresent() && acct.get().getModel(modelId).isPresent()) {
-			//List<Model> modelList = new ArrayList<Model>(acct.get().getModels().values());
 			List<Event> eventList = new ArrayList<Event>(acct.get().getModel(modelId).get().getEvents().values());
 
 			return Response.ok().entity(eventList).build();
+
+		} else {
+			throw new WebApplicationException(404);
+		}
+	}
+	
+	@DELETE
+	@Path("/{eventId}")
+	@Produces(MediaType.APPLICATION_JSON)
+	public Response deleteEvent(@PathParam("email") String email, @PathParam("modelId") int modelId, 
+								@PathParam("eventId") int eventId) {
+
+		// Delete the event only if the account and model are found
+		Optional<Account> acct = FinancialModelsDb.getAccount(email);
+		if (acct.isPresent() && acct.get().getModel(modelId).isPresent() && 
+			acct.get().getModel(modelId).get().getEvent(eventId).isPresent() ) 
+		{
+			acct.get().getModel(modelId).get().removeEvent(eventId);
+			
+			return Response.ok().entity(ResponseMessage.getNew("EVENT_DELETION_SUCCESSFUL",
+					"The event was successfully deleted from the model")).build();
 
 		} else {
 			throw new WebApplicationException(404);

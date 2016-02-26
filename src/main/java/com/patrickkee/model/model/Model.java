@@ -6,6 +6,7 @@ import java.util.TreeMap;
 
 import org.joda.time.LocalDate;
 
+import com.google.common.base.Optional;
 import com.patrickkee.model.event.Event;
 
 public interface Model {
@@ -44,8 +45,10 @@ public interface Model {
 	 */
 	public void addOrUpdateEvent(Event event);
 
-	public Event getEvent(int eventId);
+	public Optional<Event> getEvent(int eventId);
 	
 	public Map<Integer, Event> getEvents();
+
+	void removeEvent(int eventId);
 	
 }

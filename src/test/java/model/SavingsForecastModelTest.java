@@ -48,8 +48,34 @@ public class SavingsForecastModelTest {
 		event = RecurringYield.getNew(EVENT_NAME, Periods.MONTHLY, startDate, endDate, BigDecimal.valueOf(2.0));
 		model.addOrUpdateEvent(event);	
 		
-		assertEquals(BigDecimal.valueOf(2.0), model.getEvent(event.getEventId()).getValue());
+		assertEquals(BigDecimal.valueOf(2.0), model.getEvent(event.getEventId()).get().getValue());
 		assertEquals(1, model.getEvents().size());
+	}
+	
+	@Test
+	public void noInitialValueTest() {
+		final String EVENT_NAME = "updateEventTest";
+		// Set up the model
+		DateTimeFormatter formatter = DateTimeFormat.forPattern("MM/dd/yyyy");
+
+		DateTime dt = formatter.parseDateTime("01/01/2010");
+		LocalDate startDate = new LocalDate(dt.getYear(), dt.getMonthOfYear(), dt.getDayOfMonth());
+
+		dt = formatter.parseDateTime("12/31/2019");
+		LocalDate endDate = new LocalDate(dt.getYear(), dt.getMonthOfYear(), dt.getDayOfMonth());
+
+		SavingsForecastModel model = SavingsForecastModel.getNew().name("test")
+																  .endDate(endDate)
+																  .targetValue(BigDecimal.valueOf(10000.0));
+		
+		//Create the event and add it to the model
+		OneTimeDeposit event = OneTimeDeposit.getNew("Initial Deposit", startDate, BigDecimal.valueOf(500));
+		model.addOrUpdateEvent(event);	
+		
+		RecurringYield event2 = RecurringYield.getNew(EVENT_NAME, Periods.MONTHLY, startDate, endDate, BigDecimal.valueOf(0.00208));
+		model.addOrUpdateEvent(event2);	
+		assertEquals(BigDecimal.valueOf(641.589).setScale(2, BigDecimal.ROUND_HALF_UP),
+				model.getValue(endDate).setScale(2, BigDecimal.ROUND_HALF_UP));
 	}
 	
 	@Test
@@ -135,7 +161,7 @@ public class SavingsForecastModelTest {
 		//Create an "actual" event and add it to the model
 		dt = formatter.parseDateTime("04/05/2010");
 		effectiveDate = new LocalDate(dt.getYear(), dt.getMonthOfYear(), dt.getDayOfMonth());
-		Actual actualEvent = Actual.getNew(effectiveDate, BigDecimal.valueOf(3460.00));
+		Actual actualEvent = Actual.getNew("Actual", effectiveDate, BigDecimal.valueOf(3460.00));
 		model.addOrUpdateEvent(actualEvent);
 		
 		//Add the recurring withdrawl event

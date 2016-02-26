@@ -22,7 +22,7 @@ public class Actual extends Event {
 		super(name, period, eventType, startDate, endDate, value);
 	}
 
-	public static Actual getNew(LocalDate effectiveDate, BigDecimal value) {
-		return new Actual("ACTUAL", Periods.POINT_IN_TIME, EventTypes.ACTUAL, effectiveDate, effectiveDate, value);
+	public static Actual getNew(String eventName, LocalDate effectiveDate, BigDecimal value) {
+		return new Actual(eventName, Periods.POINT_IN_TIME, EventTypes.ACTUAL, effectiveDate, effectiveDate, value);
 	}
 }

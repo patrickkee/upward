@@ -18,6 +18,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.google.common.base.Optional;
 import com.patrickkee.application.util.LocalDateDeserializer;
 import com.patrickkee.application.util.LocalDateSerializer;
 import com.patrickkee.model.event.Event;
@@ -29,7 +30,7 @@ public class SavingsForecastModel implements Model {
 	private int _modelId = 0;
 	private String _name;
 	private String _description;
-	private BigDecimal _initialValue;
+	private BigDecimal _initialValue = BigDecimal.valueOf(0.0);
 	private BigDecimal _targetValue;
 	private LocalDate _startDate;
 	private LocalDate _endDate;
@@ -124,6 +125,11 @@ public class SavingsForecastModel implements Model {
 		} else {
 			_events.putIfAbsent(event.getEventId(), event);
 		}
+	}
+	
+	@Override
+	public void removeEvent(int eventId) {
+		_events.remove(eventId);
 	}
 
 	@JsonIgnore
@@ -241,8 +247,8 @@ public class SavingsForecastModel implements Model {
 
 	@Override
 	@JsonIgnore
-	public Event getEvent(int eventId) {
-		return _events.get(eventId);
+	public Optional<Event> getEvent(int eventId) {
+		return Optional.of(_events.get(eventId));
 	}
 
 	@Override
