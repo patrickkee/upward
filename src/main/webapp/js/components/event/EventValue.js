@@ -1,6 +1,8 @@
 'use strict';
 
 var React = require('react');
+var numeral = require('numeral');
+var CurrencyMaskedInput = require('react-currency-masked-input');
 
 //A single event detail such as the name, type, value, etc
 var EventValue = React.createClass({
@@ -9,15 +11,8 @@ var EventValue = React.createClass({
  
   //Pass value change along to parent, indicating what field's value changed. Parent will
   //own the event object and its state
-  _onValueChange: function(event) {
-    //TODO: THIS DOESNT ALLOW USERS TO DELETE THE LAST INTEGER IN THE FIELD. Editing this way is wierd, but currently
-    //if users enter an empty string, they're allowed to try to persist to the server, and that will cause errors, so something
-    //must be done
-    if ( (!isNaN(parseFloat(event.target.value)) && isFinite(event.target.value)) &&
-          event.target.value > 0 ) {
-      this.props.callbacks.edit(this.FIELD_NAME, event.target.value);
-    } 
-    
+  _onMaskedChange: function(event, maskedValue) {
+    this.props.callbacks.edit(this.FIELD_NAME, maskedValue);
   },
 
   //Delegate to parent form to toggle edit mode to ensure that only one field
@@ -28,24 +23,29 @@ var EventValue = React.createClass({
 
   render: function() {
     var output = "";
+    var formattedInput = numeral(this.props.value).format('0.00');
+
     if (this.props.editField.toLowerCase() == this.FIELD_NAME.toLowerCase()) {
       output =  <div className="eventDetailItem">
                   <label className="eventDetailItemLabel">{this.FIELD_NAME}:</label>
-                  <input className="eventDetailItemInput"
-                            type="text"
-                            name={this.FIELD_NAME}
-                            value={this.props.value}
-                            onChange={this._onValueChange}/>
+                  <CurrencyMaskedInput className="eventDetailItemInput"
+                                       type="text"
+                                       name={this.FIELD_NAME}
+                                       ref={this.FIELD_NAME} 
+                                       value={formattedInput} 
+                                       onChange={this._onMaskedChange}
+                                       required /> 
                 </div>
     } else {
       output =  <div>
                   <label className="eventDetailItemLabel" onClick={this.props.onClickCallback}>{this.FIELD_NAME}:</label>
-                  <input className="eventDetailItemInputDisabled"
-                            type="text"
-                            name={this.FIELD_NAME}
-                            value={this.props.value}
-                            readOnly={true}
-                            onClick={this._onClick} />
+                  <CurrencyMaskedInput className="eventDetailItemInputDisabled"
+                                       type="text"
+                                       name={this.FIELD_NAME}
+                                       ref={this.FIELD_NAME} 
+                                       value={formattedInput}
+                                       onChange={this._onMaskedChange}
+                                       required /> 
                 </div>
     }
 

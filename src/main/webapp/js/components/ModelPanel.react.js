@@ -6,6 +6,9 @@ var AppActions = require('../actions/AppActions');
 var Icons = require('../constants/Icons');
 var NewModelForm = require('./NewModelForm');
 var ModelSelect = require('./ModelSelect');
+var numeral = require('numeral');
+var CurrencyMaskedInput = require('react-currency-masked-input');
+
 var ADD_NEW_MODEL = "ADD_NEW_MODEL";
 
 var ModelPanel = React.createClass({
@@ -120,6 +123,7 @@ var ModelPanel = React.createClass({
       targetDate = this.state.selectedModel.endDate
     }
 
+    var formattedValue = numeral(targetValue).format('0.00');
     return (
       <div id="modelpanel">
           <label className="title">Goal</label>
@@ -127,11 +131,13 @@ var ModelPanel = React.createClass({
         <div> 
           <div className="target"> 
             <label className="targetValueLabel">Target Value</label>
-            <input className="targetValueText"
-                  type="text"
-                  name="targetVal"
-                  value={targetValue}
-                  onChange={this._onTargetValueChange}/>
+            <CurrencyMaskedInput className="targetValueText"
+                                 type="text"
+                                 name="targetVal"
+                                 ref={this.FIELD_NAME} 
+                                 value={formattedValue}
+                                 onChange={this._onMaskedChange}
+                                 required /> 
           </div> 
           <div className="target"> 
             <label className="targetDateLabel">Target Date</label>
