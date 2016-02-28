@@ -6,7 +6,6 @@ var AppActions = require('../actions/AppActions');
 var Icons = require('../constants/Icons');
 var NewModelForm = require('./NewModelForm');
 var ModelSelect = require('./ModelSelect');
-var numeral = require('numeral');
 var CurrencyMaskedInput = require('react-currency-masked-input');
 
 var ADD_NEW_MODEL = "ADD_NEW_MODEL";
@@ -63,10 +62,11 @@ var ModelPanel = React.createClass({
                   });
   },
 
-  _onTargetValueChange: function(/*object*/ event) {
+  _onTargetValueChange: function(event, value) {
     var tmpModel = JSON.parse(JSON.stringify(this.state.selectedModel));
-    tmpModel.targetValue = event.target.value
 
+    //Remove the masking
+    tmpModel.targetValue = value;
     this.setState({selectedModel: tmpModel,
                    edited: true });
   },
@@ -123,7 +123,6 @@ var ModelPanel = React.createClass({
       targetDate = this.state.selectedModel.endDate
     }
 
-    var formattedValue = numeral(targetValue).format('0.00');
     return (
       <div id="modelpanel">
           <label className="title">Goal</label>
@@ -135,8 +134,10 @@ var ModelPanel = React.createClass({
                                  type="text"
                                  name="targetVal"
                                  ref={this.FIELD_NAME} 
-                                 value={formattedValue}
-                                 onChange={this._onMaskedChange}
+                                 value={targetValue}
+                                 showCents={false}
+                                 currencySymbol="$"
+                                 onChange={this._onTargetValueChange}
                                  required /> 
           </div> 
           <div className="target"> 

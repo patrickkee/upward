@@ -3,7 +3,6 @@
   "version": "0.0.1",
   "description": "Financial forecasting made simple",
   "repository": "",
-  "license": "MIT",
   "main": "js/app.js",
   "dependencies": {
     "classnames": "^2.1.3",
@@ -16,7 +15,8 @@
     "react-maskedinput": "^3.1.0",
     "highcharts": "^4.2.3",
     "react-highcharts": "^7.0.0",
-    "numeral": "^1.5.3"
+    "numeral": "^1.5.3",
+    "react-currency-masked-input": "file:../../../../react-currency-masked-input/"
   },
   "devDependencies": {
     "browserify": "^6.2.0",

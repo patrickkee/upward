@@ -1,7 +1,6 @@
 'use strict';
 
 var React = require('react');
-var numeral = require('numeral');
 var CurrencyMaskedInput = require('react-currency-masked-input');
 
 //A single event detail such as the name, type, value, etc
@@ -11,8 +10,9 @@ var EventValue = React.createClass({
  
   //Pass value change along to parent, indicating what field's value changed. Parent will
   //own the event object and its state
-  _onMaskedChange: function(event, maskedValue) {
-    this.props.callbacks.edit(this.FIELD_NAME, maskedValue);
+  _onMaskedChange: function(event, value) {
+    //Send the cleaned value back to the event detail form
+    this.props.callbacks.edit(this.FIELD_NAME, value);
   },
 
   //Delegate to parent form to toggle edit mode to ensure that only one field
@@ -23,8 +23,6 @@ var EventValue = React.createClass({
 
   render: function() {
     var output = "";
-    var formattedInput = numeral(this.props.value).format('0.00');
-
     if (this.props.editField.toLowerCase() == this.FIELD_NAME.toLowerCase()) {
       output =  <div className="eventDetailItem">
                   <label className="eventDetailItemLabel">{this.FIELD_NAME}:</label>
@@ -32,7 +30,9 @@ var EventValue = React.createClass({
                                        type="text"
                                        name={this.FIELD_NAME}
                                        ref={this.FIELD_NAME} 
-                                       value={formattedInput} 
+                                       value={this.props.value} 
+                                       showCents={true}
+                                       currencySymbol="$"
                                        onChange={this._onMaskedChange}
                                        required /> 
                 </div>
@@ -43,7 +43,9 @@ var EventValue = React.createClass({
                                        type="text"
                                        name={this.FIELD_NAME}
                                        ref={this.FIELD_NAME} 
-                                       value={formattedInput}
+                                       value={this.props.value}
+                                       showCents={true}
+                                       currencySymbol="$"
                                        onChange={this._onMaskedChange}
                                        required /> 
                 </div>
