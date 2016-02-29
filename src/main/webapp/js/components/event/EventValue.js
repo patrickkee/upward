@@ -47,6 +47,7 @@ var EventValue = React.createClass({
                                        showCents={true}
                                        currencySymbol="$"
                                        onChange={this._onMaskedChange}
+                                       onClick={this._onClick}
                                        required /> 
                 </div>
     }
