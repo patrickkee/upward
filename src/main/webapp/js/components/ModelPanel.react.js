@@ -7,6 +7,7 @@ var Icons = require('../constants/Icons');
 var NewModelForm = require('./NewModelForm');
 var ModelSelect = require('./ModelSelect');
 var CurrencyMaskedInput = require('react-currency-masked-input');
+var MaskedInput = require('react-maskedinput')
 
 var ADD_NEW_MODEL = "ADD_NEW_MODEL";
 
@@ -72,11 +73,17 @@ var ModelPanel = React.createClass({
   },
 
   _onTargetDateChange: function(/*object*/ event) {
-    var tmpModel = JSON.parse(JSON.stringify(this.state.selectedModel));
-    tmpModel.endDate = event.target.value
+    //Only update the state if the date is complete
+    if (event.target.value.trim().length == 10) {
+      var tmpModel = JSON.parse(JSON.stringify(this.state.selectedModel));
+      tmpModel.endDate = event.target.value
+      this.setState({selectedModel: tmpModel,
+                     edited: true});
+    } else if (this.state.edited) {
+      this.setState({ edited: false });
+    }
 
-    this.setState({selectedModel: tmpModel,
-                   edited: true});
+
   },
 
   getInitialState: function() {
@@ -142,11 +149,12 @@ var ModelPanel = React.createClass({
           </div> 
           <div className="target"> 
             <label className="targetDateLabel">Target Date</label>
-            <input className="targetDateText"
-                  type="text"
-                  name="targetDate"
-                  value={targetDate}
-                  onChange={this._onTargetDateChange}/>
+            <MaskedInput className="targetDateText" 
+                         mask="11/11/1111" 
+                         name="targetDate"
+                         value={targetDate}
+                         placeholderChar=" " 
+                         onChange={this._onTargetDateChange}/>  
           </div> 
         </div> 
       </div>

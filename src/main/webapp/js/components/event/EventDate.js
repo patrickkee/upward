@@ -14,7 +14,6 @@ var EventType = React.createClass({
     if (event.target.value.trim().length == 10) {
       this.props.callbacks.edit(this.FIELD_NAME, event.target.value);
     } 
-    
   },
 
   //Delegate to parent form to toggle edit mode to ensure that only one field
