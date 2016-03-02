@@ -25,8 +25,8 @@ var NewModelForm = React.createClass({
     return (
       <div id="newModel">
         <input className="newModel" type="text" name="newModel" value={this.state.modelName} onChange={this._onChange}/>
-        <ToggleIcon icon={Icons.CANCEL} iconSize="15" onClickCallback={this._cancelNewModel}/>
-        <ToggleIcon icon={Icons.SAVE} iconSize="15" onClickCallback={this.props.createModelCallback}/>
+        <ToggleIcon icon={Icons.CANCEL} iconSize="15" tooltip={"Cancel"} onClickCallback={this._cancelNewModel}/>
+        <ToggleIcon icon={Icons.SAVE} iconSize="15" tooltip={"Cancel"} onClickCallback={this.props.createModelCallback}/>
       </div>
     );
   },

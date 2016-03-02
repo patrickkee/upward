@@ -24,8 +24,8 @@ var ModelSelect = React.createClass({
     var saveIcon = "" 
     if (this.props.showSaveAndCancel) {
       saveIcon =  <div>
-                    <ToggleIcon icon={Icons.CANCEL} iconSize="20" onClickCallback={this.props.cancelEditModelCallback}/>
-                    <ToggleIcon icon={Icons.SAVE} iconSize="20" onClickCallback={this.props.saveModelCallback}/>
+                    <ToggleIcon icon={Icons.CANCEL} iconSize="20" tooltip={"Cancel"} onClickCallback={this.props.cancelEditModelCallback}/>
+                    <ToggleIcon icon={Icons.SAVE} iconSize="20" tooltip={"Save"} onClickCallback={this.props.saveModelCallback}/>
                   </div>
     } 
 
@@ -37,7 +37,7 @@ var ModelSelect = React.createClass({
                       <option value={ADD_NEW_MODEL}>+ add new</option>
                     </select>
                     <div>
-                      <ToggleIcon icon={Icons.TRASH} iconSize="20" onClickCallback={this.props.deleteModelCallback}/>
+                      <ToggleIcon icon={Icons.TRASH} iconSize="20" tooltip={"Delete"} onClickCallback={this.props.deleteModelCallback}/>
                     </div>
                     {saveIcon}                   
                   </div>

@@ -22,7 +22,7 @@ var Logout = React.createClass({
     return (
       <div id="logout">
         <div className="icon"> 
-          <ToggleIcon icon={Icons.LOGOUT} iconSize="22" onClickCallback={this._logout}/>
+          <ToggleIcon icon={Icons.LOGOUT} iconSize="22" tooltip={"Logout"} onClickCallback={this._logout}/>
         </div>
       </div>
     );

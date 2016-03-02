@@ -1,6 +1,7 @@
 'use strict';
 
 var React = require('react');
+var Tooltip = require('./Tooltip');
 
 var ToggleIcon = React.createClass({
 
@@ -44,10 +45,11 @@ var ToggleIcon = React.createClass({
 
     //Conditionally highlight the user icon based on the state
     var style = this.state.hovering ? hoverStyle : noHoverStyle;
-
+    var conditionalTooltip = (this.state.hovering && this.props.tooltip) ? <Tooltip text={this.props.tooltip} /> : '';
     return (
         <div style={style} onMouseEnter={this._toggleHover} onMouseLeave={this._toggleHover}>
           <img style={imgStyle} src={this.props.icon.image} onClick={this.props.onClickCallback}/>
+          {conditionalTooltip}
         </div>
 
     );

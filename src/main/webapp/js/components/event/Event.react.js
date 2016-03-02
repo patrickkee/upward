@@ -20,7 +20,7 @@ var Event = React.createClass({
 
     return (
       <li className="event">
-        <ToggleIcon icon={this.props.modelEvent.type.icon} iconSize="20" onClickCallback={this._onClick}/>
+        <ToggleIcon icon={this.props.modelEvent.type.icon} iconSize="20" tooltip={"Event Details"} onClickCallback={this._onClick}/>
         <label className={labelClass}>{this.props.modelEvent.name}</label>
         {eventDetails}
       </li>             

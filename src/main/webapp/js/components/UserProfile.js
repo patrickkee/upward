@@ -31,7 +31,7 @@ var UserProfile = React.createClass({
       <div id="userprofile">
         <label className="userName">{this.props.appState.user.firstName}</label>
         <div className="icon">
-          <ToggleIcon icon={Icons.USER} iconSize="22" onClickCallback={this._showUserDetails}/>
+          <ToggleIcon icon={Icons.USER} iconSize="22" tooltip={"User Profile"} onClickCallback={this._showUserDetails}/>
         </div>
         {popout}
       </div>

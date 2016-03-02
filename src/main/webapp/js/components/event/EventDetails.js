@@ -88,12 +88,12 @@ var EventDetails = React.createClass({
                      delete: this._onDelete }
 
     var formButtons = "";
-    var deleteButton = (!this.props.isNewEvent) ? <div className="eventDetailItemIcon"><ToggleIcon icon={Icons.TRASH} iconSize="16" onClickCallback={callbacks.delete} /></div> : "";
+    var deleteButton = (!this.props.isNewEvent) ? <div className="eventDetailItemIcon"><ToggleIcon icon={Icons.TRASH} iconSize="16" tooltip={"Delete"} onClickCallback={callbacks.delete} /></div> : "";
 
     if (this.state.hasEdit) {
       formButtons = <div className="eventDetailsIcons"> 
-                      <div className="eventDetailItemIcon"><ToggleIcon icon={Icons.CANCEL} iconSize="16" onClickCallback={callbacks.cancel}/></div>
-                      <div className="eventDetailItemIcon"><ToggleIcon icon={Icons.SAVE} iconSize="16" onClickCallback={callbacks.save} /></div>
+                      <div className="eventDetailItemIcon"><ToggleIcon icon={Icons.CANCEL} iconSize="16" tooltip={"Cancel"} onClickCallback={callbacks.cancel}/></div>
+                      <div className="eventDetailItemIcon"><ToggleIcon icon={Icons.SAVE} iconSize="16" tooltip={"Save"} onClickCallback={callbacks.save} /></div>
                       {deleteButton}
                     </div>
     } else {
