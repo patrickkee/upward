@@ -30,10 +30,49 @@ var VisPanel = React.createClass({
 								title: {
 								      text: 'Account Value Over Time',
 								      align: 'center',
-								      x: 10
+								      x: 10,
+								      style: { "font": "20px 'Helvetica Neue', Helvetica, Arial, sans-serif, bold" }
 								},
+								legend: {
+									enabled: false
+								},
+								lang: {
+						        thousandsSep: ','
+						    },
 								xAxis: {
 								  categories: xAxisVals,
+								  title: {
+					                text: 'Date',
+					                style: { "font": "18px 'Helvetica Neue', Helvetica, Arial, sans-serif, bold" }
+					            	 },
+					        tickInterval: 24,
+			            labels: {
+			            		style: { "font": "14px 'Helvetica Neue', Helvetica, Arial, sans-serif, bold" },
+			                formatter: function () {
+			                	var theDate = new Date(this.value + ' 00:00:00');
+			                  return (theDate.getMonth()+1) + '/' + theDate.getDate() + '/' + theDate.getFullYear();
+			                }
+			            }
+								},
+								yAxis: {
+									title: {
+					                text: 'Account Value',
+					                style: { "font": "18px 'Helvetica Neue', Helvetica, Arial, sans-serif, bold" }
+					            	 },
+			            labels: {
+			            		style: { "font": "14px 'Helvetica Neue', Helvetica, Arial, sans-serif, bold" },
+			                formatter: function () {
+												return '$' + this.value.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+			                }
+			            }
+								},
+								tooltip: {
+								    formatter: function() {
+								    	var theDate = new Date(this.x + ' 00:00:00');
+								    	var prettyDate = (theDate.getMonth()+1) + '/' + theDate.getDate() + '/' + theDate.getFullYear();
+											var prettyValue = '$' + this.y.toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+								      return 'Account value on <b>' + prettyDate + '</b> is <b>' + prettyValue + '</b>';
+								    }
 								},
 								series: [{
 								  data: yAxisVals
