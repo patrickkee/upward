@@ -1,6 +1,9 @@
 #eventpanel {
 	max-width: 300px;
 	min-width: 225px;
+	position: absolute;
+	left: 0px;
+	top: 100px;
 	display: block;
 	margin: 6px;
 	vertical-align: text-bottom;

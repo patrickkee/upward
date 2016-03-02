@@ -32,7 +32,7 @@ var EventValue = React.createClass({
                                        ref={this.FIELD_NAME} 
                                        value={this.props.value} 
                                        showCents={true}
-                                       currencySymbol="$"
+                                       currencySymbol={this.props.valueSymbol}
                                        onChange={this._onMaskedChange}
                                        required /> 
                 </div>
@@ -45,7 +45,7 @@ var EventValue = React.createClass({
                                        ref={this.FIELD_NAME} 
                                        value={this.props.value}
                                        showCents={true}
-                                       currencySymbol="$"
+                                       currencySymbol={this.props.valueSymbol}
                                        onChange={this._onMaskedChange}
                                        onClick={this._onClick}
                                        required /> 

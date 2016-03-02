@@ -113,7 +113,8 @@ var EventDetails = React.createClass({
           formFields.push(<EventType key={e} value={this.state.modelEvent.type} editField={this.state.editField} callbacks={callbacks} />);
           break;
         case "EVENT_VALUE":
-          formFields.push(<EventValue key={e} value={this.state.modelEvent.value} editField={this.state.editField} callbacks={callbacks} />);
+          formFields.push(<EventValue key={e} value={this.state.modelEvent.value} valueSymbol={this.state.modelEvent.type.valueSymbol}
+                                      editField={this.state.editField} callbacks={callbacks} />);
           break;          
         case "EVENT_PERIOD":
           formFields.push(<EventPeriod key={e} value={this.state.modelEvent.period} editField={this.state.editField} callbacks={callbacks} />);

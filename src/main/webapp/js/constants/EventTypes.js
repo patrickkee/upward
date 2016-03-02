@@ -7,35 +7,40 @@ var EventTypes = {
 		type: "NEW_EVENT",
 		pretty: "New Event",
 		icon: Icons.NEW_EVENT,
-		requiredAttrs: ["EVENT_NAME", "EVENT_TYPE"]
+		requiredAttrs: ["EVENT_NAME", "EVENT_TYPE"],
+		valueSymbol: "$"
 	},
 
 	ACTUAL: {
 		type: "ACTUAL",
 		pretty: "Actual",
 		icon: Icons.THUMBTACK,
-		requiredAttrs: ["EVENT_NAME", "EVENT_TYPE", "EVENT_VALUE", "EFFECTIVE_DATE"]
+		requiredAttrs: ["EVENT_NAME", "EVENT_TYPE", "EVENT_VALUE", "EFFECTIVE_DATE"],
+		valueSymbol: "$"
 	},
 
 	RECURRING_YIELD: {
 		type: "RECURRING_YIELD",
 		pretty: "Recurring Yield",
 		icon: Icons.RECUR_PCT,
-		requiredAttrs: ["EVENT_NAME", "EVENT_TYPE", "EVENT_VALUE", "EVENT_PERIOD", "START_DATE", "END_DATE"]
+		requiredAttrs: ["EVENT_NAME", "EVENT_TYPE", "EVENT_VALUE", "EVENT_PERIOD", "START_DATE", "END_DATE"],
+		valueSymbol: ""
 	},
 
 	RECURRING_DEPOSIT: {
 		type: "RECURRING_DEPOSIT",
 		pretty: "Recurring Deposit",
 		icon: Icons.RECUR_DOLLAR,
-		requiredAttrs: ["EVENT_NAME", "EVENT_TYPE", "EVENT_VALUE", "EVENT_PERIOD", "START_DATE", "END_DATE"]
+		requiredAttrs: ["EVENT_NAME", "EVENT_TYPE", "EVENT_VALUE", "EVENT_PERIOD", "START_DATE", "END_DATE"],
+		valueSymbol: "$"
 	},	
 
 	ONE_TIME_DEPOSIT: {
 		type: "ONE_TIME_DEPOSIT",
 		pretty: "One-Time Deposit",
 		icon: Icons.MONEYBAG,
-		requiredAttrs: ["EVENT_NAME", "EVENT_TYPE", "EVENT_VALUE", "EFFECTIVE_DATE"]
+		requiredAttrs: ["EVENT_NAME", "EVENT_TYPE", "EVENT_VALUE", "EFFECTIVE_DATE"],
+		valueSymbol: "$"
 	},
 
 	get: function(eventType) {

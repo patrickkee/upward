@@ -1,6 +1,8 @@
 #modelpanel {
 	max-width: 300px;
 	min-width: 225px;
+	position: absolute;
+	left: 0px;
 	display: inline-block;
 	margin: 6px;
 	vertical-align: text-bottom;
