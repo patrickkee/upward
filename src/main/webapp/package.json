@@ -18,8 +18,8 @@
     "react-maskedinput": "^3.1.0",
     "highcharts": "^4.2.3",
     "react-highcharts": "^7.0.0",
-    "numeral": "^1.5.3",
-    "react-currency-masked-input": "file:../../../../react-currency-masked-input/"
+    "react-currency-masked-input": "file:../../../../react-currency-masked-input/",
+    "react-router": "^2.0.0"
   },
   "devDependencies": {
     "browserify": "^6.2.0",

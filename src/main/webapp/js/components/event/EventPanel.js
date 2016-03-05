@@ -4,7 +4,7 @@ var React = require('react');
 var AppStore = require('../../stores/AppStore');
 var Event = require('./Event.react');
 var EventTypes = require('../../constants/EventTypes');
-var Models = require("../../model/models");
+var Enums = require("../../model/Enums");
 
 var ModelPanel = React.createClass({
 
@@ -20,7 +20,7 @@ var ModelPanel = React.createClass({
 
   render: function() {
     var eventList = [];
-    var events = [{eventId: 0, name: "add new", type: EventTypes.get("NEW_EVENT"), period: Models.Events.Period.MONTHLY.type}]
+    var events = [{eventId: 0, name: "add new", type: EventTypes.get("NEW_EVENT"), period: Enums.Event.Period.MONTHLY.type}]
     var serverEvents = this.props.appState.currentModel.events;
     if (serverEvents != undefined) {
       events = events.concat(this.props.appState.currentModel.events);

@@ -2,7 +2,7 @@
 
 var React = require('react');
 var Event = require("./Event.react");
-var Models = require("../../model/models");
+var Enums = require("../../model/Enums");
 
 //A single event detail such as the name, type, value, etc
 Event.Period = React.createClass({
@@ -21,17 +21,7 @@ Event.Period = React.createClass({
 
   render: function() {
     //Generate the collection of model options
-    //var eventPeriodOptions = Models.Events.Period.getPeriods();
-    var eventPeriodOptions = Models.Events.Period.getPeriods().map( p => ( <option key={p.type} value={p.type}>{p.pretty}</option> ));
-
-  
-    /*for (var e in EventTypes) {
-      if( EventTypes.hasOwnProperty(e) && 
-          !(EventTypes[e] && EventTypes[e].constructor && EventTypes[e].call && EventTypes[e].apply) &&
-          EventTypes[e] != EventTypes.NEW_EVENT ) {
-        eventTypeOptions.push( <option key={e} value={EventTypes[e].type}>{EventTypes[e].pretty}</option> );
-      } 
-    }*/   
+    var eventPeriodOptions = Enums.Event.Period.getAll().map( p => ( <option key={p.type} value={p.type}>{p.pretty}</option> ));
 
     var output = "";
     if (this.props.editField.toLowerCase() == this.FIELD_NAME.toLowerCase()) {
@@ -51,7 +41,7 @@ Event.Period = React.createClass({
                   <input className="eventDetailItemInputDisabled"
                             type="text"
                             name={this.FIELD_NAME}
-                            value={Models.Events.Period.get(this.props.value).pretty}
+                            value={Enums.Event.Period.get(this.props.value).pretty}
                             readOnly={true}
                             onClick={this._onClick} />
                 </div>

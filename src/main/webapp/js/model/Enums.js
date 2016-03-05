@@ -1,10 +1,12 @@
 'use strict';
 
-var Models = {};
+var Enums = {};
 
-Models.Events = {};
+Enums.Event = {};
 
-Models.Events.Period = {
+Enums.Event.Type = {};
+
+Enums.Event.Period = {
 
 	MONTHLY: {
 		type: "MONTHLY",
@@ -29,7 +31,7 @@ Models.Events.Period = {
     	}
     },
 
-    getPeriods: function() {
+    getAll: function() {
     	var periods = [];
     	for (var e in this) {
 	      if( this.hasOwnProperty(e) && 
@@ -43,4 +45,4 @@ Models.Events.Period = {
 }
 
 
-module.exports = Models; 
+module.exports = Enums; 

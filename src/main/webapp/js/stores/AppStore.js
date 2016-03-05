@@ -8,19 +8,17 @@ var AppConstants = require('../constants/AppConstants');
 var AppStates = require('../constants/AppStates');
 var assign = require('object-assign');
 var $ = require('jquery')
+
 var CHANGE_EVENT = 'change';
 var REMOTE_BASE_URL = 'https://patrickkee.com'
 
-
-var appStateHist = [{ viewState: AppStates.LOGIN_VIEW,
-                      user: {email: "",
-                             firstName: "",
-                             password: ""},
-                      models: [],
-                      currentModel: {}
-                    }];
-
-var appState = appStateHist[0];
+var appState = { viewState: AppStates.LOGIN_VIEW,
+                  user: {email: "fooBar@gmail.com",
+                         firstName: "",
+                         password: ""},
+                  models: [],
+                  currentModel: {}
+                };
 
 var AppStore = assign({}, EventEmitter.prototype, {
 
