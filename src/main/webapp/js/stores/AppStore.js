@@ -12,13 +12,16 @@ var $ = require('jquery')
 var CHANGE_EVENT = 'change';
 var REMOTE_BASE_URL = 'https://patrickkee.com'
 
-var appState = { viewState: AppStates.LOGIN_VIEW,
-                  user: {email: "fooBar@gmail.com",
-                         firstName: "",
-                         password: ""},
-                  models: [],
-                  currentModel: {}
-                };
+var initialAppState = { viewState: AppStates.LOGIN_VIEW,
+                        user: {email: "fooBar@gmail.com",
+                               firstName: "",
+                               password: "",
+                               jwt: ""},
+                        models: [],
+                        currentModel: {}
+                      };
+
+var appState = JSON.parse(JSON.stringify(initialAppState));
 
 var AppStore = assign({}, EventEmitter.prototype, {
 
@@ -49,7 +52,7 @@ AppDispatcher.register(function(action) {
       break;
 
     case ActionTypes.LOGOUT.key:
-         appState = appStateHist[0];
+         appState = JSON.parse(JSON.stringify(initialAppState));
          appState.viewState = AppStates.LOGIN_VIEW;
          emitChange();
       break;

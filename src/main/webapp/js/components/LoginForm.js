@@ -16,7 +16,7 @@ var LoginForm = React.createClass({
   },
 
   _login: function() {
-     if (this.props.loginFailed && this.state.email 
+     if (this.props.appState.user.jwt === "" && this.state.email 
         && this.state.password && this.state.firstName) {
       AppActions.signup({ email: this.state.email,
                           password: this.state.password,
@@ -45,7 +45,7 @@ var LoginForm = React.createClass({
   },
 
   render: function() {
-    if (this.props.loginFailed) { 
+    if (this.props.appState.user.jwt !== "") { 
         var failText =  <div className="failText">
                           <label>
                             Could not login, please retry or add name to signup

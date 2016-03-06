@@ -1,6 +1,7 @@
 'use strict';
 
 var React = require('react');
+var Link = require('react-router').Link;
 var Header = require('./Header');
 var UserPanel = require('./UserPanel');
 var ModelPanel = require('./ModelPanel.react');
@@ -35,6 +36,7 @@ var App = React.createClass({
       <div>
         <Header />
         {viewStateUi}
+        {this.props.children}
       </div>
     );
   }
@@ -46,11 +48,11 @@ function getViewStateUi(appState) {
 
   switch(appState.viewState) {
     case AppStates.LOGIN_VIEW:
-      viewStateUi = <LoginForm loginFailed={false}/>
+      viewStateUi = <LoginForm appState={appState} />
       break;
 
     case AppStates.LOGIN_FAIL_VIEW:
-      viewStateUi = <LoginForm loginFailed={true}/>
+      viewStateUi = <LoginForm appState={appState} />
       break;
 
     case AppStates.CONTENT_VIEW:
@@ -59,7 +61,6 @@ function getViewStateUi(appState) {
                       <VisPanel   appState={appState} />
                       <ModelPanel appState={appState} />
                       <EventPanel appState={appState} />
-                      
                     </div>
       break;
 
