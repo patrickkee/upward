@@ -12,14 +12,19 @@ var AppStates = require('../constants/AppStates');
 var Content = React.createClass({
 
  render: function() {
+ 		var content = ''
+ 		if (this.props.appState.user.jwt !== "") {
+ 			content = <div>
+					        <UserPanel  appState={this.props.appState} />
+					        <VisPanel   appState={this.props.appState} />
+					        <ModelPanel appState={this.props.appState} />
+					        <EventPanel appState={this.props.appState} />
+					      </div>
+ 		}
+
     return (
-      <div>
-        <UserPanel  appState={appState} />
-        <VisPanel   appState={appState} />
-        <ModelPanel appState={appState} />
-        <EventPanel appState={appState} />
-      </div>
-    );
+    	<div>{content}</div>
+    )
   }
 
 });

@@ -14,6 +14,8 @@ var XhrRequests = {
       type: 'GET',
       success: function(data) {
         appState.user = data;
+        //Temporary hack to fake login 
+        appState.user.jwt = 'aJavaWebToken'
         callback();     
       },
       error: function(xhr, status, err) {

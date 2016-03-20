@@ -29,14 +29,18 @@ var App = React.createClass({
     AppStore.removeChangeListener(this._onChange);
   },
 
+  cloneElement: function(child) {
+    return React.cloneElement(child, { appState: this.state.appState });
+  },
+
   render: function() {
-    var viewStateUi = getViewStateUi(this.state.appState);
-    
+    var childrenWithProps = React.Children.map(this.props.children, this.cloneElement);
+
     return (
       <div>
         <Header />
-        {viewStateUi}
-        {this.props.children}
+        <LoginForm appState={this.state.appState} />
+        {childrenWithProps}
       </div>
     );
   }

@@ -22,21 +22,40 @@
     "react-router": "^2.0.0"
   },
   "devDependencies": {
+    "babelify": "^7.2.0",
+    "browser-sync": "^2.11.1",
     "browserify": "^6.2.0",
+    "connect-history-api-fallback": "^1.1.0",
     "envify": "^3.0.0",
-    "jest-cli": "^0.4.3",
-    "reactify": "^0.15.2",
-    "uglify-js": "~2.4.15",
-    "watchify": "^2.1.1",
     "eslint": "^1.2.1",
     "eslint-plugin-react": "^3.2.3",
-    "jscs": "^2.1.0"
+    "gulp": "^3.9.1",
+    "gulp-concat": "^2.6.0",
+    "gulp-concat-css": "^2.2.0",
+    "gulp-csslint": "^0.2.2",
+    "gulp-filesize": "0.0.6",
+    "gulp-htmltidy": "^0.2.2",
+    "gulp-jshint": "^2.0.0",
+    "gulp-minify-css": "^1.2.4",
+    "gulp-rename": "^1.2.2",
+    "gulp-sass": "^2.2.0",
+    "gulp-sourcemaps": "^1.6.0",
+    "gulp-uglify": "^1.5.3",
+    "jest-cli": "^0.4.3",
+    "jscs": "^2.1.0",
+    "jshint": "^2.9.1",
+    "lodash.assign": "^4.0.6",
+    "reactify": "^0.15.2",
+    "uglify-js": "~2.4.15",
+    "vinyl-buffer": "^1.0.0",
+    "vinyl-source-stream": "^1.1.0",
+    "watchify": "^2.1.1"
   },
   "scripts": {
     "start": "watchify -o js/bundle.js -v -d js/app.js",
     "lint": "eslint --ext .jsx,.js js && jscs -x js",
     "build": "browserify . -t [envify --NODE_ENV production] | uglifyjs -cm > js/bundle.min.js",
-    "test": "jest"
+    "test": "grunt test"
   },
   "author": "Patrick Kee",
   "browserify": {

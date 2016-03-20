@@ -4,4 +4,5 @@
 * Refactor the Store to sync with the server asynchronously while maintaining the local store as persistence. 
 * Get rid of com.patrickkee.api.event - it's not useful and has been replaced by defaulting logic in the Event constructor
 
+
 ******* v1.0 *********

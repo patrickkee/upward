@@ -1,6 +1,7 @@
 'use strict';
 
 var React = require('react');
+var browserHistory = require('react-router').browserHistory;
 var AppActions = require('../actions/AppActions');
 var AppConstants = require('../constants/AppConstants');
 var AppStore = require('../stores/AppStore');
@@ -46,6 +47,7 @@ var LoginForm = React.createClass({
 
   render: function() {
     if (this.props.appState.user.jwt !== "") { 
+    
         var failText =  <div className="failText">
                           <label>
                             Could not login, please retry or add name to signup
@@ -64,37 +66,40 @@ var LoginForm = React.createClass({
     }
 
     var focus = true
+    var loginForm = ''
+    if (this.props.appState.user.jwt === "") {
+      loginForm =   <div id="login">
+                      {failText}  
+                      <div id="form">
+                        <div id="formItem">
+                          <label>Email</label>
+                          <input  className="email" type="text" name="email" 
+                                  value={this.state.email}
+                                  onChange={this._onEmailTextEntry}
+                                  autoFocus={focus} />
+                        </div>
+                        <div id="formItem">
+                          <label>Password</label>
+                          <input  className="password" type="password" name="password" 
+                                  value={this.state.password}
+                                  onChange={this._onPasswordTextEntry}
+                                  onKeyDown={this._onKeyDown} />
+                        </div>
+                        {signupPanel}
+                      </div>
+
+                      <div className="loginButton">
+                        <button onClick={this._login}>
+                          Login or Signup&nbsp;&nbsp;
+                          <ToggleIcon icon={Icons.LOGOUT} iconSize="16" onClickCallback={this.props._login}/>
+                        </button>
+                      </div>
+                    </div>
+      }
 
     return (
-      <div id="login">
-        {failText}  
-        <div id="form">
-          <div id="formItem">
-            <label>Email</label>
-            <input  className="email" type="text" name="email" 
-                    value={this.state.email}
-                    onChange={this._onEmailTextEntry}
-                    autoFocus={focus} />
-          </div>
-          <div id="formItem">
-            <label>Password</label>
-            <input  className="password" type="password" name="password" 
-                    value={this.state.password}
-                    onChange={this._onPasswordTextEntry}
-                    onKeyDown={this._onKeyDown} />
-          </div>
-          {signupPanel}
-        </div>
-
-        <div className="loginButton">
-          <button onClick={this._login}>
-            Login or Signup&nbsp;&nbsp;
-            <ToggleIcon icon={Icons.LOGOUT} iconSize="16" onClickCallback={this.props._login}/>
-          </button>
-        </div>
-
-      </div> 
-    );
+      <div>{loginForm}</div>
+    )
   }
 });
 

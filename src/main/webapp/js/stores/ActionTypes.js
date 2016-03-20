@@ -2,6 +2,7 @@
 
 var XHR = require('./XhrRequests');
 var AppStates = require('../constants/AppStates');
+var browserHistory = require('react-router').browserHistory;
 
 var ActionTypes = {
 
@@ -44,7 +45,13 @@ var ActionTypes = {
 
 			};
 
-			XHR.fetchAccount(actionValue, fetchModels, appState);
+			//Sets the user's url to the default logged in view showing their models
+			var setRouteUrl = function() {
+				browserHistory.push('/models');
+				fetchModels();
+			};
+
+			XHR.fetchAccount(actionValue, setRouteUrl, appState);
 		}
 	},
 
